@@ -38,6 +38,7 @@ export interface LabSuggestion {
   fields: Record<string, string>;
   label_column: string | null;
   positive_values: string[];
+  negative_values: string[];
   category_column: string | null;
   date_format: "iso" | "month_first";
   low_cardinality: Record<string, string[]>;
@@ -47,6 +48,7 @@ export interface LabMappingIn {
   fields: Record<string, string | null>;
   label_column: string;
   positive_values: string[];
+  negative_values?: string[] | null;
   category_column: string | null;
   date_format: "iso" | "month_first";
   default_currency: string | null;

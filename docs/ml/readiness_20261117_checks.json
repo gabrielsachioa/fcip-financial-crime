@@ -1,0 +1,144 @@
+{
+  "base_head": "7b5880d5e6d3ce17140756729e5859bca4fd963a",
+  "scope": "ML safeguards/readiness/incremental alert evidence; no new research model fitting or quality result.",
+  "backend_runs": [
+    {
+      "private_cluster": "/tmp/fciprdy_0vud2qbr",
+      "unix_socket_only": true,
+      "live_app_database_accessed": false,
+      "model_training_experiment": false,
+      "started_at_utc": "2026-11-17T01:41:05.648194+00:00",
+      "server_identity_verified": true,
+      "postgres_version": "postgres (PostgreSQL) 16.15 (Homebrew)",
+      "command": [
+        "backend/.venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "no:cacheprovider",
+        "-o",
+        "addopts=",
+        "-q"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 258.514,
+      "log": "/tmp/fciprdy_0vud2qbr/pytest.log",
+      "log_sha256": "a5e8ec473a447789eda57a9d89d3eb8d5fb65b0b28e544455524932b9ec2b251",
+      "cluster_stopped": true,
+      "completed_at_utc": "2026-11-17T01:45:33.091857+00:00",
+      "label": "full_safeguards_before_incremental_alert_repair",
+      "passed": 1044,
+      "warnings": 375,
+      "includes_slow": 5
+    },
+    {
+      "private_cluster": "/tmp/fciprdy_mt01jkwt",
+      "unix_socket_only": true,
+      "live_app_database_accessed": false,
+      "model_training_experiment": false,
+      "started_at_utc": "2026-11-17T01:55:02.240125+00:00",
+      "server_identity_verified": true,
+      "postgres_version": "postgres (PostgreSQL) 16.15 (Homebrew)",
+      "command": [
+        "backend/.venv/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "no:cacheprovider",
+        "-o",
+        "addopts=",
+        "-q",
+        "tests/test_ml_incremental_alerts.py",
+        "tests/test_ml_app.py",
+        "tests/test_behavioral_app.py",
+        "tests/test_lab_deploy.py",
+        "tests/test_monitoring_alignment.py",
+        "tests/test_ml_serving_guards.py",
+        "tests/test_lab_label_contract.py",
+        "tests/test_lab_evaluation_lock.py"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 50.749,
+      "log": "/tmp/fciprdy_mt01jkwt/pytest.log",
+      "log_sha256": "0c97b00c1c339d6377a8018aaf1f6060ecc7876cc36375d7ea7e6a8e6c32a638",
+      "cluster_stopped": true,
+      "completed_at_utc": "2026-11-17T01:55:54.502518+00:00",
+      "label": "post_incremental_alert_repair_ml_regressions",
+      "passed": 134,
+      "warnings": 184,
+      "new_checks": 6,
+      "overlapping_checks": 128
+    }
+  ],
+  "distinct_passing_checks": 1050,
+  "count_policy": "1044 full checks plus6 new incremental tests;128 focused repeats are not added twice.",
+  "frontend": {
+    "command": [
+      "npm",
+      "run",
+      "build"
+    ],
+    "cwd": "frontend",
+    "exit_code": 0,
+    "includes": [
+      "TypeScript noEmit",
+      "Vite production build"
+    ],
+    "browser_qa": false
+  },
+  "development_readiness": {
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "app.scripts.audit_ml_readiness",
+      "--data",
+      "ml_data/team_review_s20261110/training_labeled.csv",
+      "--mapping",
+      "/tmp/fcip_readiness_mapping_20261117.json",
+      "--train-share",
+      "0.7",
+      "--out",
+      "/tmp/fcip_readiness_final_20261117.json"
+    ],
+    "cwd": "backend",
+    "exit_code": 0,
+    "source_file": "backend/ml_data/team_review_s20261110/training_labeled.csv",
+    "source_sha256": "d2b8087e9fc07a2462d84bb1d3fb3be405035b8027430a670b1753e6f220aea6",
+    "report": "docs/ml/data_readiness_20261117.json",
+    "report_sha256": "c9477e03f8acde34329f80c5987aced6636b1915b40d4eff3dc8647fcaf38ceb",
+    "reproduction_mapping": "Use mapping.snapshot from the report; original exact mapping-byte SHA is retained separately.",
+    "model_fitted": false,
+    "predictions_computed": false,
+    "reference_outcome_scope": "TRAIN only"
+  },
+  "code_and_test_sha256": {
+    "backend/app/ml/lab/mapping.py": "2deb638643a7f259157bae02437ae620170a49fbe04ccdc77744626ae2581edc",
+    "backend/app/ml/lab/scoring.py": "27603594ec1f2a137184ccb0ac507d3900d7ae11484a5b4564d720bfcce2d500",
+    "backend/app/ml/lab/readiness.py": "57182da514e8ab74a0587d05cdd0431aedad2e3e57d8961834e7d4f5164692ae",
+    "backend/app/scripts/audit_ml_readiness.py": "73928478c440adf3efd4dc94ab69ada2b54676275e14bda38d8bc942905cdc8c",
+    "backend/app/services/ml_scoring.py": "43ad615c14921c548de72b307f616eaabe523a14695b47e266dc79140af76476",
+    "backend/app/routers/lab.py": "6fc8dc3a95beeb6d4f2bdb2015e037988c8baa2f7b2d6b63e03535e979d73d19",
+    "backend/app/schemas/lab.py": "d02216163f8fcbc9939e4901f28bc3c19bdde3a7bc6a2d40eb05391dd9f641c2",
+    "backend/tests/test_lab_label_contract.py": "d8d347936f271f21d81a4abc80fa3ddeea5033e5a44066b5ed5fd4f2d2842dc0",
+    "backend/tests/test_ml_serving_guards.py": "0934aa2790031d38fb56c8e652b2a6e6a521f13987535a8921c04539afe77db9",
+    "backend/tests/test_ml_readiness.py": "480780976d062acffc5b43a1b554d1ce5b5983418ac2ace25a411fb040cfdea1",
+    "backend/tests/test_ml_incremental_alerts.py": "4c8b8ef3b78b50051e3278374b529e5ce5b4557c77600947b9007b1e11e4c0a1",
+    "frontend/src/pages/LabPage.tsx": "4d6321ffb7c500702db10255addaa1dee58e9e465a6247260072c2413fdc4a59",
+    "frontend/src/types/lab.ts": "e5841d208f90617414f807bcaf6f59da2540e94993050c148c822ae0b35af708"
+  },
+  "boundaries": {
+    "live_database_accessed": false,
+    "live_model_registry_inspected": false,
+    "live_model_activated": false,
+    "generator_or_shared_data_changed": false,
+    "historical_models_or_final_metrics_rewritten": false,
+    "real_bank_data_requested": false
+  },
+  "limitations": [
+    "Existing NumPy matmul and pandas deprecation warnings are retained in full logs; passing guards do not establish model quality.",
+    "Regression tests fit small fixture models and approve them only within isolated temporary databases.",
+    "The full suite predates the final incremental alert change; the affected ML/app/deploy/integrity suites are rechecked afterward.",
+    "No production browser QA, load test, bank UAT, new precision/recall result or live deployment is claimed.",
+    "ML grouping remains AS-15; global FR-310 transaction-set-hash/concurrency work remains separate."
+  ]
+}

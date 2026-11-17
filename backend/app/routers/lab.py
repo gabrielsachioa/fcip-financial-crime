@@ -154,7 +154,12 @@ def map_dataset(
 ) -> LabDatasetOut:
     dataset = _get_dataset(db, dataset_id)
     try:
-        dataset = lab_service.map_dataset(db, dataset, payload.model_dump(), actor=user)
+        mapping = payload.model_dump()
+        # An omitted new label field must not rewrite legacy frozen mapping
+        # bytes/hashes. Existing nullable fields retain their original keys.
+        if mapping["negative_values"] is None:
+            mapping.pop("negative_values")
+        dataset = lab_service.map_dataset(db, dataset, mapping, actor=user)
     except lab_service.LabConflict as exc:
         db.rollback()
         raise HTTPException(status.HTTP_409_CONFLICT, str(exc)) from exc

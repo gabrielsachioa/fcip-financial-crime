@@ -28,7 +28,7 @@ import numpy as np
 import pandas as pd
 
 from app.ml.behavioral.features import FEATURE_SET_VERSION, feature_names
-from app.ml.lab.trainer import score_lightgbm, score_logistic
+from app.ml.lab.trainer import LOGISTIC_FORMAT, score_lightgbm, score_logistic
 
 LAB_FEATURE_SET_VERSION = f"lab:{FEATURE_SET_VERSION}"
 UNIT = "FRAUD"
@@ -129,12 +129,41 @@ def definition_hash(model_text: str, features: list[str], vocabulary: dict, thre
     )).encode()).hexdigest()
 
 
+def _verify_logistic_payload(model_text: str, features: list[str]) -> None:
+    """A valid hash does not make malformed arithmetic safe to execute."""
+    payload = json.loads(model_text)
+    if (not isinstance(payload, dict) or payload.get("format") != LOGISTIC_FORMAT
+            or payload.get("features") != features):
+        raise ValueError("Invalid lab logistic model format or feature order")
+    for name in ("medians", "means", "scales", "coef"):
+        try:
+            values = np.asarray(payload.get(name), dtype=float)
+        except (TypeError, ValueError, OverflowError) as exc:
+            raise ValueError(f"Invalid lab logistic {name}") from exc
+        if values.shape != (len(features),) or not np.isfinite(values).all():
+            raise ValueError(f"Invalid lab logistic {name}")
+        if name == "scales" and np.any(values <= 0):
+            raise ValueError("Lab logistic scales must be positive")
+    try:
+        intercept = float(payload["intercept"])
+    except (KeyError, TypeError, ValueError, OverflowError) as exc:
+        raise ValueError("Invalid lab logistic intercept") from exc
+    if not math.isfinite(intercept):
+        raise ValueError("Invalid lab logistic intercept")
+
+
 def verify(version) -> list[str]:
     """The model's features, after checking that what is stored is exactly what was saved
     and that this checkout computes the same features. Raises ValueError otherwise."""
     card = version.model_card
     context = card["feature_set"]
-    features = list(context["features"])
+    features = context["features"]
+    if (not isinstance(features, list) or not features
+            or any(not isinstance(name, str) for name in features)
+            or len(features) != len(set(features))):
+        raise ValueError(f"{version.version}: invalid lab model feature registry")
+    if not math.isfinite(version.threshold) or not 0 <= version.threshold <= 1:
+        raise ValueError(f"{version.version}: lab threshold must be finite and between zero and one")
     vocabulary = context["vocabulary"]
     if definition_hash(version.model_text, features, vocabulary, version.threshold) != version.definition_hash \
             or card.get("definition_hash") != version.definition_hash:
@@ -150,6 +179,13 @@ def verify(version) -> list[str]:
         names = _booster(version.model_text).feature_name()
         if sorted(names) != sorted(features):
             raise ValueError(f"{version.version}: model features differ from its card")
-    elif json.loads(version.model_text).get("features") != features:
-        raise ValueError(f"{version.version}: model feature order differs from its card")
+    elif version.artefact_type == ARTEFACT_LOGISTIC:
+        _verify_logistic_payload(version.model_text, features)
+    elif version.artefact_type == ARTEFACT_ISOLATION:
+        from app.ml.behavioral.model import load_model
+
+        if load_model(version.model_text).features != features:
+            raise ValueError(f"{version.version}: model feature order differs from its card")
+    else:
+        raise ValueError(f"{version.version}: unsupported lab artefact type")
     return features

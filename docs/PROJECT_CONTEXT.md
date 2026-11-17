@@ -4,10 +4,10 @@
 Intelligence Platform capstone: what the project is, what the spec demands, what
 is actually built, what is deliberately not built, and what is still undecided.
 
-Last updated: **13 November 2026** · latest scope estimate in
+Last updated: **17 November 2026** · latest scope estimate in
 [PROGRESS.md](PROGRESS.md) is roughly 20% (3 November; not recounted by this audit).
 
-**Current handoff:** §18–22, [the Lab guide](LAB_THIN_SLICE.md) and
+**Current handoff:** §18–23, [the Lab guide](LAB_THIN_SLICE.md) and
 [PROGRESS.md](PROGRESS.md) describe the current application after the team's
 27 October/3 November work: nine roles, model approval and monitoring, and
 P01–P10 app rules. CF-05(b) is recorded as answered; an MLRO controls model
@@ -27,6 +27,12 @@ model. AS-20 records the approved scope and source-provenance limitations.
 fraud definition. §22 records the proposed interpretation and unresolved target/
 acceptance criteria. Existing 70/15/15 results are preserved; no new training,
 generator, label, threshold or model-state change follows from this discussion.
+
+**17 November readiness improvements:** Jevon authorises fixing the identified
+gaps, prioritising ML flags, and asks what supporting data is needed. §23 and
+[ML_READINESS.md](ML_READINESS.md) describe the label/inference safeguards and
+development-data audit. Target definition and new reviewed data remain pending;
+there is no new research training, fraud/AML performance claim or activation.
 
 The [4 November Lab repair](ml/lab_repair_20261104.md) passes 913 distinct backend
 checks and the frontend build. It fixes evaluation/mapping leakage, adds a
@@ -890,6 +896,31 @@ in §13), routes, handlers, validation, permissions, model policy and data. No
 new dependency, external font, training, generator or local-port change.
 Fixture QA evidence and limitations are in PROGRESS and the updated design
 reference is `design-system/fcip/MASTER.md`.
+
+**AS-25 — ML label/inference safeguards and development-data diagnostics (17 Nov):**
+Jevon authorises readiness fixes, especially transaction flags. Explicit negative
+label values and narrow exact-binary compatibility prevent unknown nonblank
+answers from silently becoming normal. Pending/unresolved statuses cannot be
+negatives; deliberately selected REVIEW positives may represent review-worthy
+targets. These are implementation safeguards under FR-102/TRD §10.6, not a new
+fraud definition. Keep legacy mapping JSON and saved prediction arithmetic;
+reject nonfinite/misaligned scores, invalid model parameters/thresholds and
+incomplete explanations before that model's inserts (FR-308/405). No new score
+cutoff, feature policy or calibration is invented. The additive CLI retains
+unlabelled observations as history, discloses reference labels/channel/category
+support only for TRAIN, records mapping/source provenance and refuses output
+overwrite. Its review items are descriptive, not production acceptance gates.
+The earlier approved 70/15/15 share is used only to audit the existing 615-row
+development source; no new final predictions or tuning occur. Existing training
+still excludes blank-target observations before feature construction; the audit
+explicitly discloses its different population. No generator/shared data,
+historical artifacts, live DB, model activation, label target, mentor decision
+or product-backlog order is changed. See §23 for verification and remaining work.
+The existing AS-15 ML day/week grouping also gains FR-308/310 evidence handling:
+an OPEN case-unlinked alert absorbs new score/transaction references with audit
+and a creation snapshot; reviewed/case-linked alerts remain unchanged and new
+uncovered scores produce a related finding. Exact reruns add no score/transaction
+duplicates. This does not complete the global FR-310 hash-key/concurrency design.
 
 ### TRD §1.5 — conflicts still open
 
@@ -2248,3 +2279,65 @@ roles/metrics without retraining or relabelling. **Capstone:** Arahan mentor
 dipetakan ke alur 70/15/15 yang sudah ada; ground truth adalah label acuan, dan
 hasil saat ini masih melewatkan sepertiga kasus positif. Prioritas berikutnya
 menyepakati definisi target dan rubrik label sebelum eksperimen baru.
+
+---
+
+## 23. ML readiness safeguards and required data — 17 November 2026
+
+Jevon authorises fixing the readiness gaps, prioritising ML transaction flags,
+and asks what input is required. The first safeguards stage implements label
+and inference validation, a Lab mapping UI with explicit negative choices and
+a read-only development-data audit. [The guide](ML_READINESS.md) records required
+data, the unresolved target/acceptance decisions and the remaining product work.
+AS-25 records implementation choices; the definition of fraud/AML is not guessed.
+
+**Label safety:** nonblank values outside the explicit binary target are refused
+instead of becoming normal. Existing exact-binary mappings remain compatible;
+custom labels need explicit negatives. Native missing/blank labels are excluded
+from targets, unresolved statuses cannot be normal, and monitoring still ignores
+answer columns. Existing mapping hashes and archived expectations are not rebased.
+
+**Inference:** malformed artifacts, nonfinite thresholds/scores, wrong prediction
+counts and incomplete/nonfinite explanations fail before that model's score
+inserts. Valid prediction arithmetic and legacy finite score scales are unchanged.
+No new feature set, threshold default, history-based suppression or calibration.
+
+**Incremental alert evidence:** later same-day flags no longer disappear behind
+an existing day-level key. An OPEN unlinked alert retains new references, its
+original snapshot and audited duplicate counts. Reviewed or case-linked findings
+are not edited; genuinely uncovered scores create a related new alert. Historical
+scores are not repeatedly resurfaced as new findings. AS-15 grouping is retained;
+this is not the complete global FR-310 hash-key/concurrency implementation.
+
+**Data audit, not training:** [615-row report](ml/data_readiness_20261117.json)
+uses the earlier approved 70/15/15 chronology. No quarantine/duplicates; TRAIN 430
+has 46 positive/384 negative, but **0/430 TRAIN rows meet the existing historical
+baseline gate**. TRAIN channels AGENT 5/5 positive, WEB 24/24 positive and
+BANK_TRANSFER 24/24 negative show recipe-shortcut risks. Outcome/channel/category
+diagnostics are TRAIN-only; later periods disclose row/time metadata only. Blank
+targets remain as history in this audit; its population may differ from training.
+There are no new prediction metrics, selected models or crime-quality claims.
+
+**Technical verification:** a full 1,044-test backend run, including the five slow
+checks, passes on a private PostgreSQL 16.15 cluster; frontend production build
+passes. The 375 warnings include existing numerical/deprecation warnings and are
+retained. No production browser QA or live model-registry inspection is claimed.
+Final alert-path regressions and evidence are recorded in PROGRESS.
+After the incremental-alert repair, 134 focused ML regressions pass, including 6 new
+cases and 128 overlapping checks: 1,050 distinct checks across the full/focused runs.
+Both private clusters stop cleanly. [Technical evidence](ml/readiness_20261117_checks.json)
+records commands, logs/hashes, run ordering and the preserved warnings.
+
+**Pending input:** choose review-worthy versus confirmed-crime target with the
+mentor; provide reviewed synthetic legitimate lookalikes, complete prior history,
+prediction-time account/recipient/session/business context, reviewer provenance
+and operational acceptance criteria. The existing 615 rows are available; do not
+request them again. Generator/shared-data changes still require a concrete
+decision under AGENTS.md. AML account-week Lab and the existing product backlog
+remain unfinished; this stage does not make FCIP ready for bank production.
+
+**Decisions I took myself:** explicit negative mapping with narrow compatibility;
+fail visibly on invalid predictions; descriptive TRAIN-only readiness diagnostics;
+isolated test databases. **Capstone:** Pengaman label dan inference diperkuat serta
+kekurangan riwayat dan bias sumber diukur. Pembelajaran ulang dan pembuktian
+kualitas fraud/AML masih membutuhkan definisi target dan data review yang sesuai.

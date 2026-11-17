@@ -32,7 +32,16 @@ import "../lab.css";
 
 const WRITER_ROLES = ["ROLE_DATA_OPS", "ROLE_ANALYST"];
 const POSITIVE_DEFAULTS = new Set(["1", "true", "yes", "y", "t", "fraud", "ya"]);
+const BINARY_PAIRS: Record<string, string> = {
+  "1": "0", "0": "1", true: "false", false: "true", yes: "no", no: "yes",
+  y: "n", n: "y", t: "f", f: "t", ya: "tidak", tidak: "ya",
+};
 const NONE = "";
+
+function binaryNegatives(values: string[], positives: string[]): string[] {
+  const paired = new Set(positives.map((value) => BINARY_PAIRS[value.trim().toLowerCase()]).filter(Boolean));
+  return values.filter((value) => paired.has(value.trim().toLowerCase()));
+}
 
 function pct(value: number | null | undefined, digits = 1): string {
   return typeof value === "number" && Number.isFinite(value)
@@ -256,6 +265,7 @@ function initialMapping(dataset: LabDataset): LabMappingIn {
     fields: { ...s.fields },
     label_column: s.label_column ?? "",
     positive_values: s.positive_values,
+    negative_values: s.negative_values,
     category_column: s.category_column,
     date_format: s.date_format,
     default_currency: null,
@@ -267,10 +277,12 @@ function MappingStep({ options, dataset, canWrite }: { options: LabOptions; data
   const mappingLocked = dataset.evaluation?.state !== "UNCONFIGURED";
   const editable = canWrite && !mappingLocked;
   const [form, setForm] = useState<LabMappingIn>(() => initialMapping(dataset));
-  const [positiveText, setPositiveText] = useState("");
+  const [positiveText, setPositiveText] = useState(() => dataset.mapping?.positive_values.join(", ") ?? "");
+  const [negativeText, setNegativeText] = useState(() => dataset.mapping?.negative_values?.join(", ") ?? "");
   useEffect(() => {
     setForm(initialMapping(dataset));
-    setPositiveText("");
+    setPositiveText(dataset.mapping?.positive_values.join(", ") ?? "");
+    setNegativeText(dataset.mapping?.negative_values?.join(", ") ?? "");
     // Refresh the form when its source or immutable contract changes, not on every refetch.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataset.id, dataset.evaluation?.protocol_id]);
@@ -284,6 +296,7 @@ function MappingStep({ options, dataset, canWrite }: { options: LabOptions; data
   const labelValues = form.label_column ? dataset.suggestion.low_cardinality[form.label_column] : undefined;
   const reserved = new Set([form.label_column, form.category_column ?? ""].filter(Boolean));
   const validation = dataset.validation;
+  const legacyLabels = mappingLocked && form.negative_values == null;
 
   function setField(key: string, column: string) {
     setForm((current) => ({ ...current, fields: { ...current.fields, [key]: column || null } }));
@@ -291,10 +304,14 @@ function MappingStep({ options, dataset, canWrite }: { options: LabOptions; data
 
   function setLabel(column: string) {
     const values = dataset.suggestion.low_cardinality[column] ?? [];
+    const positives = values.filter((v) => POSITIVE_DEFAULTS.has(v.trim().toLowerCase()));
+    setPositiveText("");
+    setNegativeText("");
     setForm((current) => ({
       ...current,
       label_column: column,
-      positive_values: values.filter((v) => POSITIVE_DEFAULTS.has(v.trim().toLowerCase())),
+      positive_values: positives,
+      negative_values: binaryNegatives(values, positives),
       fields: Object.fromEntries(Object.entries(current.fields).filter(([, c]) => c !== column)),
     }));
   }
@@ -306,6 +323,9 @@ function MappingStep({ options, dataset, canWrite }: { options: LabOptions; data
     save.mutate({
       ...form,
       positive_values: positives,
+      negative_values: labelValues
+        ? form.negative_values ?? binaryNegatives(labelValues, positives)
+        : negativeText.split(",").map((v) => v.trim()).filter(Boolean),
       category_column: form.category_column || null,
       default_currency: form.default_currency?.trim() ? form.default_currency.trim().toUpperCase() : null,
     });
@@ -372,33 +392,43 @@ function MappingStep({ options, dataset, canWrite }: { options: LabOptions; data
           </label>
           {form.label_column && (
             <fieldset className="lab-positive">
-              <legend>Nilai yang dihitung positif</legend>
+              <legend>Arti setiap nilai label</legend>
+              <p className="muted" id="lab-label-help">Pilih positif atau normal sesuai hasil review. Label kosong tidak dipakai sebagai target pelatihan. Nilai lain harus diperiksa; jangan anggap kasus yang belum diputuskan sebagai normal.</p>
+              {legacyLabels && <p className="notice lab-note">Pemetaan ini tidak menyimpan nilai negatif secara eksplisit. Pemetaan dan hasil run tetap dikunci.</p>}
               {labelValues ? (
                 labelValues.map((value) => (
                   <label key={value} className="inline">
-                    <input
-                      type="checkbox"
-                      checked={form.positive_values.includes(value)}
-                      disabled={!editable}
-                      onChange={(event) =>
+                    <span className="mono">{value === "" ? "(kosong)" : value}</span>
+                    <select
+                      aria-label={`Arti label ${value || "kosong"}`}
+                      aria-describedby="lab-label-help"
+                      value={!value.trim() ? "" : form.positive_values.includes(value) ? "positive"
+                        : (form.negative_values ?? binaryNegatives(labelValues, form.positive_values)).includes(value) ? "negative" : ""}
+                      disabled={!editable || !value.trim()}
+                      onChange={(event) => {
+                        const kind = event.target.value;
                         setForm((current) => ({
                           ...current,
-                          positive_values: event.target.checked
-                            ? [...current.positive_values, value]
-                            : current.positive_values.filter((v) => v !== value),
-                        }))
-                      }
-                    />
-                    <span className="mono">{value === "" ? "(kosong)" : value}</span>
+                          positive_values: [...current.positive_values.filter((v) => v !== value), ...(kind === "positive" ? [value] : [])],
+                          negative_values: [...(current.negative_values ?? binaryNegatives(labelValues, current.positive_values)).filter((v) => v !== value), ...(kind === "negative" ? [value] : [])],
+                        }));
+                      }}
+                    >
+                      <option value="">{value.trim() ? "— belum dipetakan —" : "Tidak dipakai"}</option>
+                      <option value="positive">Positif</option>
+                      <option value="negative">Normal</option>
+                    </select>
                   </label>
                 ))
               ) : (
-                <input
-                  value={positiveText}
-                  onChange={(event) => setPositiveText(event.target.value)}
-                  placeholder="Nilai positif, pisahkan dengan koma"
-                  disabled={!editable}
-                />
+                <>
+                  <label>Nilai positif, pisahkan dengan koma
+                    <input value={positiveText} onChange={(event) => setPositiveText(event.target.value)} disabled={!editable} aria-describedby="lab-label-help" />
+                  </label>
+                  <label>Nilai normal, pisahkan dengan koma
+                    <input value={negativeText} onChange={(event) => setNegativeText(event.target.value)} disabled={!editable} aria-describedby="lab-label-help" />
+                  </label>
+                </>
               )}
             </fieldset>
           )}

@@ -22,6 +22,7 @@ from __future__ import annotations
 import math
 import uuid
 from collections import defaultdict
+from copy import deepcopy
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 
@@ -89,13 +90,15 @@ def verify(version: ModelVersion) -> list[str]:
         return _verify(version)
     except ModelIntegrityError:
         raise
-    except (KeyError, TypeError, ValueError, AttributeError) as exc:
+    except (KeyError, TypeError, ValueError, AttributeError, OverflowError) as exc:
         raise ModelIntegrityError(f"{version.version}: malformed model artefact or card: {exc}") from exc
 
 
 def _verify(version: ModelVersion) -> list[str]:
     """The definition hash recomputed from what is stored, and the feature set
     and MCC reference it needs, compared with this checkout's."""
+    if not math.isfinite(version.threshold):
+        raise ModelIntegrityError(f"{version.version}: threshold must be finite")
     card = version.model_card
     features = card["feature_set"]["features"]
     if is_lab_artefact(version.artefact_type):
@@ -242,6 +245,44 @@ def _entities_with_rule_alerts(db: Session) -> set[uuid.UUID]:
     return set(db.scalars(select(Alert.customer_id).where(Alert.pattern_code != ML_PATTERN_CODE)))
 
 
+def _validated_scores(version: ModelVersion, values, rows: int) -> np.ndarray:
+    """Fail before flagging when a predictor cannot supply one finite score per row.
+
+    NaN compares false against a threshold; accepting it would silently treat a
+    failed prediction as a below-threshold observation. Legacy score scales are
+    left unchanged: this checks validity, never clips or recalibrates scores.
+    """
+    try:
+        finite_threshold = math.isfinite(version.threshold)
+        scores = np.asarray(values, dtype=float)
+    except (TypeError, ValueError, OverflowError) as exc:
+        raise ModelIntegrityError(f"{version.version}: invalid scoring output or threshold") from exc
+    if not finite_threshold:
+        raise ModelIntegrityError(f"{version.version}: threshold must be finite")
+    if scores.shape != (rows,) or not np.isfinite(scores).all():
+        raise ModelIntegrityError(f"{version.version}: expected one finite score for each of {rows} observations")
+    return scores
+
+
+def _validated_explanations(version: ModelVersion, explanations, rows: int) -> list:
+    """Never silently truncate stored findings through zip's shortest input."""
+    if not isinstance(explanations, list) or len(explanations) != rows:
+        raise ModelIntegrityError(f"{version.version}: expected one explanation for each of {rows} stored scores")
+    for explanation in explanations:
+        if not isinstance(explanation, list) or not explanation:
+            raise ModelIntegrityError(f"{version.version}: each stored score requires named feature contributions")
+        for item in explanation:
+            try:
+                valid = (isinstance(item["feature"], str) and bool(item["feature"])
+                         and math.isfinite(item["contribution"])
+                         and (item["value"] is None or math.isfinite(item["value"])))
+            except (KeyError, TypeError, ValueError, OverflowError) as exc:
+                raise ModelIntegrityError(f"{version.version}: invalid feature contribution") from exc
+            if not valid:
+                raise ModelIntegrityError(f"{version.version}: invalid feature contribution")
+    return explanations
+
+
 def _score_legacy(db: Session, run_id: uuid.UUID, models: dict[str, LoadedModel]) -> list[UnitRun]:
     dataset, customer_ids, transaction_ids = dataset_from_db(db)
     if not dataset.transactions:
@@ -252,7 +293,7 @@ def _score_legacy(db: Session, run_id: uuid.UUID, models: dict[str, LoadedModel]
     for unit, model in sorted(models.items()):
         frame = aml if unit == UNIT_AML else fraud
         X = frame[model.features]
-        scores = model.booster.predict(X)
+        scores = _validated_scores(model.version, model.booster.predict(X), len(frame))
         threshold = model.version.threshold
         flagged = scores >= threshold
         keep = flagged.copy()
@@ -260,6 +301,13 @@ def _score_legacy(db: Session, run_id: uuid.UUID, models: dict[str, LoadedModel]
             keep |= frame.entity_id.map(lambda ref: customer_ids.get(ref) in alerted).to_numpy(dtype=bool)
         rows = np.flatnonzero(keep)
         contributions = model.booster.predict(X.iloc[rows], pred_contrib=True) if len(rows) else np.zeros((0, 1))
+        try:
+            contributions = np.asarray(contributions, dtype=float)
+        except (TypeError, ValueError, OverflowError) as exc:
+            raise ModelIntegrityError(f"{model.version.version}: invalid feature contributions") from exc
+        if (len(rows) and (contributions.shape != (len(rows), len(model.features) + 1)
+                          or not np.isfinite(contributions).all())):
+            raise ModelIntegrityError(f"{model.version.version}: invalid feature contributions")
         values = X.iloc[rows].to_numpy(dtype=float)
         records = []
         for k, i in enumerate(rows):
@@ -341,7 +389,7 @@ def score_all(db: Session, run_id: uuid.UUID, models: dict[str, LoadedModel]) ->
         if unit == UNIT_AML and len(set(customer_ids.values())) != len(customer_ids):
             raise ModelIntegrityError("behavioral_v1 account-week storage requires one observation proxy per account")
         frame = build_features(source, unit, vocabulary)
-        scores = model.booster.scores(frame)
+        scores = _validated_scores(model.version, model.booster.scores(frame), len(frame))
         flagged = scores >= model.version.threshold
         keep = flagged.copy()
         if unit == UNIT_AML:
@@ -349,6 +397,7 @@ def score_all(db: Session, run_id: uuid.UUID, models: dict[str, LoadedModel]) ->
         positions = np.flatnonzero(keep)
         explanations = (model.booster.explain(frame.iloc[positions], TOP_CONTRIBUTIONS) if lab else
                         explain_model(model.version.model_text, frame.iloc[positions], TOP_CONTRIBUTIONS))
+        explanations = _validated_explanations(model.version, explanations, len(positions))
         records = []
         for i, contributions in zip(positions, explanations):
             records.append({
@@ -395,8 +444,10 @@ def raise_ml_alerts(db: Session, run_id: uuid.UUID, actor: User | None) -> tuple
     versions = active_rule_versions(db, ML_PATTERN_CODE)
     if not versions:
         return [], 0, 0
-    existing = {a.detection_details.get("ML_UNIT_KEY") for a in
-                db.scalars(select(Alert).where(Alert.pattern_code == ML_PATTERN_CODE))}
+    existing: dict[str, list[Alert]] = defaultdict(list)
+    for alert in db.scalars(select(Alert).where(Alert.pattern_code == ML_PATTERN_CODE)
+                            .order_by(Alert.created_at, Alert.id).with_for_update()):
+        existing[alert.detection_details.get("ML_UNIT_KEY")].append(alert)
     flagged = db.execute(
         select(MlScore, ModelVersion, Transaction.transaction_date)
         .join(ModelVersion, MlScore.model_version_id == ModelVersion.id)
@@ -422,9 +473,24 @@ def raise_ml_alerts(db: Session, run_id: uuid.UUID, actor: User | None) -> tuple
     for rule, version in versions:
         for (model_version, unit, customer_id, period), scores in groups.items():
             unit_key = f"{rule.rule_ref}:{model_version}:{customer_id}:{period}"
-            if unit_key in existing:
+            prior = existing.get(unit_key, [])
+            covered = {score_id for previous in prior for score_id in previous.detection_details.get("SCORE_IDS", [])}
+            novel = [score for score in scores if str(score.id) not in covered]
+            # FR-310: only an open survivor may absorb new occurrences. A case's
+            # evidence is protected even if an older app left its alert OPEN.
+            survivor = next((previous for previous in reversed(prior)
+                             if previous.status is AlertStatus.OPEN and previous.case_id is None), None)
+            if survivor is None and not novel:
                 already += 1
                 continue
+            if survivor is not None:
+                own_ids = set(survivor.detection_details.get("SCORE_IDS", []))
+                novel_ids = {str(score.id) for score in novel}
+                scores = [score for score in scores if str(score.id) in own_ids | novel_ids]
+            else:
+                # Never replay a human's disposed/escalated evidence into the
+                # new finding. Only genuinely uncovered stored scores are new.
+                scores = novel
             best = max(scores, key=lambda s: s.score)
             if unit == UNIT_AML:
                 window_end = best.as_of
@@ -446,6 +512,56 @@ def raise_ml_alerts(db: Session, run_id: uuid.UUID, actor: User | None) -> tuple
             reason = (f"{UNIT_LABEL[unit].capitalize()} {model_version} scored {what} at {_number(best.score)} "
                       f"(threshold {_number(best.threshold)}). Strongest features: "
                       f"{_describe(unit, best.contributions, definitions=definitions)}")
+            details = {
+                "ML_UNIT_KEY": unit_key,
+                "MODEL_VERSION": model_version,
+                "UNIT": unit,
+                "SCORE": round(best.score, 4),
+                "THRESHOLD": best.threshold,
+                "CONTRIBUTIONS": best.contributions,
+                "SCORE_IDS": [str(s.id) for s in scores],
+                "window_start": window_start.astimezone(timezone.utc).isoformat(),
+                "window_end": window_end.astimezone(timezone.utc).isoformat(),
+                "SIGNAL_NOTICE": SIGNAL_NOTICE,
+                "SYNTHETIC_NOTICE": SYNTHETIC_NOTICE,
+                "DETECTION_RUN_ID": str(run_id),
+            }
+            if survivor is not None:
+                # FR-308 / FR-310: a daily ML finding must retain every flagged
+                # transaction, including later uploads on that same source day.
+                original = deepcopy(survivor.detection_details)
+                previous_links = set(db.scalars(select(AlertTransaction.transaction_id)
+                                                .where(AlertTransaction.alert_id == survivor.id)))
+                new_evidence = set(evidence) - previous_links
+                count = int(original.get("SUPPRESSION_COUNT", 0)) + 1
+                occurrence = {
+                    "DETECTION_RUN_ID": str(run_id),
+                    "SUPPRESSED_AT": datetime.now(timezone.utc).isoformat(),
+                    "NOVEL_SCORE_IDS": [str(score.id) for score in novel],
+                    "NEW_TRANSACTION_IDS": sorted(str(value) for value in new_evidence),
+                }
+                updated = {**original, **details}
+                updated["CREATION_SNAPSHOT"] = original.get("CREATION_SNAPSHOT", {
+                    "reason": survivor.reason, "detection_details": original,
+                })
+                updated["DETECTION_RUN_ID"] = original.get("DETECTION_RUN_ID", str(run_id))
+                updated["LAST_DETECTION_RUN_ID"] = str(run_id)
+                updated["SUPPRESSION_COUNT"] = count
+                updated["SUPPRESSED_OCCURRENCES"] = [*original.get("SUPPRESSED_OCCURRENCES", []), occurrence]
+                survivor.reason = reason
+                survivor.detection_details = updated
+                db.add_all(AlertTransaction(alert_id=survivor.id, transaction_id=value) for value in new_evidence)
+                record_transition(
+                    db, correlation_id=survivor.correlation_id, actor=actor, object_type=OBJECT_ALERT,
+                    object_id=survivor.id, from_state=survivor.status.value, to_state=survivor.status.value,
+                    reason="Existing open ML finding retained; duplicate occurrence and new score references recorded (FR-310).",
+                    action="ALERT_SUPPRESSED_AS_DUPLICATE",
+                    details={**occurrence, "suppression_count": count, "novel_score_count": len(novel)},
+                )
+                already += 1
+                continue
+            if prior:
+                details["RELATED_PRIOR"] = [str(previous.id) for previous in prior]
             alert = Alert(
                 pattern_code=ML_PATTERN_CODE,
                 rule_version_id=version.id,
@@ -453,27 +569,14 @@ def raise_ml_alerts(db: Session, run_id: uuid.UUID, actor: User | None) -> tuple
                 correlation_id=uuid.uuid4(),
                 customer_id=customer_id,
                 reason=reason,
-                detection_details={
-                    "ML_UNIT_KEY": unit_key,
-                    "MODEL_VERSION": model_version,
-                    "UNIT": unit,
-                    "SCORE": round(best.score, 4),
-                    "THRESHOLD": best.threshold,
-                    "CONTRIBUTIONS": best.contributions,
-                    "SCORE_IDS": [str(s.id) for s in scores],
-                    "window_start": window_start.astimezone(timezone.utc).isoformat(),
-                    "window_end": window_end.astimezone(timezone.utc).isoformat(),
-                    "SIGNAL_NOTICE": SIGNAL_NOTICE,
-                    "SYNTHETIC_NOTICE": SYNTHETIC_NOTICE,
-                    "DETECTION_RUN_ID": str(run_id),
-                },
+                detection_details=details,
             )
             db.add(alert)
             db.flush()
             db.add_all(AlertTransaction(alert_id=alert.id, transaction_id=t) for t in set(evidence))
             record_transition(db, correlation_id=alert.correlation_id, actor=actor, object_type=OBJECT_ALERT,
                               object_id=alert.id, from_state=None, to_state=AlertStatus.OPEN.value, reason=reason)
-            existing.add(unit_key)
+            existing[unit_key].append(alert)
             created += 1
     return evaluated, created, already
 

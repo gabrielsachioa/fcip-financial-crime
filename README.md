@@ -7,6 +7,12 @@ risk scoring, watchlist/PEP screening, graph investigation, AI narrative and
 the complete investigation/evidence workflow remain unfinished. See
 [current context](docs/PROJECT_CONTEXT.md) for scope and open mentor decisions.
 
+**17 November ML safeguards:** unknown target values no longer silently become
+normal, invalid predictions fail before flag storage, and a read-only audit
+reports development-data history and shortcut risks. See
+[ML readiness and required review data](docs/ML_READINESS.md). These changes do
+not train or activate a model or establish new fraud/AML performance.
+
 ## Model lab: train, approve, monitor — 27 October 2026
 
 The **Lab model** page is the detection framework the mentors confirmed: upload a

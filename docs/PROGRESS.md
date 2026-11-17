@@ -1,9 +1,38 @@
 # FCIP — Progress Status
 
-**As of 13 November 2026 · roughly 20% of MVP scope (3 November estimate; not recounted by the UI simplification or ML exercises)**
+**As of 17 November 2026 · roughly 20% of MVP scope (3 November estimate; not recounted by the safeguards or UI/ML exercises)**
 
 Supersedes any earlier progress figure. Scope definitions, architecture and open
 questions are unchanged — see `PROJECT_CONTEXT.md`.
+
+## 17 November — first ML readiness safeguards stage
+
+Jevon authorises readiness fixes, prioritising ML flags. Unknown nonblank labels
+now fail validation instead of becoming normal; Lab mapping supports explicit
+negative values with exact-binary compatibility. Invalid scores, thresholds,
+artifacts and incomplete explanations fail visibly before model-score inserts.
+Later same-day flags enrich an OPEN unlinked finding with audited references;
+reviewed/case-linked evidence stays unchanged and new uncovered flags create a
+related alert. This retains AS-15 grouping; full FR-310 hash/concurrency work remains.
+
+The new read-only audit finds TRAIN 430/615 has **zero rows with the existing
+minimum history baseline**, plus single-class channel shortcuts. It neither
+fits a model nor discloses later reference outcomes. [Data findings](ml/data_readiness_20261117.json)
+and [required data/target decisions](ML_READINESS.md) are recorded. No new fraud/
+AML quality result, generator/shared-data change, live DB access or activation.
+
+**Verification:** full 1,044 backend tests pass, including 5 slow, then 134 focused ML
+regressions pass after the incremental-alert repair (6 new, 128 overlap):
+**1,050 distinct checks** across runs. Private PostgreSQL 16.15 clusters stop cleanly;
+frontend TypeScript/Vite build passes. Existing numerical/deprecation warnings
+are retained; no production browser QA. [Evidence](ml/readiness_20261117_checks.json).
+
+**Decisions I took myself:** AS-25 label compatibility and inference guards,
+TRAIN-only diagnostic tool, existing-group alert evidence repair per FR-308/310,
+private test DBs. **Ringkasan capstone:** Pengaman ML dan keterlacakan flag
+diperbaiki; hasil belum membuktikan peningkatan akurasi fraud/AML. Pembelajaran
+ulang menunggu definisi target, data sintetis yang direview dan kriteria evaluasi.
+The broader readiness request and original product backlog remain unfinished.
 
 > **12 November mentoring clarification:** Kak Gio suggests 70/15/15 development
 > and final backtest plus a fundamental fraud definition. Existing 430/92/93

@@ -70,6 +70,18 @@ LABEL_ALIASES = ("isfraud", "fraud", "label", "target", "class", "isfraudulent",
                  "suspicious", "issar", "sar", "islaundering", "laundering", "y")
 CATEGORY_ALIASES = ("patterncode", "pattern", "category", "typology", "scenario", "fraudtype", "kategori")
 POSITIVE_DEFAULTS = {"1", "true", "yes", "y", "t", "fraud", "ya"}
+# Compatibility for established binary mappings only. Other vocabularies need
+# an explicit negative set; an unrecognised answer is never evidence of normality.
+BINARY_LABEL_PAIRS = {
+    "1": "0", "0": "1", "true": "false", "false": "true", "yes": "no", "no": "yes",
+    "y": "n", "n": "y", "t": "f", "f": "t", "ya": "tidak", "tidak": "ya",
+}
+MISSING_LABEL_VALUES = {"nan", "none", "null", "<na>", "na", "n/a"}
+UNRESOLVED_LABEL_VALUES = {
+    "review", "unresolved", "pending", "unknown", "uncertain", "inconclusive",
+    "insufficient evidence", "insufficient_evidence", "belum ditinjau", "belum direview",
+    "belum diputuskan", "belum pasti", "tidak diketahui", "menunggu review",
+}
 LOW_CARDINALITY = 20
 MIN_PER_CLASS = 30
 # Upper end of the capstone brief's synthetic dataset (300k–500k transactions).
@@ -81,6 +93,54 @@ DIRECTION_SYNONYMS = {"DR": "DEBIT", "D": "DEBIT", "WITHDRAWAL": "DEBIT", "OUTGO
 
 class LabDataError(ValueError):
     """The file or the mapping cannot be used; the message is shown to the user."""
+
+
+def normalize_label_cells(values: pd.Series) -> pd.Series:
+    """Normalise spelling without turning native missing values into negatives."""
+    return values.astype("string").fillna("").str.strip().str.casefold()
+
+
+def label_values(mapping: dict) -> tuple[set[str], set[str]]:
+    """Resolve an explicit binary target, retaining legacy exact binary pairs.
+
+    This defines label spelling, not whether a case is confirmed fraud. Review
+    status belongs in a separate column (PROJECT_CONTEXT §22). A deliberately
+    chosen REVIEW positive may mean a review-worthy target; it must never be an
+    implicit or explicit normal answer.
+    """
+    def checked(values: object, kind: str) -> set[str]:
+        if not isinstance(values, (list, tuple, set)):
+            raise LabDataError(f"Pilih nilai label {kind} sebagai daftar nilai.")
+        result: set[str] = set()
+        for value in values:
+            if not pd.api.types.is_scalar(value):
+                raise LabDataError(f"Setiap nilai label {kind} harus berupa satu nilai teks, bukan daftar/objek.")
+            if value is None or (not isinstance(value, str) and pd.isna(value)):
+                raise LabDataError(f"Nilai label {kind} tidak boleh berisi nilai kosong/null.")
+            text = str(value).strip().casefold()
+            if not text or text in MISSING_LABEL_VALUES:
+                raise LabDataError(f"Nilai label {kind} tidak boleh berisi nilai kosong/null.")
+            result.add(text)
+        if not result:
+            raise LabDataError(f"Pilih minimal satu nilai label yang dihitung sebagai {kind}.")
+        return result
+
+    positives = checked(mapping.get("positive_values") or [], "positif")
+    supplied_negatives = mapping.get("negative_values")
+    if supplied_negatives is None:
+        if not positives <= BINARY_LABEL_PAIRS.keys():
+            raise LabDataError("Pilih nilai label negatif secara eksplisit untuk label selain pasangan biner "
+                               "(misalnya 1/0 atau yes/no); nilai lain tidak otomatis dianggap normal.")
+        negatives = {BINARY_LABEL_PAIRS[value] for value in positives}
+    else:
+        negatives = checked(supplied_negatives, "negatif")
+    if positives & negatives:
+        raise LabDataError("Nilai label positif dan negatif harus berbeda (tidak boleh tumpang tindih).")
+    if negatives & UNRESOLVED_LABEL_VALUES:
+        raise LabDataError("Status belum diputuskan (REVIEW/PENDING/UNRESOLVED/UNKNOWN) tidak boleh menjadi label "
+                           "negatif/normal. Kosongkan label sampai review selesai dan simpan status review "
+                           "pada kolom terpisah.")
+    return positives, negatives
 
 
 def _name(value: object) -> str:
@@ -166,10 +226,14 @@ def suggest(frame: pd.DataFrame) -> dict:
         if len(distinct) <= LOW_CARDINALITY:
             low_cardinality[column] = sorted(str(v) for v in distinct)
     positives = [v for v in low_cardinality.get(label or "", []) if v.strip().lower() in POSITIVE_DEFAULTS]
+    complements = {BINARY_LABEL_PAIRS[v.strip().casefold()] for v in positives
+                   if v.strip().casefold() in BINARY_LABEL_PAIRS}
+    negatives = [v for v in low_cardinality.get(label or "", []) if v.strip().casefold() in complements]
     return {
         "fields": mapping,
         "label_column": label,
         "positive_values": positives,
+        "negative_values": negatives,
         "category_column": category,
         "date_format": _sniff_date_format(frame[mapping["transaction_date"]]) if "transaction_date" in mapping else "iso",
         "low_cardinality": low_cardinality,
@@ -267,15 +331,20 @@ def apply_mapping(raw: pd.DataFrame, mapping: dict) -> MappedData:
     used = list(fields.values())
     if label_column in used or (category_column and category_column in used):
         raise LabDataError("Kolom label dan kolom kategori tidak boleh dipakai sebagai field transaksi (mencegah kebocoran).")
-    positive_values = {str(v).strip().lower() for v in mapping.get("positive_values") or [] if str(v).strip()}
-    if not positive_values:
-        raise LabDataError("Pilih minimal satu nilai label yang dihitung sebagai positif.")
+    positive_values, negative_values = label_values(mapping)
 
     accepted, quarantine, notes = _normalize(raw, fields, date_format, default_currency)
     positions = accepted.source_ordinal.to_numpy(dtype=np.int64) - 1
-    label_raw = raw[label_column].astype(str).str.strip().to_numpy()[positions]
+    label_raw = normalize_label_cells(raw[label_column]).to_numpy(dtype=str)[positions]
     label_present = label_raw != ""
-    labels = np.where(np.isin(np.char.lower(label_raw.astype(str)), list(positive_values)), 1.0, 0.0)
+    known_label = np.isin(label_raw, list(positive_values | negative_values))
+    unknown = label_present & ~known_label
+    if unknown.any():
+        examples = ", ".join(repr(value[:80]) for value in sorted(set(label_raw[unknown]))[:8])
+        raise LabDataError(f"{int(unknown.sum())} baris memiliki nilai label yang belum dipetakan: {examples}. "
+                           "Pilih nilai positif dan negatif secara eksplisit; nilai lain tidak otomatis normal. "
+                           "Untuk kasus belum diputuskan, kosongkan label dan simpan status review terpisah.")
+    labels = np.where(np.isin(label_raw, list(positive_values)), 1.0, 0.0)
     missing_label = int((~label_present).sum())
     keep = label_present.copy()
 

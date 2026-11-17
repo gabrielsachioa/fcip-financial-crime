@@ -43,6 +43,7 @@ class LabSuggestion(BaseModel):
     fields: dict[str, str]
     label_column: str | None
     positive_values: list[str]
+    negative_values: list[str] = []
     category_column: str | None
     date_format: Literal["iso", "month_first"]
     low_cardinality: dict[str, list[str]]
@@ -52,6 +53,7 @@ class LabMappingIn(BaseModel):
     fields: dict[str, str | None]
     label_column: str = Field(min_length=1)
     positive_values: list[str] = Field(min_length=1)
+    negative_values: list[str] | None = Field(None, min_length=1)
     category_column: str | None = None
     date_format: Literal["iso", "month_first"] = "iso"
     default_currency: str | None = Field(None, max_length=3)

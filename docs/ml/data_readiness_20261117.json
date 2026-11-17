@@ -1,0 +1,209 @@
+{
+  "version": "ml_data_readiness_v1",
+  "purpose": "Development-data diagnostics only; not model quality or a production acceptance decision.",
+  "model_fitted": false,
+  "predictions_computed": false,
+  "reference_label_scope": "TRAIN only; validation and TEST outcomes are withheld.",
+  "input": {
+    "total_rows": 615,
+    "accepted_transactions": 615,
+    "quarantined_transactions": 0,
+    "quarantine_reasons": [],
+    "duplicate_reference_rows": 0,
+    "duplicate_reference_rows_definition": "All rows sharing a nonempty reference, including its first occurrence.",
+    "duplicate_reference_values": 0,
+    "generated_reference_ids": false,
+    "currencies": {
+      "IDR": 615
+    }
+  },
+  "mapping": {
+    "snapshot": {
+      "fields": {
+        "account_number": "account_number",
+        "amount": "amount",
+        "channel": "channel",
+        "counterparty_country": "counterparty_country",
+        "currency": "currency",
+        "device_ref": "device_ref",
+        "direction": "direction",
+        "ip_address": "ip_address",
+        "location": "location",
+        "merchant_ref": "merchant_ref",
+        "transaction_date": "transaction_date",
+        "transaction_ref": "transaction_ref",
+        "transaction_type": "transaction_type"
+      },
+      "label_column": "is_fraud",
+      "category_column": "pattern_code",
+      "positive_values": [
+        "1"
+      ],
+      "date_format": "iso",
+      "default_currency": "XXX",
+      "negative_values": [
+        "0"
+      ]
+    },
+    "snapshot_scope": "Supported Lab mapping configuration only; no transaction cells or arbitrary source metadata.",
+    "positive_values": [
+      "1"
+    ],
+    "negative_values": [
+      "0"
+    ],
+    "negative_mapping_explicit": true,
+    "unmapped_transaction_fields": [
+      "source_status",
+      "login_attempts",
+      "transaction_duration",
+      "account_balance"
+    ],
+    "notes": []
+  },
+  "chronology": {
+    "requested_train_share": 0.7,
+    "split_population": "All accepted transactions, including unlabelled history; not a training run.",
+    "partitions": {
+      "train": {
+        "rows": 430,
+        "date_from": "2026-07-01T02:54:44+00:00",
+        "date_to": "2026-09-02T17:37:39+00:00",
+        "availability_from": "2026-07-01T02:54:44+00:00",
+        "availability_to": "2026-09-02T17:37:39+00:00",
+        "reference_labels_disclosed": true
+      },
+      "validation": {
+        "rows": 92,
+        "date_from": "2026-09-02T17:39:22+00:00",
+        "date_to": "2026-09-14T03:51:38+00:00",
+        "availability_from": "2026-09-02T17:39:22+00:00",
+        "availability_to": "2026-09-14T03:51:38+00:00",
+        "reference_labels_disclosed": false
+      },
+      "test": {
+        "rows": 93,
+        "date_from": "2026-09-14T04:18:33+00:00",
+        "date_to": "2026-09-30T13:35:43+00:00",
+        "availability_from": "2026-09-14T04:18:33+00:00",
+        "availability_to": "2026-09-30T13:35:43+00:00",
+        "reference_labels_disclosed": false
+      }
+    }
+  },
+  "train": {
+    "rows": 430,
+    "label_counts": {
+      "positive": 46,
+      "negative": 384,
+      "blank": 0,
+      "unresolved": 0,
+      "unconfirmed_negative": 0
+    },
+    "unconfirmed_label_values": [],
+    "history_policy": {
+      "min_prior_observations": 30,
+      "min_observed_days": 30,
+      "source": "Existing behavioral_v1 feature gate; descriptive only, no new scoring restriction."
+    },
+    "history_by_currency": [
+      {
+        "currency": "IDR",
+        "rows": 430,
+        "accounts": 30,
+        "baseline_available_rows": 0,
+        "baseline_unavailable_rows": 430,
+        "prior_mean_available_rows": 0,
+        "day_only_rows": 0,
+        "source_timezone_unknown_rows": 0
+      }
+    ],
+    "channel_label_support": [
+      {
+        "channel": "AGENT",
+        "rows": 5,
+        "positive": 5,
+        "negative": 0,
+        "unconfirmed_or_unlabelled": 0,
+        "only_one_mapped_class_observed": true
+      },
+      {
+        "channel": "BANK_TRANSFER",
+        "rows": 24,
+        "positive": 0,
+        "negative": 24,
+        "unconfirmed_or_unlabelled": 0,
+        "only_one_mapped_class_observed": true
+      },
+      {
+        "channel": "MOBILE_APP",
+        "rows": 377,
+        "positive": 17,
+        "negative": 360,
+        "unconfirmed_or_unlabelled": 0,
+        "only_one_mapped_class_observed": false
+      },
+      {
+        "channel": "WEB",
+        "rows": 24,
+        "positive": 24,
+        "negative": 0,
+        "unconfirmed_or_unlabelled": 0,
+        "only_one_mapped_class_observed": true
+      }
+    ],
+    "category_label_support": [
+      {
+        "category": "ATO",
+        "positive": 11,
+        "negative": 0
+      },
+      {
+        "category": "DORMANT",
+        "positive": 2,
+        "negative": 0
+      },
+      {
+        "category": "LOOKALIKE",
+        "positive": 0,
+        "negative": 17
+      },
+      {
+        "category": "MULE",
+        "positive": 16,
+        "negative": 0
+      },
+      {
+        "category": "NORMAL",
+        "positive": 0,
+        "negative": 367
+      },
+      {
+        "category": "STRUCTURING",
+        "positive": 6,
+        "negative": 0
+      },
+      {
+        "category": "VELOCITY",
+        "positive": 11,
+        "negative": 0
+      }
+    ]
+  },
+  "review_items": [
+    "TRAIN_HISTORY_BASELINE_UNAVAILABLE",
+    "TRAIN_CHANNEL_SINGLE_LABEL_CLASS"
+  ],
+  "review_item_policy": "Descriptive issues for review; no automatic model acceptance, training prohibition, or scoring suppression.",
+  "limitations": [
+    "Explicit labels still require reviewer provenance and an agreed target definition.",
+    "A channel with one observed label class is a shortcut risk to review, not evidence of fraud.",
+    "No diagnostic proves fraud intent, money laundering, or real-bank accuracy.",
+    "Do not pass an untouched final source; these checks are for development data."
+  ],
+  "source": {
+    "file_format": "csv",
+    "data_sha256": "d2b8087e9fc07a2462d84bb1d3fb3be405035b8027430a670b1753e6f220aea6",
+    "mapping_sha256": "b734eb5889e43d89c6b35c33a7966aa7d57a559248bd3f9458c24350df0fdad9"
+  }
+}
