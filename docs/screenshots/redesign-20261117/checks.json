@@ -1,0 +1,2448 @@
+{
+  "purpose": "Fictional fixtures for UI behavior only; not ML or production results.",
+  "live_backend_requests": 0,
+  "checks": [
+    {
+      "kind": "responsive",
+      "route": "/",
+      "width": 320,
+      "scroll": 320,
+      "title": "Beranda",
+      "overflow": []
+    },
+    {
+      "kind": "responsive",
+      "route": "/alerts",
+      "width": 320,
+      "scroll": 320,
+      "title": "Perlu ditinjau",
+      "overflow": []
+    },
+    {
+      "kind": "responsive",
+      "route": "/alerts/alert-1",
+      "width": 320,
+      "scroll": 320,
+      "title": "Nasabah Contoh",
+      "overflow": []
+    },
+    {
+      "kind": "responsive",
+      "route": "/cases/case-1",
+      "width": 320,
+      "scroll": 320,
+      "title": "CASE-QA42",
+      "overflow": []
+    },
+    {
+      "kind": "responsive",
+      "route": "/model-flags",
+      "width": 320,
+      "scroll": 320,
+      "title": "Kenali hasil yang ditandai",
+      "overflow": []
+    },
+    {
+      "kind": "responsive",
+      "route": "/lab",
+      "width": 320,
+      "scroll": 320,
+      "title": "Pemeriksaan otomatis, langkah demi langkah",
+      "overflow": []
+    },
+    {
+      "kind": "responsive",
+      "route": "/audit",
+      "width": 320,
+      "scroll": 320,
+      "title": "Riwayat aktivitas",
+      "overflow": []
+    },
+    {
+      "kind": "responsive",
+      "route": "/guide",
+      "width": 320,
+      "scroll": 320,
+      "title": "Mulai dari yang sederhana.",
+      "overflow": []
+    },
+    {
+      "kind": "responsive",
+      "route": "/",
+      "width": 375,
+      "scroll": 375,
+      "title": "Beranda",
+      "overflow": []
+    },
+    {
+      "kind": "responsive",
+      "route": "/alerts",
+      "width": 375,
+      "scroll": 375,
+      "title": "Perlu ditinjau",
+      "overflow": []
+    },
+    {
+      "kind": "responsive",
+      "route": "/alerts/alert-1",
+      "width": 375,
+      "scroll": 375,
+      "title": "Nasabah Contoh",
+      "overflow": []
+    },
+    {
+      "kind": "responsive",
+      "route": "/cases/case-1",
+      "width": 375,
+      "scroll": 375,
+      "title": "CASE-QA42",
+      "overflow": []
+    },
+    {
+      "kind": "responsive",
+      "route": "/model-flags",
+      "width": 375,
+      "scroll": 375,
+      "title": "Kenali hasil yang ditandai",
+      "overflow": []
+    },
+    {
+      "kind": "responsive",
+      "route": "/lab",
+      "width": 375,
+      "scroll": 375,
+      "title": "Pemeriksaan otomatis, langkah demi langkah",
+      "overflow": []
+    },
+    {
+      "kind": "responsive",
+      "route": "/audit",
+      "width": 375,
+      "scroll": 375,
+      "title": "Riwayat aktivitas",
+      "overflow": []
+    },
+    {
+      "kind": "responsive",
+      "route": "/guide",
+      "width": 375,
+      "scroll": 375,
+      "title": "Mulai dari yang sederhana.",
+      "overflow": []
+    },
+    {
+      "kind": "responsive",
+      "route": "/",
+      "width": 768,
+      "scroll": 768,
+      "title": "Beranda",
+      "overflow": []
+    },
+    {
+      "kind": "responsive",
+      "route": "/alerts",
+      "width": 768,
+      "scroll": 768,
+      "title": "Perlu ditinjau",
+      "overflow": []
+    },
+    {
+      "kind": "responsive",
+      "route": "/alerts/alert-1",
+      "width": 768,
+      "scroll": 768,
+      "title": "Nasabah Contoh",
+      "overflow": []
+    },
+    {
+      "kind": "responsive",
+      "route": "/cases/case-1",
+      "width": 768,
+      "scroll": 768,
+      "title": "CASE-QA42",
+      "overflow": []
+    },
+    {
+      "kind": "responsive",
+      "route": "/model-flags",
+      "width": 768,
+      "scroll": 768,
+      "title": "Kenali hasil yang ditandai",
+      "overflow": []
+    },
+    {
+      "kind": "responsive",
+      "route": "/lab",
+      "width": 768,
+      "scroll": 768,
+      "title": "Pemeriksaan otomatis, langkah demi langkah",
+      "overflow": []
+    },
+    {
+      "kind": "responsive",
+      "route": "/audit",
+      "width": 768,
+      "scroll": 768,
+      "title": "Riwayat aktivitas",
+      "overflow": []
+    },
+    {
+      "kind": "responsive",
+      "route": "/guide",
+      "width": 768,
+      "scroll": 768,
+      "title": "Mulai dari yang sederhana.",
+      "overflow": []
+    },
+    {
+      "kind": "responsive",
+      "route": "/",
+      "width": 1024,
+      "scroll": 1024,
+      "title": "Beranda",
+      "overflow": []
+    },
+    {
+      "kind": "responsive",
+      "route": "/alerts",
+      "width": 1024,
+      "scroll": 1024,
+      "title": "Perlu ditinjau",
+      "overflow": []
+    },
+    {
+      "kind": "responsive",
+      "route": "/alerts/alert-1",
+      "width": 1024,
+      "scroll": 1024,
+      "title": "Nasabah Contoh",
+      "overflow": []
+    },
+    {
+      "kind": "responsive",
+      "route": "/cases/case-1",
+      "width": 1024,
+      "scroll": 1024,
+      "title": "CASE-QA42",
+      "overflow": []
+    },
+    {
+      "kind": "responsive",
+      "route": "/model-flags",
+      "width": 1024,
+      "scroll": 1024,
+      "title": "Kenali hasil yang ditandai",
+      "overflow": []
+    },
+    {
+      "kind": "responsive",
+      "route": "/lab",
+      "width": 1024,
+      "scroll": 1024,
+      "title": "Pemeriksaan otomatis, langkah demi langkah",
+      "overflow": []
+    },
+    {
+      "kind": "responsive",
+      "route": "/audit",
+      "width": 1024,
+      "scroll": 1024,
+      "title": "Riwayat aktivitas",
+      "overflow": []
+    },
+    {
+      "kind": "responsive",
+      "route": "/guide",
+      "width": 1024,
+      "scroll": 1024,
+      "title": "Mulai dari yang sederhana.",
+      "overflow": []
+    },
+    {
+      "kind": "responsive",
+      "route": "/",
+      "width": 1440,
+      "scroll": 1440,
+      "title": "Beranda",
+      "overflow": []
+    },
+    {
+      "kind": "responsive",
+      "route": "/alerts",
+      "width": 1440,
+      "scroll": 1440,
+      "title": "Perlu ditinjau",
+      "overflow": []
+    },
+    {
+      "kind": "responsive",
+      "route": "/alerts/alert-1",
+      "width": 1440,
+      "scroll": 1440,
+      "title": "Nasabah Contoh",
+      "overflow": []
+    },
+    {
+      "kind": "responsive",
+      "route": "/cases/case-1",
+      "width": 1440,
+      "scroll": 1440,
+      "title": "CASE-QA42",
+      "overflow": []
+    },
+    {
+      "kind": "responsive",
+      "route": "/model-flags",
+      "width": 1440,
+      "scroll": 1440,
+      "title": "Kenali hasil yang ditandai",
+      "overflow": []
+    },
+    {
+      "kind": "responsive",
+      "route": "/lab",
+      "width": 1440,
+      "scroll": 1440,
+      "title": "Pemeriksaan otomatis, langkah demi langkah",
+      "overflow": []
+    },
+    {
+      "kind": "responsive",
+      "route": "/audit",
+      "width": 1440,
+      "scroll": 1440,
+      "title": "Riwayat aktivitas",
+      "overflow": []
+    },
+    {
+      "kind": "responsive",
+      "route": "/guide",
+      "width": 1440,
+      "scroll": 1440,
+      "title": "Mulai dari yang sederhana.",
+      "overflow": []
+    },
+    {
+      "kind": "login-localized-error",
+      "passed": true
+    },
+    {
+      "kind": "drawer-focus-trap",
+      "passed": true
+    },
+    {
+      "kind": "drawer-escape-focus",
+      "passed": true
+    },
+    {
+      "kind": "decision-reason-guard",
+      "passed": true
+    },
+    {
+      "kind": "decision-api-contract",
+      "passed": true
+    },
+    {
+      "kind": "readonly-decision-role",
+      "passed": true
+    },
+    {
+      "kind": "upload-state-retained",
+      "passed": true
+    },
+    {
+      "kind": "model-story-observed-indicators",
+      "passed": true
+    },
+    {
+      "kind": "glossary-and-score-language",
+      "passed": true
+    },
+    {
+      "kind": "visible-small-score-boundary",
+      "passed": true
+    },
+    {
+      "kind": "explicit-label-mapping-contract",
+      "passed": true
+    },
+    {
+      "kind": "evaluation-mapping-lock",
+      "passed": true
+    },
+    {
+      "kind": "empty",
+      "route": "/",
+      "passed": true
+    },
+    {
+      "kind": "empty",
+      "route": "/alerts",
+      "passed": true
+    },
+    {
+      "kind": "empty",
+      "route": "/model-flags",
+      "passed": true
+    },
+    {
+      "kind": "empty",
+      "route": "/audit",
+      "passed": true
+    },
+    {
+      "kind": "empty",
+      "route": "/lab",
+      "passed": true
+    },
+    {
+      "kind": "visible-model-run-errors",
+      "passed": true
+    },
+    {
+      "kind": "mlro-approval-view",
+      "passed": true
+    },
+    {
+      "kind": "approval-reason-guard",
+      "passed": true
+    },
+    {
+      "kind": "compact-mobile-progress",
+      "passed": true
+    },
+    {
+      "kind": "landscape-reduced-motion",
+      "passed": true
+    }
+  ],
+  "requests": [
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/overview",
+      "query": "",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/transactions",
+      "query": "?limit=25&offset=0",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/ingestion/quarantine",
+      "query": "?limit=25",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/ingestion/batches",
+      "query": "?limit=10",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/ml/models",
+      "query": "",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/ml/scores",
+      "query": "?unit=AML&limit=1&offset=0&flagged=true",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/ml/scores",
+      "query": "?unit=FRAUD&limit=1&offset=0&flagged=true",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/overview",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/transactions",
+      "query": "?limit=25&offset=0",
+      "method": "GET"
+    },
+    {
+      "path": "/ingestion/quarantine",
+      "query": "?limit=25",
+      "method": "GET"
+    },
+    {
+      "path": "/ingestion/batches",
+      "query": "?limit=10",
+      "method": "GET"
+    },
+    {
+      "path": "/ml/models",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/ml/scores",
+      "query": "?unit=AML&limit=1&offset=0&flagged=true",
+      "method": "GET"
+    },
+    {
+      "path": "/ml/scores",
+      "query": "?unit=FRAUD&limit=1&offset=0&flagged=true",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/alerts",
+      "query": "?status=OPEN&limit=25&offset=0",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/alerts",
+      "query": "?status=OPEN&limit=25&offset=0",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/alerts/alert-1",
+      "query": "",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/alerts/alert-1",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/cases/case-1",
+      "query": "",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/cases/case-1",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/ml/scores",
+      "query": "?limit=50&offset=0&flagged=true",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/ml/models",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/ml/scores",
+      "query": "?limit=50&offset=0&flagged=true",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/options",
+      "query": "",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/lab/datasets",
+      "query": "",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/lab/models",
+      "query": "",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/lab/options",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/datasets",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/models",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/datasets/dataset-1",
+      "query": "",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/lab/datasets/dataset-1",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/runs/run-1",
+      "query": "",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/lab/runs/run-1",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/audit",
+      "query": "?limit=50&offset=0",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/audit",
+      "query": "?limit=50&offset=0",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/overview",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/transactions",
+      "query": "?limit=25&offset=0",
+      "method": "GET"
+    },
+    {
+      "path": "/ingestion/quarantine",
+      "query": "?limit=25",
+      "method": "GET"
+    },
+    {
+      "path": "/ingestion/batches",
+      "query": "?limit=10",
+      "method": "GET"
+    },
+    {
+      "path": "/ml/models",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/ml/scores",
+      "query": "?unit=AML&limit=1&offset=0&flagged=true",
+      "method": "GET"
+    },
+    {
+      "path": "/ml/scores",
+      "query": "?unit=FRAUD&limit=1&offset=0&flagged=true",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/alerts",
+      "query": "?status=OPEN&limit=25&offset=0",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/alerts/alert-1",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/cases/case-1",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/ml/models",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/ml/scores",
+      "query": "?limit=50&offset=0&flagged=true",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/options",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/datasets",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/models",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/datasets/dataset-1",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/runs/run-1",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/audit",
+      "query": "?limit=50&offset=0",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/overview",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/transactions",
+      "query": "?limit=25&offset=0",
+      "method": "GET"
+    },
+    {
+      "path": "/ingestion/quarantine",
+      "query": "?limit=25",
+      "method": "GET"
+    },
+    {
+      "path": "/ingestion/batches",
+      "query": "?limit=10",
+      "method": "GET"
+    },
+    {
+      "path": "/ml/models",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/ml/scores",
+      "query": "?unit=AML&limit=1&offset=0&flagged=true",
+      "method": "GET"
+    },
+    {
+      "path": "/ml/scores",
+      "query": "?unit=FRAUD&limit=1&offset=0&flagged=true",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/alerts",
+      "query": "?status=OPEN&limit=25&offset=0",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/alerts/alert-1",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/cases/case-1",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/ml/models",
+      "query": "",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/ml/scores",
+      "query": "?limit=50&offset=0&flagged=true",
+      "method": "GET"
+    },
+    {
+      "path": "/ml/models",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/options",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/datasets",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/models",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/datasets/dataset-1",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/runs/run-1",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/audit",
+      "query": "?limit=50&offset=0",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/overview",
+      "query": "",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/transactions",
+      "query": "?limit=25&offset=0",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/ingestion/quarantine",
+      "query": "?limit=25",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/ingestion/batches",
+      "query": "?limit=10",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/ml/scores",
+      "query": "?unit=AML&limit=1&offset=0&flagged=true",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/ml/scores",
+      "query": "?unit=FRAUD&limit=1&offset=0&flagged=true",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/ml/models",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/overview",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/transactions",
+      "query": "?limit=25&offset=0",
+      "method": "GET"
+    },
+    {
+      "path": "/ingestion/quarantine",
+      "query": "?limit=25",
+      "method": "GET"
+    },
+    {
+      "path": "/ingestion/batches",
+      "query": "?limit=10",
+      "method": "GET"
+    },
+    {
+      "path": "/ml/scores",
+      "query": "?unit=AML&limit=1&offset=0&flagged=true",
+      "method": "GET"
+    },
+    {
+      "path": "/ml/scores",
+      "query": "?unit=FRAUD&limit=1&offset=0&flagged=true",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/alerts",
+      "query": "?status=OPEN&limit=25&offset=0",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/alerts",
+      "query": "?status=OPEN&limit=25&offset=0",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/alerts/alert-1",
+      "query": "",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/alerts/alert-1",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/cases/case-1",
+      "query": "",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/cases/case-1",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/ml/scores",
+      "query": "?limit=50&offset=0&flagged=true",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/ml/models",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/ml/scores",
+      "query": "?limit=50&offset=0&flagged=true",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/options",
+      "query": "",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/lab/datasets",
+      "query": "",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/lab/models",
+      "query": "",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/lab/options",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/datasets",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/models",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/datasets/dataset-1",
+      "query": "",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/lab/datasets/dataset-1",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/runs/run-1",
+      "query": "",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/lab/runs/run-1",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/audit",
+      "query": "?limit=50&offset=0",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/audit",
+      "query": "?limit=50&offset=0",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/overview",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/transactions",
+      "query": "?limit=25&offset=0",
+      "method": "GET"
+    },
+    {
+      "path": "/ingestion/quarantine",
+      "query": "?limit=25",
+      "method": "GET"
+    },
+    {
+      "path": "/ingestion/batches",
+      "query": "?limit=10",
+      "method": "GET"
+    },
+    {
+      "path": "/ml/models",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/ml/scores",
+      "query": "?unit=AML&limit=1&offset=0&flagged=true",
+      "method": "GET"
+    },
+    {
+      "path": "/ml/scores",
+      "query": "?unit=FRAUD&limit=1&offset=0&flagged=true",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/alerts",
+      "query": "?status=OPEN&limit=25&offset=0",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/alerts/alert-1",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/cases/case-1",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/ml/models",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/ml/scores",
+      "query": "?limit=50&offset=0&flagged=true",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/options",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/datasets",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/models",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/datasets/dataset-1",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/runs/run-1",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/audit",
+      "query": "?limit=50&offset=0",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/login",
+      "query": "",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/auth/login",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/login",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/overview",
+      "query": "",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/transactions",
+      "query": "?limit=25&offset=0",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/ingestion/quarantine",
+      "query": "?limit=25",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/ingestion/batches",
+      "query": "?limit=10",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/ml/models",
+      "query": "",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/ml/scores",
+      "query": "?unit=AML&limit=1&offset=0&flagged=true",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/ml/scores",
+      "query": "?unit=FRAUD&limit=1&offset=0&flagged=true",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/overview",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/transactions",
+      "query": "?limit=25&offset=0",
+      "method": "GET"
+    },
+    {
+      "path": "/ingestion/quarantine",
+      "query": "?limit=25",
+      "method": "GET"
+    },
+    {
+      "path": "/ingestion/batches",
+      "query": "?limit=10",
+      "method": "GET"
+    },
+    {
+      "path": "/ml/models",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/ml/scores",
+      "query": "?unit=AML&limit=1&offset=0&flagged=true",
+      "method": "GET"
+    },
+    {
+      "path": "/ml/scores",
+      "query": "?unit=FRAUD&limit=1&offset=0&flagged=true",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/alerts",
+      "query": "?status=ESCALATED&limit=25&offset=0",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/alerts",
+      "query": "?status=ESCALATED&limit=25&offset=0",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/alerts/alert-1",
+      "query": "",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/alerts/alert-1",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/alerts/alert-1/disposition",
+      "query": "",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/alerts/alert-1/disposition",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/alerts/alert-1",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/overview",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/transactions",
+      "query": "?limit=25&offset=0",
+      "method": "GET"
+    },
+    {
+      "path": "/ingestion/quarantine",
+      "query": "?limit=25",
+      "method": "GET"
+    },
+    {
+      "path": "/ingestion/batches",
+      "query": "?limit=10",
+      "method": "GET"
+    },
+    {
+      "path": "/ml/models",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/ml/scores",
+      "query": "?unit=AML&limit=1&offset=0&flagged=true",
+      "method": "GET"
+    },
+    {
+      "path": "/ml/scores",
+      "query": "?unit=FRAUD&limit=1&offset=0&flagged=true",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/alerts/alert-1",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/ml/scores",
+      "query": "?limit=50&offset=0&flagged=true",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/ml/models",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/ml/scores",
+      "query": "?limit=50&offset=0&flagged=true",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/options",
+      "query": "",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/lab/datasets",
+      "query": "",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/lab/models",
+      "query": "",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/lab/options",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/datasets",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/models",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/datasets/dataset-1",
+      "query": "",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/lab/datasets/dataset-1",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/datasets/dataset-1/mapping",
+      "query": "",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/lab/datasets/dataset-1/mapping",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/lab/datasets",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/options",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/datasets",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/models",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/datasets/dataset-1",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/runs/run-1",
+      "query": "",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/lab/runs/run-1",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/overview",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/transactions",
+      "query": "?limit=25&offset=0",
+      "method": "GET"
+    },
+    {
+      "path": "/ingestion/quarantine",
+      "query": "?limit=25",
+      "method": "GET"
+    },
+    {
+      "path": "/ingestion/batches",
+      "query": "?limit=10",
+      "method": "GET"
+    },
+    {
+      "path": "/ml/models",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/ml/scores",
+      "query": "?unit=AML&limit=1&offset=0&flagged=true",
+      "method": "GET"
+    },
+    {
+      "path": "/ml/scores",
+      "query": "?unit=FRAUD&limit=1&offset=0&flagged=true",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/alerts",
+      "query": "?status=OPEN&limit=25&offset=0",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/alerts",
+      "query": "?status=OPEN&limit=25&offset=0",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/ml/models",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/ml/scores",
+      "query": "?limit=50&offset=0&flagged=true",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/audit",
+      "query": "?limit=50&offset=0",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/audit",
+      "query": "?limit=50&offset=0",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/options",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/datasets",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/models",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/options",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/datasets",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/models",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/ml/models",
+      "query": "",
+      "method": "OPTIONS"
+    },
+    {
+      "path": "/ml/scores",
+      "query": "?limit=50&offset=0&flagged=true",
+      "method": "GET"
+    },
+    {
+      "path": "/ml/models",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/options",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/datasets",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/models",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/datasets/dataset-1",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/runs/run-1",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/options",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/datasets",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/models",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/datasets/dataset-1",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/runs/run-1",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/options",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/datasets",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/models",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/datasets/dataset-1",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/lab/runs/run-1",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/refresh",
+      "query": "",
+      "method": "POST"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    },
+    {
+      "path": "/auth/me",
+      "query": "",
+      "method": "GET"
+    }
+  ],
+  "runtime_errors": [],
+  "unmocked_requests": []
+}

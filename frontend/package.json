@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "test:explanations": "node --test tests/explanations.test.mjs",
+    "test:ui": "node tests/redesign.browser.mjs"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.62.0",

@@ -7,7 +7,7 @@ is actually built, what is deliberately not built, and what is still undecided.
 Last updated: **17 November 2026** · latest scope estimate in
 [PROGRESS.md](PROGRESS.md) is roughly 20% (3 November; not recounted by this audit).
 
-**Current handoff:** §18–23, [the Lab guide](LAB_THIN_SLICE.md) and
+**Current handoff:** §18–24, [the Lab guide](LAB_THIN_SLICE.md) and
 [PROGRESS.md](PROGRESS.md) describe the current application after the team's
 27 October/3 November work: nine roles, model approval and monitoring, and
 P01–P10 app rules. CF-05(b) is recorded as answered; an MLRO controls model
@@ -33,6 +33,12 @@ gaps, prioritising ML flags, and asks what supporting data is needed. §23 and
 [ML_READINESS.md](ML_READINESS.md) describe the label/inference safeguards and
 development-data audit. Target definition and new reviewed data remain pending;
 there is no new research training, fraud/AML performance claim or activation.
+
+**17 November interface redesign:** while the ML target/review data is pending,
+Jevon explicitly requests a fresh novice-friendly UI/UX using `ui-ux-pro-max`.
+§24 and [the design system](../design-system/fcip/MASTER.md) describe the new
+Indonesian task-based interface, grounded explanations and searchable guide.
+This is a presentation stage; the outstanding ML decisions above remain open.
 
 The [4 November Lab repair](ml/lab_repair_20261104.md) passes 913 distinct backend
 checks and the frontend build. It fixes evaluation/mapping leakage, adds a
@@ -921,6 +927,26 @@ an OPEN case-unlinked alert absorbs new score/transaction references with audit
 and a creation snapshot; reviewed/case-linked alerts remain unchanged and new
 uncovered scores produce a related finding. Exact reruns add no score/transaction
 duplicates. This does not complete the global FR-310 hash-key/concurrency design.
+
+**AS-26 — authorised beginner-focused interface redesign (17 Nov):** Jevon
+explicitly switches to a complete UI/UX redesign while ML inputs are pending,
+using `ui-ux-pro-max`. Supersede AS-21–24 visual/short-copy choices with cobalt,
+navy navigation, light surfaces, task-oriented Indonesian names, relevant help
+and an always-available `/guide` glossary. Existing eight pages are redesigned;
+the guide is a new frontend-only route. Details retain original codes, rule
+description/reason and arithmetic without exposing them as the first explanation.
+Deterministic presentation helpers translate stored factors, preserve unknowns
+and show up to two validated stored ML contribution values before the cutoff;
+matching source currency requires explicit provenance. No inferred intent,
+authorisation, baseline or probability. Numeric display preserves close/tiny
+scores; backend values stay unchanged. Forms remain mounted across task views;
+roles, 20-character reasons, approval/evaluation guards and mandatory bilingual
+captions remain. A valid alert-status deep link is now honoured. Known auth
+messages are translated without changing authentication semantics. Colours,
+spacing, font sizes, breakpoints and QA viewports are reversible design choices,
+not FRD/TRD numeric targets. Verification uses pure helper tests and isolated
+browser fixtures; all screenshot metrics/data are fictional QA examples. No
+backend, generator/shared data, model/threshold/label, live DB or activation change.
 
 ### TRD §1.5 — conflicts still open
 
@@ -2341,3 +2367,57 @@ fail visibly on invalid predictions; descriptive TRAIN-only readiness diagnostic
 isolated test databases. **Capstone:** Pengaman label dan inference diperkuat serta
 kekurangan riwayat dan bias sumber diukur. Pembelajaran ulang dan pembuktian
 kualitas fraud/AML masih membutuhkan definisi target dan data review yang sesuai.
+
+---
+
+## 24. Fresh, beginner-friendly interface — 17 November 2026
+
+Jevon requests a complete redesign while waiting for the ML input/target
+decisions. This deliberately replaces the previous sparse forest interface.
+The verified `ui-ux-pro-max` Minimalism & Swiss Style direction is adapted to a
+calm cobalt/sky/white workspace and navy navigation, using existing local fonts
+and SVG icons. [MASTER.md](../design-system/fcip/MASTER.md) is the design source.
+AS-26 records the reversible UI choices and explicit authority.
+
+**Experience:** Beranda explains the upload → check → review journey and separates
+transactions, adding/checking data and records needing repair. Review presents
+why flagged, observed facts and what to check before the human decision. ML
+stories surface actual stored indicators and unknown history before the score/
+cutoff; they do not invent behavioural baselines, currency or crime conclusions.
+Original explanations, IDs, model contributions and configuration remain in
+technical disclosures. Case/queue/status names are plain Indonesian. Scores
+remain model values, not probabilities. Empty/unflagged/ACTIVE states do not
+establish safety or quality (FR-308/406, BR-406.1, TRD §10.6, FRD L-01).
+
+**Management:** Hasil otomatis separates transaction/weekly observations and
+puts model versions behind optional details. Atur deteksi separates prepare/test
+from approve/use, preserves form state and locks, explains validation/final
+boundaries and gives a compact expandable mobile step list. Audit becomes a
+readable timeline with the original trace filters and export. Login explains the
+purpose and gives actionable Indonesian errors. `/guide` adds searchable plain
+definitions and the beginner journey. Mandatory bilingual notices stay visible.
+
+**Verification:** 14 pure explanation checks pass, including actual-only ML facts,
+unknown/malformed observations, source-currency provenance and tiny/close score
+display. 62 recorded browser checks pass: 40 populated route×viewport combinations
+at 320/375/768/1024/1440 px plus input/role/guard/error/empty/mobile/keyboard checks.
+Eleven selected token text/background pairs meet 4.5:1 contrast. TypeScript/Vite
+production build passes; no new dependency or external font/image request is introduced.
+[Evidence](ui_redesign_20261117_checks.json) and
+[fixture screenshots](screenshots/redesign-20261117/checks.json) retain scope and
+provenance. All displayed counts/model metrics in screenshots are invented QA
+fixtures; zero test API requests reach the live service. Dedicated QA Chrome and
+Vite are stopped. No full backend-suite rerun, real-bank UAT, independent novice
+usability study or screen-reader certification is claimed by this UI-only stage.
+
+**No ML experiment:** backend/datasets/models remain unchanged; no live DB query,
+training, label/threshold change, activation or regulator/payment action. The
+615-row source and its limitations, remaining product backlog and target/review
+decisions in §23 remain current.
+
+**Decisions I took myself:** task-based navigation and bilingual-safe plain copy;
+grounded factor cards with optional technical details; cobalt/navy design tokens;
+mobile progress disclosure and retained form state; isolated browser regression
+checks. **Capstone:** Seluruh tampilan utama dirancang ulang agar pengguna baru
+lebih mudah memahami alur, alasan penandaan dan tindak lanjut. Tampilan skor
+dan indikator diperjelas tanpa mengubah hasil atau menyimpulkan adanya kejahatan.

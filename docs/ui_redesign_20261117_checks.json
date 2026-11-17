@@ -1,0 +1,218 @@
+{
+  "base_head": "ae298eba627584fd3ec4c093d48d8c7b9daefefb",
+  "scope": "Beginner-focused FCIP presentation redesign; no ML/data/backend experiment.",
+  "explanation_tests": {
+    "command": [
+      "npm",
+      "run",
+      "test:explanations"
+    ],
+    "cwd": "frontend",
+    "passed": 14,
+    "failed": 0,
+    "exit_code": 0
+  },
+  "frontend_build": {
+    "command": [
+      "npm",
+      "run",
+      "build"
+    ],
+    "cwd": "frontend",
+    "exit_code": 0,
+    "typescript_no_emit": true,
+    "vite_production_build": true,
+    "modules": 169
+  },
+  "browser": {
+    "command": [
+      "npm",
+      "run",
+      "test:ui"
+    ],
+    "cwd": "frontend",
+    "exit_code": 0,
+    "recorded_checkpoints": 62,
+    "populated_route_viewport_combinations": 40,
+    "viewport_widths": [
+      320,
+      375,
+      768,
+      1024,
+      1440
+    ],
+    "ledger": "docs/screenshots/redesign-20261117/checks.json",
+    "ledger_sha256": "2fa78189798b51e2aa1249c2b7d1fb7962ddf9a7a37cc6edfa8245d119258c21",
+    "live_backend_requests": 0,
+    "runtime_errors": 0,
+    "unmocked_requests": 0,
+    "api_host": "https://fcip-qa.invalid",
+    "frontend_host": "http://127.0.0.1:5177",
+    "dedicated_debug_port": 9237,
+    "dedicated_browser_closed": true,
+    "isolated_vite_stopped": true,
+    "fixture_notice": "All counts, identities, flags and model metrics shown in screenshots are invented UI fixtures; no production or ML quality inference."
+  },
+  "contrast": [
+    {
+      "foreground": "ink",
+      "background": "panel",
+      "ratio": 14.11,
+      "minimum": 4.5
+    },
+    {
+      "foreground": "text-secondary",
+      "background": "panel",
+      "ratio": 7.66,
+      "minimum": 4.5
+    },
+    {
+      "foreground": "muted",
+      "background": "panel",
+      "ratio": 4.93,
+      "minimum": 4.5
+    },
+    {
+      "foreground": "muted",
+      "background": "canvas",
+      "ratio": 4.6,
+      "minimum": 4.5
+    },
+    {
+      "foreground": "on-primary",
+      "background": "primary",
+      "ratio": 6.09,
+      "minimum": 4.5
+    },
+    {
+      "foreground": "nav-text",
+      "background": "nav-bg",
+      "ratio": 14.26,
+      "minimum": 4.5
+    },
+    {
+      "foreground": "nav-muted",
+      "background": "nav-bg",
+      "ratio": 8.96,
+      "minimum": 4.5
+    },
+    {
+      "foreground": "green",
+      "background": "green-soft",
+      "ratio": 5.42,
+      "minimum": 4.5
+    },
+    {
+      "foreground": "amber",
+      "background": "amber-soft",
+      "ratio": 6.06,
+      "minimum": 4.5
+    },
+    {
+      "foreground": "red",
+      "background": "red-soft",
+      "ratio": 5.72,
+      "minimum": 4.5
+    },
+    {
+      "foreground": "primary",
+      "background": "primary-soft",
+      "ratio": 5.43,
+      "minimum": 4.5
+    }
+  ],
+  "manual_visual_review": [
+    "1440-beranda.png",
+    "375-beranda.png",
+    "1440-detail-temuan.png",
+    "375-detail-temuan.png",
+    "1440-ml-explanation.png",
+    "1440-model-flags.png",
+    "1440-lab.png",
+    "375-lab.png",
+    "375-lab-first-use.png",
+    "1440-audit.png",
+    "1440-login.png",
+    "1440-upload.png"
+  ],
+  "source_sha256": {
+    "frontend/index.html": "e1039955c1ee49d9efd3feae8ba09b7d48339f330f10b5f4cd72a4b0b79f6cb0",
+    "frontend/package.json": "3ebe0f6d1fe2a3766efb627094f188d82a21fc48d7e6069c9306ce612d0f919c",
+    "frontend/public/favicon.svg": "dadb0e5904c872fa80bd8a7197f1bdb6a6daab19cb2ad1853b7e8dcb32afab31",
+    "frontend/src/App.tsx": "23627cac4ee8e94d7b0c4967fc1371768fc4397204c1a4eadd225f428a03fd35",
+    "frontend/src/analysis.css": "3e238d77a7f0b8d6f1b3d67f4fde47558cbcbf46be45bb71576c25f84fa5dd0d",
+    "frontend/src/api/errors.ts": "be0ffd6af45a5e69f3542fcfaaa73903ff647e85386c53886f5093a6a9dc4957",
+    "frontend/src/components/LabDeploy.tsx": "b572d247744923e9019d03d15129f51b9a2eaa1b7cdc8b320dcf1fdadfcb531a",
+    "frontend/src/components/Layout.tsx": "a0dacc87f32856cec03975b73ee7271c304d38aa2137d79db0fb343c0ae82509",
+    "frontend/src/components/ModelSignals.tsx": "f119c670b365b4b2d5c51c4b77377ce304d6261b50089c3452effe7589f25c7a",
+    "frontend/src/components/StatusBadge.tsx": "5afbd2cb70c91612a95ac6103fe9710c692f98d547d63a13e779cf900dae55df",
+    "frontend/src/explanations.ts": "0fca005d492c35e7e2e8a98ee6f51c564a0783312c8f62e0c9e1993c63b552bf",
+    "frontend/src/format.ts": "b7204538f2dace4997323fddf26680bcf595cbecb14ba9e8a46e3df9b4cbc4f7",
+    "frontend/src/guide.css": "de2233d11e322176327d0049c237da3b0c8f1a62c361c1f83553a9ce537b06aa",
+    "frontend/src/index.css": "cbfc58df500689727f2527860d6442c6aa7743c6a1e81a583339aea39518185f",
+    "frontend/src/lab.css": "4e6e89a022bb3c7edcba984a1387dc43daa1bbe57fc25811da6dbaa16fd38965",
+    "frontend/src/operations.css": "91293aa38e4cb601f60cfc3c6d9c13be612db60e6ea5a69cff863ff2af634221",
+    "frontend/src/pages/AlertDetailPage.tsx": "5622a8d91dd370139813fa026dc79134fdeb9848c899a68ae86e1a4f58dd4a82",
+    "frontend/src/pages/AlertQueuePage.tsx": "52401f2e29fd34b497b97b80762c23cea5b46c536a886203ad5405224dc9e5bb",
+    "frontend/src/pages/AuditPage.tsx": "03e9e11ee17de62f7cddc27443f4f998ce5f5c4271db238d059e22c7a2d4a2ea",
+    "frontend/src/pages/CaseDetailPage.tsx": "a0060465509340505b2b6235ad2c521aa24ebe43fd268bad90f42f8ab5975436",
+    "frontend/src/pages/GuidePage.tsx": "b3a87821ae484891cc7407bbe28ee605f54cb2ef36c07e41ef3c9ba2f3b40378",
+    "frontend/src/pages/LabPage.tsx": "fb908d2705920e44f97569c5ddd123a3bc53ca2e4f9e3b539d8a872b8c24e41a",
+    "frontend/src/pages/LoginPage.tsx": "6829442768852f0aa8650b25ff696b5ad5729229f569ab72e77c9da2dff7af0d",
+    "frontend/src/pages/ModelFlagsPage.tsx": "5716ab15436e8d0f6e96a223e8d1cb8c801970f4caac2cdcd2a0eb6f4fdc36ca",
+    "frontend/src/pages/OverviewPage.tsx": "32083434a2cf0a1b900f0e0d4e263ec109b8ee9647331fe3fc7517eaa1a76cce",
+    "frontend/src/review.css": "27b30a258268e4c272a9eaf5094f7a11c7ff5244d7378571c12a1f132b946167",
+    "frontend/src/tokens.css": "0c3a05a156f2adda2b115d3563daa5ab797caa02ef6adedf5c720288fe91a014",
+    "frontend/tests/README.md": "62242f3c52e3c3dd5b429b36024939b4a2a9b07796fd7e14237b6b20149032bb",
+    "frontend/tests/explanations.test.mjs": "430d334a0ea58bae43b016b1b6fe5352455baadd349136944597d3ec3064229b",
+    "frontend/tests/redesign.browser.mjs": "319e0b28366654b2cb19cc801d70c2bd08585b1837002fb205a046c253cd75d6"
+  },
+  "screenshot_sha256": {
+    "docs/screenshots/redesign-20261117/1440-alerts.png": "c58430b4d67e5f05648dd4e8ae010da439a26f0081c2679870c74dfd42178379",
+    "docs/screenshots/redesign-20261117/1440-approval.png": "5f32cd7e3c434d487d597207c9fddccd44a4f5fd33f3bf06392267a9f9324a44",
+    "docs/screenshots/redesign-20261117/1440-audit.png": "9c4459b93d579bdaf8f8eef64c4565a329d79fd87cd9c90d9ad6a4851523244f",
+    "docs/screenshots/redesign-20261117/1440-beranda.png": "882b19859d759818bcdbb3b83f7dd2f6bb8087897d2588de0dccb673fd2f12cc",
+    "docs/screenshots/redesign-20261117/1440-detail-temuan.png": "417657289d98eaa05fba9f919077cf9102b7be27cda25f2702bdbba6cdb883d2",
+    "docs/screenshots/redesign-20261117/1440-guide.png": "60b279edd42fadc1659f7e9f1f3675fc414312410c4ced3db39d5e8c147ad759",
+    "docs/screenshots/redesign-20261117/1440-lab.png": "8be3e5ffcdbad4df413798fcd0343fd76ac4f63f9eab14b4cb8a1a72c5686aba",
+    "docs/screenshots/redesign-20261117/1440-login.png": "0616e034b9cafab3c222fe28f583995a5a408c378ac98739a16cb67bb69703a3",
+    "docs/screenshots/redesign-20261117/1440-ml-explanation.png": "c93701cda8c12cc70bcb0ad07686ba44688c850a2ec7ab84856c778478932b59",
+    "docs/screenshots/redesign-20261117/1440-model-flags.png": "b55c36d64dab80232c57c103cfcd2d0382eb34d45a4fc20b6ce46017ce358308",
+    "docs/screenshots/redesign-20261117/1440-pemeriksaan.png": "74d32a97563590f8ea0e61de61bd8a95dd8880d647169e3b49001458edba4f31",
+    "docs/screenshots/redesign-20261117/1440-upload.png": "bb522cc489f48254ec66fcf98afaa52c21343ea3f0fa60d1ab3887d864e5888b",
+    "docs/screenshots/redesign-20261117/375-beranda.png": "041cb12932da0a3ac2c6fed03b00f3d50cab5fc9e0e84f0f4230ae0a88e3d11f",
+    "docs/screenshots/redesign-20261117/375-detail-temuan.png": "0d2c09a2ebafd8d3c286050e791ca5991e7f2e651e41ef00037e45fbabc45287",
+    "docs/screenshots/redesign-20261117/375-guide.png": "839bb79deb82e5429ecbeb64484aeef96787d2e40fa8303159cf02c8bc0ed2c4",
+    "docs/screenshots/redesign-20261117/375-lab-first-use.png": "a8ff0812a8a22c2ab0aa3e2dc42cdde3fa7648f2f11105a29bc3a0246dbd1ff7",
+    "docs/screenshots/redesign-20261117/375-lab.png": "f836af1fbb3fbc358962f2a2d63976c7d84ce0e508c475362fbe3c5d4b576a6e",
+    "docs/screenshots/redesign-20261117/375-login.png": "4318795b0d4b46f8b6d102fc562a597b4618967a184e0650c2d1e43044b42294"
+  },
+  "boundaries": {
+    "backend_diff_empty": true,
+    "model_training": false,
+    "dataset_or_generator_change": false,
+    "model_threshold_or_label_change": false,
+    "live_database_access": false,
+    "live_review_or_activation_mutation": false,
+    "external_font_or_image_request_added": false
+  },
+  "limitations": [
+    "This stage does not rerun the unchanged backend suite or evaluate ML quality.",
+    "No independent first-time-user usability study or assistive-technology certification is claimed.",
+    "Contrast checks cover selected semantic token pairs, not every possible component/state.",
+    "Headless Chrome emitted host graphics/allocator diagnostics; page runtime-exception checks are clean.",
+    "Fixture-based browser validation is separate from live-deployment or bank UAT."
+  ],
+  "resolved_during_qa": [
+    "Grid/table-driven mobile page overflow",
+    "Small-screen pagination wrapping",
+    "Valid alert-status deep link",
+    "Visible model/run fetch errors",
+    "Indonesian authentication recovery text",
+    "Tiny/near-cutoff numeric display",
+    "Retained view-switch input state",
+    "Compact mobile progress",
+    "Explicit alert-versus-model-flag glossary",
+    "Stored ML indicators before score/cutoff"
+  ]
+}

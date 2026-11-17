@@ -59,19 +59,19 @@ export function formatDetailValue(value: unknown): string {
   return String(value);
 }
 
-/** "P7D" -> "7 days", "PT36H" -> "36 hours". Anything else is shown as sent. */
+/** ISO duration rendered without changing the stored interval. */
 export function formatDuration(iso: string): string {
   const match = /^P(?:(\d+)D)?(?:T(?:(\d+)H)?(?:(\d+)M)?)?$/.exec(iso);
   if (!match || match.slice(1).every((part) => part === undefined)) {
     return iso;
   }
   const units: [string | undefined, string][] = [
-    [match[1], "day"],
-    [match[2], "hour"],
-    [match[3], "minute"],
+    [match[1], "hari"],
+    [match[2], "jam"],
+    [match[3], "menit"],
   ];
   return units
     .filter(([value]) => value !== undefined)
-    .map(([value, unit]) => `${value} ${unit}${value === "1" ? "" : "s"}`)
+    .map(([value, unit]) => `${value} ${unit}`)
     .join(" ");
 }

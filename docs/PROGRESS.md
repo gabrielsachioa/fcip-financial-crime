@@ -5,6 +5,31 @@
 Supersedes any earlier progress figure. Scope definitions, architecture and open
 questions are unchanged — see `PROJECT_CONTEXT.md`.
 
+## 17 November — fresh interface for first-time users
+
+Jevon explicitly requests a complete redesign using `ui-ux-pro-max` while ML
+inputs are pending. All eight existing pages now use plain Indonesian task
+names, a cobalt/navy visual system and contextual help. A new `/guide` explains
+the three-step journey and technical terms. Review leads with observed facts,
+why flagged and human next steps; ML stories show stored indicators and unknown
+history before scores. Optional details retain original codes and arithmetic.
+Lab splits prepare/test from approve/use and retains forms/locks; mobile steps
+expand on demand. Home, audit and login use clearer actions and recovery copy.
+
+**Verification:** 14 explanation tests, 62 browser checkpoints (40 populated viewport/
+route combinations plus interaction/empty/error checks), 11 selected contrast
+pairs and frontend build pass. Browser fixtures intercept every API request;
+screenshots contain invented QA data, not ML results. No backend, data, model,
+threshold, activation or live DB change; no full backend rerun claimed.
+[Evidence](ui_redesign_20261117_checks.json), [design decisions](../design-system/fcip/MASTER.md),
+[preview](screenshots/redesign-20261117/1440-ml-explanation.png).
+
+**Decisions I took myself:** AS-26 task-first language/navigation, grounded factor
+cards, optional technical disclosures, responsive blue visual system and fixture
+QA. **Ringkasan capstone:** UI/UX diperbarui agar pengguna baru dapat memahami
+alasan temuan dan tindak lanjut. Angka dan hasil model tetap sama; kebutuhan
+definisi target dan data review untuk tahap ML berikutnya masih menunggu.
+
 ## 17 November — first ML readiness safeguards stage
 
 Jevon authorises readiness fixes, prioritising ML flags. Unknown nonblank labels

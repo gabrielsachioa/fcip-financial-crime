@@ -1,6 +1,42 @@
 .analysis-page {
   min-width: 0;
 }
+.analysis-page .page-header p { max-width: 760px; }
+.analysis-explain-band {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 26px;
+  background: var(--primary-soft);
+  border: 1px solid var(--primary-border);
+  border-radius: 18px;
+  margin-bottom: 26px;
+}
+.analysis-explain-icon {
+  width: 50px;
+  height: 50px;
+  flex: 0 0 50px;
+  color: var(--primary);
+  background: var(--panel);
+  border-radius: 15px;
+  display: grid;
+  place-items: center;
+}
+.analysis-explain-band h2 { font-size: 20px; margin: 0 0 8px; line-height: 1.45; }
+.analysis-explain-band p { color: var(--text-secondary); max-width: 740px; margin: 0; line-height: 1.75; }
+.analysis-explain-band > a { flex-shrink: 0; margin-left: auto; }
+.analysis-model-disclosure {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  border-radius: 16px;
+  padding: 20px 24px;
+}
+.analysis-model-disclosure > summary { cursor: pointer; color: var(--ink); font-weight: 600; line-height: 1.5; }
+.analysis-model-disclosure > summary > span:first-child { display: inline-block; vertical-align: middle; margin-left: 8px; }
+.analysis-model-disclosure > summary small { display: block; font-size: var(--text-sm); margin-top: 4px; color: var(--muted); font-weight: 400; }
+.analysis-model-disclosure > summary > .analysis-small-count { float: right; margin-top: 10px; }
+.analysis-model-disclosure > section { margin-top: 28px; }
+.analysis-model-disclosure .analysis-model-card { background: var(--surface-subtle); box-shadow: none; }
 .analysis-page .page-header {
   justify-content: space-between;
   align-items: flex-start;
@@ -35,6 +71,7 @@
   margin: 0;
   padding: var(--space-6);
   min-width: 0;
+  border-radius: 16px;
 }
 .analysis-model-heading {
   display: flex;
@@ -125,7 +162,7 @@
 }
 .analysis-validation dt {
   color: var(--muted);
-  font-size: var(--text-xs);
+  font-size: var(--text-sm);
   line-height: 1.4;
   margin-bottom: var(--space-1);
 }
@@ -137,10 +174,11 @@
   font-variant-numeric: tabular-nums;
 }
 .analysis-model-reference {
-  font-size: var(--text-xs);
+  font-size: var(--text-sm);
   margin-top: var(--space-4);
   color: var(--muted);
 }
+.analysis-model-reference > p { line-height: 1.75; color: var(--text-secondary); }
 .analysis-model-reference summary {
   cursor: pointer;
   width: fit-content;
@@ -195,7 +233,7 @@
   background: transparent;
   color: var(--muted);
   box-shadow: none;
-  min-height: 35px;
+  min-height: 44px;
   white-space: nowrap;
 }
 .analysis-tabs button:hover {
@@ -238,6 +276,8 @@
 }
 .analysis-pagination > div {
   display: flex;
+  flex-wrap: wrap;
+  max-width: 100%;
   gap: var(--space-2);
 }
 .analysis-pagination button,
@@ -252,7 +292,7 @@
   align-items: flex-start;
   gap: var(--space-2);
   color: var(--muted);
-  font-size: var(--text-xs);
+  font-size: var(--text-sm);
   line-height: 1.65;
   border-top: 1px solid var(--line-subtle);
   margin-top: var(--space-5);
@@ -477,6 +517,12 @@
     flex-direction: column;
     align-items: flex-start;
   }
+  .analysis-explain-band { flex-wrap: wrap; padding: 20px; }
+  .analysis-explain-band > a { margin-left: 0; }
+  .analysis-explain-icon { display: none; }
+  .analysis-explain-band h2 { font-size: 19px; }
+  .analysis-model-disclosure { padding: 18px; }
+  .analysis-model-disclosure > summary > .analysis-small-count { float: none; display: block; margin: 10px 0 0 22px; }
 }
 @media (max-width: 460px) {
   .analysis-model-card.card {

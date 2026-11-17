@@ -1,37 +1,47 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 import { fetchAlerts } from "../api/alerts";
 import { errorMessage } from "../api/errors";
 import { Icon } from "../components/Icon";
 import { SignalNotice, SIGNAL_NOTICE } from "../components/Notices";
 import { StatusBadge } from "../components/StatusBadge";
+import { patternSummary, patternTitle } from "../explanations";
 import { formatDateTime } from "../format";
 import type { AlertStatus } from "../types";
 import "../review.css";
 
 const STATUS_OPTIONS: { value: AlertStatus | ""; label: string }[] = [
-  { value: "OPEN", label: "Alert terbuka" },
-  { value: "ESCALATED", label: "Escalated" },
-  { value: "DISPOSED", label: "Disposed" },
-  { value: "", label: "Semua status" },
+  { value: "OPEN", label: "Menunggu tinjauan" },
+  { value: "ESCALATED", label: "Pemeriksaan lanjutan" },
+  { value: "DISPOSED", label: "Selesai ditinjau" },
+  { value: "", label: "Semua temuan" },
 ];
 const PAGE_SIZE = 25;
 
 export function AlertQueuePage() {
-  const [status, setStatus] = useState<AlertStatus | "">("OPEN");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const requestedStatus = searchParams.get("status");
+  const status: AlertStatus | "" = STATUS_OPTIONS.some((option) => option.value === requestedStatus)
+    ? requestedStatus as AlertStatus | "" : "OPEN";
   const [offset, setOffset] = useState(0);
-  const { data, isLoading, isFetching, error } = useQuery({
+  function setStatus(next: AlertStatus | "") {
+    setSearchParams((current) => {
+      const updated = new URLSearchParams(current);
+      updated.set("status", next);
+      return updated;
+    });
+    setOffset(0);
+  }
+  useEffect(() => setOffset(0), [status]);
+  const { data, isLoading, isFetching, error, refetch } = useQuery({
     queryKey: ["alerts", status, offset],
-    queryFn: () =>
-      fetchAlerts(status || undefined, { limit: PAGE_SIZE, offset }),
+    queryFn: () => fetchAlerts(status || undefined, { limit: PAGE_SIZE, offset }),
   });
   useEffect(() => {
     if (data && offset > 0 && offset >= data.total) {
-      setOffset(
-        Math.max(0, Math.floor((data.total - 1) / PAGE_SIZE) * PAGE_SIZE),
-      );
+      setOffset(Math.max(0, Math.floor((data.total - 1) / PAGE_SIZE) * PAGE_SIZE));
     }
   }, [data, offset]);
 
@@ -39,175 +49,51 @@ export function AlertQueuePage() {
     <>
       <div className="page-header">
         <div>
-          <h1>Alert queue</h1>
+          <p className="eyebrow">TINJAUAN TRANSAKSI</p>
+          <h1>Perlu ditinjau</h1>
+          <p className="page-subtitle">Pahami mengapa aktivitas ditandai, periksa transaksinya, lalu catat tindak lanjut.</p>
         </div>
-        {data && (
-          <span className="review-count">
-            {data.total.toLocaleString("id-ID")} alert
-          </span>
-        )}
+        <Link className="btn-link secondary" to="/guide#meninjau">Cara meninjau temuan <Icon name="arrow-right" size={16} /></Link>
       </div>
-      <section className="card review-queue-card">
+      <div className="review-intro-strip">
+        <span className="review-intro-icon"><Icon name="eye" size={24} /></span>
+        <div><strong>Ditandai berarti perlu diperiksa.</strong><p>Aktivitas yang sah juga dapat memenuhi pola deteksi. Keputusan dibuat setelah seseorang memeriksa konteksnya.</p></div>
+      </div>
+      <section className="card review-queue-card" aria-labelledby="review-list-heading">
         <div className="section-head">
-          <div>
-            <h2>Daftar alert</h2>
-          </div>
-          <label className="review-filter">
-            <span>Status</span>
-            <select
-              value={status}
-              onChange={(e) => {
-                setStatus(e.target.value as AlertStatus | "");
-                setOffset(0);
-              }}
-            >
-              {STATUS_OPTIONS.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </label>
+          <div><h2 id="review-list-heading">Daftar temuan</h2>{data && <p className="muted">{data.total.toLocaleString("id-ID")} temuan sesuai filter</p>}</div>
+          {isFetching && !isLoading && <span className="muted" role="status">Memperbarui…</span>}
         </div>
+        <div className="review-status-filters" role="group" aria-label="Filter status temuan">
+          {STATUS_OPTIONS.map((option) => <button key={option.value} type="button" className={`button-secondary ${status === option.value ? "is-selected" : ""}`} aria-pressed={status === option.value} onClick={() => { setStatus(option.value); setOffset(0); }}>{option.label}</button>)}
+        </div>
+        {isLoading && <div className="empty-state" role="status"><Icon name="clock" size={28} /><h3>Menyiapkan daftar temuan…</h3><p>Menunggu data peninjauan.</p></div>}
+        {error && <div className="review-load-error" role="alert"><h3>Daftar belum dapat dimuat</h3><p>{errorMessage(error)}</p><button type="button" className="button-secondary" disabled={isFetching} onClick={() => void refetch()}>Coba lagi</button></div>}
+        {data && data.items.length === 0 && <div className="empty-state"><Icon name="check" size={30} /><h3>Belum ada temuan pada filter ini</h3><p>Coba lihat status lain. Hasil kosong tidak menyatakan bahwa semua transaksi telah dinilai normal.</p>{status !== "" && <button type="button" className="button-secondary" onClick={() => { setStatus(""); setOffset(0); }}>Lihat semua temuan</button>}</div>}
+        {data && data.items.length > 0 && <>
+          <ol className="review-finding-list">
+            {data.items.map((alert) => <li key={alert.id}>
+              <article className="review-finding">
+                <div className="review-finding-icon"><Icon name={alert.pattern_code === "ML_SCORE" ? "activity" : "eye"} size={21} /></div>
+                <div className="review-finding-main">
+                  <div className="review-finding-meta"><span>{alert.customer_name}</span><StatusBadge status={alert.status} /></div>
+                  <Link to={`/alerts/${alert.id}`} className="review-finding-title">{patternTitle(alert.pattern_code)}</Link>
+                  <p>{patternSummary(alert.pattern_code)}</p>
+                  <div className="review-finding-foot"><span>{alert.customer_ref}</span><span>Dibuat {formatDateTime(alert.created_at)}</span>{alert.case_id && <Link to={`/cases/${alert.case_id}`}>Lihat pemeriksaan terkait</Link>}</div>
+                </div>
+                <Link className="btn-link review-investigate" to={`/alerts/${alert.id}`} aria-label={`Tinjau ${patternTitle(alert.pattern_code)} untuk ${alert.customer_name}`}>Tinjau temuan <Icon name="arrow-right" size={17} /></Link>
+              </article>
+            </li>)}
+          </ol>
+          <div className="pager review-pager" aria-label="Halaman daftar temuan">
+            <span className="muted" aria-live="polite">Menampilkan {(data.offset + 1).toLocaleString("id-ID")}–{(data.offset + data.items.length).toLocaleString("id-ID")} dari {data.total.toLocaleString("id-ID")} temuan</span>
+            <div className="review-pager-controls">
+              <button type="button" className="button-secondary" disabled={offset === 0 || isFetching} onClick={() => setOffset(Math.max(0, offset - PAGE_SIZE))} aria-label="Halaman temuan sebelumnya"><Icon name="arrow-left" size={15} />Sebelumnya</button>
+              <button type="button" className="button-secondary" disabled={offset + PAGE_SIZE >= data.total || isFetching} onClick={() => setOffset(offset + PAGE_SIZE)} aria-label="Halaman temuan berikutnya">Berikutnya<Icon name="arrow-right" size={15} /></button>
+            </div>
+          </div>
+        </>}
         <SignalNotice text={SIGNAL_NOTICE} />
-        {isLoading && (
-          <div className="empty-state" role="status">
-            Memuat alert…
-          </div>
-        )}
-        {error && (
-          <p className="error" role="alert">
-            {errorMessage(error)}
-          </p>
-        )}
-        {data && data.items.length === 0 && (
-          <div className="empty-state">
-            <h3>Tidak ada alert</h3>
-            <p>Ubah filter status untuk melihat alert lainnya.</p>
-          </div>
-        )}
-        {data && data.items.length > 0 && (
-          <>
-            <div
-              className="table-scroll"
-              tabIndex={0}
-              role="region"
-              aria-label="Tabel antrean alert"
-            >
-              <table className="table review-alert-table">
-                <thead>
-                  <tr>
-                    <th>Entity / alert</th>
-                    <th>Pattern</th>
-                    <th>Status</th>
-                    <th
-                      className="num"
-                      title="Skor model tersimpan tertinggi untuk entity dalam window alert ini"
-                    >
-                      Skor model
-                    </th>
-                    <th>Perilaku teramati</th>
-                    <th>Dibuat</th>
-                    <th>
-                      <span className="review-sr-only">Tindakan</span>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.items.map((alert) => (
-                    <tr key={alert.id}>
-                      <td>
-                        <Link
-                          className="review-entity-link"
-                          to={`/alerts/${alert.id}`}
-                        >
-                          {alert.customer_ref}
-                        </Link>
-                        <div className="review-cell-sub">
-                          {alert.customer_name}
-                        </div>
-                      </td>
-                      <td>
-                        <span className="review-pattern">
-                          {alert.pattern_code}
-                        </span>
-                        <div className="review-cell-sub">
-                          {alert.pattern_code === "ML_SCORE"
-                            ? "Skor model (tanpa rule pola)"
-                            : "Rule"}
-                        </div>
-                      </td>
-                      <td>
-                        <StatusBadge status={alert.status} />
-                      </td>
-                      <td className="num">
-                        <span className="review-score">
-                          {alert.model_score === null
-                            ? "—"
-                            : alert.model_score !== 0 &&
-                                Math.abs(alert.model_score) < 0.01
-                              ? alert.model_score.toPrecision(2)
-                              : alert.model_score.toFixed(3)}
-                        </span>
-                        <div className="review-cell-sub">
-                          {alert.pattern_code === "ML_SCORE"
-                            ? "Skor pemicu"
-                            : "Skor pendukung"}
-                        </div>
-                      </td>
-                      <td className="reason-cell">{alert.reason}</td>
-                      <td className="review-date-cell">
-                        {formatDateTime(alert.created_at)}
-                      </td>
-                      <td>
-                        <Link
-                          className="btn-link secondary review-investigate"
-                          to={`/alerts/${alert.id}`}
-                          aria-label={`Investigasi ${alert.customer_ref}`}
-                        >
-                          <span>Investigasi</span>
-                          <Icon name="arrow-right" size={16} />
-                        </Link>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <div
-              className="pager review-pager"
-              aria-label="Pagination antrean alert"
-            >
-              <span className="muted" aria-live="polite">
-                Menampilkan {(data.offset + 1).toLocaleString("id-ID")}–
-                {(data.offset + data.items.length).toLocaleString("id-ID")} dari{" "}
-                {data.total.toLocaleString("id-ID")} alert
-              </span>
-              <div className="review-pager-controls">
-                <button
-                  type="button"
-                  className="button-secondary"
-                  disabled={offset === 0 || isFetching}
-                  onClick={() => setOffset(Math.max(0, offset - PAGE_SIZE))}
-                  aria-label="Halaman alert sebelumnya"
-                >
-                  <Icon name="arrow-left" size={15} />
-                  Sebelumnya
-                </button>
-                <button
-                  type="button"
-                  className="button-secondary"
-                  disabled={offset + PAGE_SIZE >= data.total || isFetching}
-                  onClick={() => setOffset(offset + PAGE_SIZE)}
-                  aria-label="Halaman alert berikutnya"
-                >
-                  Berikutnya
-                  <Icon name="arrow-right" size={15} />
-                </button>
-              </div>
-            </div>
-          </>
-        )}
       </section>
     </>
   );

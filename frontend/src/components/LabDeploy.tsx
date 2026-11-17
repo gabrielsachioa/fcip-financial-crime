@@ -16,12 +16,12 @@ import type { LabDataset, LabModelsResponse, LabModelVersion, LabMonitorResult }
 import { Icon } from "./Icon";
 
 const STATE_LABEL: Record<string, string> = {
-  DRAFT: "Draft",
-  PENDING_APPROVAL: "Menunggu MLRO",
-  ACTIVE: "Aktif",
-  SUSPENDED: "Dinonaktifkan",
-  RETIRED: "Diganti",
-  IN_SIMULATION: "Simulasi",
+  DRAFT: "Rancangan",
+  PENDING_APPROVAL: "Menunggu persetujuan",
+  ACTIVE: "Sedang dipakai",
+  SUSPENDED: "Dihentikan sementara",
+  RETIRED: "Sudah diganti",
+  IN_SIMULATION: "Dalam simulasi",
 };
 const STATE_BADGE: Record<string, string> = {
   DRAFT: "badge-amber",
@@ -74,23 +74,24 @@ function ModelAlertsBanner({ data, isMlro }: { data: LabModelsResponse; isMlro: 
     <div className={`lab-alerts-switch ${state.active ? "is-on" : ""}`}>
       <div>
         <p>
-          <strong>Alert dari skor model</strong>{" "}
+          <strong>Jadikan hasil model sebagai temuan untuk ditinjau</strong>{" "}
           <span className={`badge ${state.active ? "badge-green" : "badge-amber"}`}>
-            {state.active ? "AKTIF" : "NONAKTIF"}
+            {state.active ? "Dinyalakan" : "Dimatikan"}
           </span>
         </p>
         <p className="small">
           {state.active
-            ? "Skor di atas threshold model ACTIVE membuat alert."
-            : "Skor model menjadi sinyal pendukung; tidak membuat alert sendiri."}
+            ? "Hasil dengan skor yang mencapai batas pada model aktif akan masuk ke antrean tinjauan. Aturan ini berlaku umum untuk penandaan dari model."
+            : "Skor masih dapat dibaca sebagai informasi pendukung, tetapi tidak membuat temuan tersendiri di antrean tinjauan."}
         </p>
       </div>
       {isMlro && (
         <div className="lab-alerts-actions">
-          <input
+          <label htmlFor="model-alert-reason">Alasan perubahan <small>Minimal {data.min_reason_length} karakter agar keputusan dapat ditelusuri.</small></label>
+          <input id="model-alert-reason"
             value={reason}
             onChange={(event) => setReason(event.target.value)}
-            placeholder={`Alasan (min. ${data.min_reason_length} karakter)`}
+            placeholder="Jelaskan alasan perubahan aturan ini"
             aria-label="Alasan mengubah alert dari skor model"
           />
           <button
@@ -99,7 +100,7 @@ function ModelAlertsBanner({ data, isMlro }: { data: LabModelsResponse; isMlro: 
             onClick={() => toggle.mutate()}
             disabled={toggle.isPending || reason.trim().length < data.min_reason_length}
           >
-            {state.active ? "Matikan alert dari skor" : "Aktifkan alert dari skor"}
+            {toggle.isPending ? "Menyimpan perubahan..." : state.active ? "Matikan penandaan dari model" : "Nyalakan penandaan dari model"}
           </button>
           {toggle.error && <p className="error small" role="alert">{errorMessage(toggle.error)}</p>}
         </div>
@@ -149,49 +150,49 @@ function VersionCard({
     (version.state === "ACTIVE" && isMlro);
   const waiting =
     version.state === "DRAFT"
-      ? "Analyst mengajukan model ini ke MLRO."
+      ? "Analis perlu mengajukan rancangan ini kepada penanggung jawab kepatuhan."
       : version.state === "PENDING_APPROVAL"
-        ? "Menunggu persetujuan MLRO (bukan pengaju)."
+        ? "Menunggu penanggung jawab kepatuhan (MLRO) yang berbeda dari pengaju."
         : version.state === "ACTIVE"
-          ? "Model ini menilai data baru yang diunggah untuk dipantau."
+          ? "Versi ini dipakai memeriksa unggahan baru yang sesuai. Status ini bukan jaminan ketepatan deteksi."
           : null;
 
   return (
     <article className={`lab-version ${highlight ? "is-current" : ""} state-${version.state.toLowerCase()}`}>
       <div className="lab-version-head">
         <div>
-          <strong className="mono">{version.version}</strong>
+          <strong>{version.model_name}</strong>
           <span className="small muted">
             {" "}
-            · {version.model_name} · {version.training_kind === "supervised" ? "berlabel" : "tanpa label"}
+            {version.dataset_name ?? "Contoh sumber belum tercatat"}
           </span>
         </div>
         <span className={`badge ${STATE_BADGE[version.state] ?? ""}`}>{STATE_LABEL[version.state] ?? version.state}</span>
       </div>
       <dl className="lab-version-facts">
         <div>
-          <dt>Dataset</dt>
+          <dt>Contoh yang dipelajari</dt>
           <dd>{version.dataset_name ?? "–"}</dd>
         </div>
         <div>
-          <dt>Threshold</dt>
+          <dt>Batas penandaan</dt>
           <dd className="mono">{score(version.threshold)}</dd>
         </div>
         <div>
-          <dt>Validasi</dt>
+          <dt>Pada data pembanding</dt>
           <dd>
-            presisi {pct(version.validation.precision)} · recall {pct(version.validation.recall)}
+            ketepatan {pct(version.validation.precision)} · cakupan {pct(version.validation.recall)}
           </dd>
         </div>
         <div>
-          <dt>{version.evaluation_state === "REVEALED" ? "Uji final terkunci" : "Uji historis · sudah terbuka"}</dt>
+          <dt>{version.evaluation_state === "REVEALED" ? "Uji akhir · pilihan terkunci" : "Hasil uji terdahulu · sudah terbuka"}</dt>
           <dd>
-            presisi {pct(version.test.precision)} · recall {pct(version.test.recall)} ·{" "}
-            {num(Math.round(version.test.flagged_per_10k ?? NaN))} alert/10k
+            ketepatan {pct(version.test.precision)} · cakupan {pct(version.test.recall)} ·{" "}
+            {num(Math.round(version.test.flagged_per_10k ?? NaN))} ditandai / 10.000 transaksi
           </dd>
         </div>
         <div>
-          <dt>Orang</dt>
+          <dt>Penanggung jawab</dt>
           <dd>
             dibuat {version.created_by_email ?? "–"}
             {version.submitted_by_email && <> · diajukan {version.submitted_by_email}</>}
@@ -207,16 +208,21 @@ function VersionCard({
       </dl>
       {canAct ? (
         <div className="lab-version-action">
+          <label htmlFor={`model-note-${version.id}`}>
+            {version.state === "DRAFT" ? "Mengapa rancangan ini layak diajukan?" : version.state === "PENDING_APPROVAL" ? "Catatan hasil tinjauan" : "Mengapa pemeriksaan perlu dihentikan?"}
+            <small>Minimal {minReason} karakter. Catatan ini disimpan dalam riwayat keputusan.</small>
+          </label>
           <textarea
+            id={`model-note-${version.id}`}
             rows={2}
             value={text}
             onChange={(event) => setText(event.target.value)}
             placeholder={
               version.state === "DRAFT"
-                ? `Justifikasi pengajuan (min. ${minReason} karakter)`
+                ? "Jelaskan hasil pembanding, batasan, dan alasan pengajuan"
                 : version.state === "PENDING_APPROVAL"
-                  ? `Catatan persetujuan atau alasan pengembalian (min. ${minReason} karakter)`
-                  : `Alasan menonaktifkan (min. ${minReason} karakter)`
+                  ? "Jelaskan dasar persetujuan atau hal yang harus diperbaiki"
+                  : "Jelaskan alasan penghentian sementara"
             }
             aria-label="Catatan untuk tindakan ini"
             disabled={busy}
@@ -224,14 +230,14 @@ function VersionCard({
           {version.state === "PENDING_APPROVAL" && (
             <label className="inline lab-alerts-check">
               <input type="checkbox" checked={alertsOn} onChange={(event) => setAlertsOn(event.target.checked)} />
-              <span>Skor di atas threshold langsung menjadi alert (tanpa menunggu rule pola)</span>
+              <span>Masukkan hasil yang mencapai batas skor ke antrean tinjauan, tanpa menunggu aturan pola lain.</span>
             </label>
           )}
           <div className="lab-version-buttons">
             {version.state === "DRAFT" && (
               <button type="button" onClick={() => submit.mutate()} disabled={busy || !longEnough}>
                 <Icon name="arrow-right" size={15} />
-                {submit.isPending ? "Mengajukan..." : "Ajukan ke MLRO"}
+                {submit.isPending ? "Mengajukan..." : "Ajukan untuk persetujuan"}
               </button>
             )}
             {version.state === "PENDING_APPROVAL" && (
@@ -246,13 +252,13 @@ function VersionCard({
                   onClick={() => giveBack.mutate()}
                   disabled={busy || !longEnough}
                 >
-                  Kembalikan ke Analyst
+                  Kembalikan ke analis
                 </button>
               </>
             )}
             {version.state === "ACTIVE" && (
               <button type="button" className="button-secondary" onClick={() => suspend.mutate()} disabled={busy || !longEnough}>
-                Nonaktifkan model
+                Hentikan sementara
               </button>
             )}
           </div>
@@ -282,6 +288,11 @@ function VersionCard({
           </ol>
         </details>
       )}
+      <details className="lab-version-history">
+        <summary>Identitas versi dan istilah pengujian</summary>
+        <p className="small">Versi <span className="mono">{version.version}</span> · status teknis <span className="mono">{version.state}</span> · {version.training_kind === "supervised" ? "belajar dari label (supervised)" : "belajar tanpa label saat pelatihan (unsupervised)"}.</p>
+        <p className="small">Ketepatan menunjukkan bagian hasil ditandai yang berlabel positif; cakupan menunjukkan bagian contoh positif yang ditemukan. Keduanya mengikuti jawaban acuan pada data simulasi, bukan kepastian fraud.</p>
+      </details>
     </article>
   );
 }
@@ -304,16 +315,16 @@ export function ModelApprovalPanel({
       <div className="section-head">
         <div>
           <span className="section-kicker">LANGKAH 6</span>
-          <h2 id="lab-step-6-title">Persetujuan & status model</h2>
+          <h2 id="lab-step-6-title">Tinjau sebelum dipakai</h2>
           <p>
-            Persetujuan oleh MLRO lain mengganti model aktif sebelumnya.
+            Penanggung jawab kepatuhan (MLRO) yang berbeda dari pengaju meninjau rancangan. Persetujuan mengaktifkan versi ini dan mengganti model aktif sebelumnya.
           </p>
         </div>
-        <span className="badge badge-blue">{data.items.length} model dari lab</span>
+        <span className="badge badge-blue">{data.items.length} versi tersimpan</span>
       </div>
       <ModelAlertsBanner data={data} isMlro={role === "ROLE_MLRO"} />
       {ordered.length === 0 ? (
-        <p className="muted small">Belum ada model yang disimpan dari lab. Simpan model di langkah 5.</p>
+        <p className="muted">Belum ada rancangan untuk ditinjau. Analis dapat menyimpan satu pilihan dari hasil pengujian di langkah 5.</p>
       ) : (
         <div className="lab-versions">
           {ordered.map((version) => (
@@ -382,29 +393,29 @@ export function MonitorPanel({
       <div className="section-head">
         <div>
           <span className="section-kicker">LANGKAH 7</span>
-          <h2 id="lab-step-7-title">Pantau data baru</h2>
+          <h2 id="lab-step-7-title">Periksa transaksi baru</h2>
           <p>
-            Gunakan susunan kolom <strong>{dataset.name}</strong>. Upload dilanjutkan dengan deteksi.
+            Unggah transaksi dengan susunan kolom yang sama seperti <strong>{dataset.name}</strong>. Sistem memeriksa datanya, lalu menjalankan aturan dan model yang tersedia.
           </p>
         </div>
         <span className="badge badge-blue">CSV / Parquet</span>
       </div>
       <ul className="lab-monitor-status">
         <li>
-          <span>Model aktif</span>
+          <span>Model yang sedang dipakai</span>
           <strong className={active ? "" : "warn"}>
-            {active ? `${active.version} · ${active.model_name}` : "Belum ada — setujui model di langkah 6"}
+            {active ? `${active.model_name} · ${active.version}` : "Belum ada. Rancangan perlu disetujui di langkah 6."}
           </strong>
         </li>
         <li>
-          <span>Alert dari skor model</span>
+          <span>Penandaan dari skor model</span>
           <strong className={models.model_alerts.active ? "ok" : "warn"}>
-            {models.model_alerts.active ? "Aktif (tanpa menunggu rule)" : "Nonaktif (skor hanya sebagai sinyal)"}
+            {models.model_alerts.active ? "Dinyalakan: dapat membuat temuan" : "Dimatikan: skor hanya informasi pendukung"}
           </strong>
         </li>
         <li>
-          <span>Pemetaan kolom</span>
-          <strong className={mapped ? "ok" : "warn"}>{mapped ? "Dipakai ulang dari dataset ini" : "Belum dipetakan"}</strong>
+          <span>Susunan kolom</span>
+          <strong className={mapped ? "ok" : "warn"}>{mapped ? "Mengikuti contoh yang dipilih" : "Perlu dicocokkan lebih dulu"}</strong>
         </li>
       </ul>
       {canMonitor ? (
@@ -428,19 +439,19 @@ export function MonitorPanel({
           />
           <button type="submit" disabled={!file || monitor.isPending || !mapped}>
             <Icon name="activity" size={16} />
-            {monitor.isPending ? "Mengunggah & mendeteksi..." : "Unggah & jalankan deteksi"}
+            {monitor.isPending ? "Memeriksa transaksi..." : "Unggah & periksa transaksi"}
           </button>
           {fileError && <p className="error small" role="alert">{fileError}</p>}
           {monitor.error && <p className="error small" role="alert">{errorMessage(monitor.error)}</p>}
           {monitor.isPending && (
             <div className="processing-state" role="status">
               <span className="spinner" />
-              Validasi, penyimpanan batch, lalu deteksi oleh rule dan model.
+              Memeriksa kelengkapan data, menyimpan unggahan, lalu mencari pola. Tunggu sampai ringkasan hasil tersedia.
             </div>
           )}
         </form>
       ) : (
-        <p className="muted small">Data Operations mengunggah data baru untuk dipantau (FR-101).</p>
+        <p className="muted">Petugas data mengunggah transaksi baru. Akun Anda dapat membaca hasil sesuai kewenangan yang tersedia.</p>
       )}
       {result && (
         <div className="lab-monitor-result" role="status">
@@ -449,36 +460,37 @@ export function MonitorPanel({
               <span>Baris diterima</span>
               <strong>{num(result.accepted)}</strong>
               <small>
-                dari {num(result.total_rows)} · batch {result.batch_ref}
+                dari {num(result.total_rows)} · nomor unggahan {result.batch_ref}
               </small>
             </div>
             <div className="lab-tile">
-              <span>Dikarantina</span>
+              <span>Perlu perbaikan data</span>
               <strong>{num(result.quarantined)}</strong>
-              <small>dengan alasan, di Overview</small>
+              <small>alasan pemisahan tersedia di halaman Beranda</small>
             </div>
             <div className="lab-tile">
-              <span>Alert dari model</span>
+              <span>Temuan dari model</span>
               <strong>{num(result.model_alerts_created)}</strong>
               <small>
-                {result.models.map((m) => `${num(m.units_flagged)} transaksi ≥ threshold`).join(" · ") || "tidak ada model aktif"}
+                {result.models.map((m) => `${num(m.units_flagged)} ${m.unit === "AML" ? "rangkuman mingguan" : "transaksi"} mencapai batas`).join(" · ") || "tidak ada model aktif"}
               </small>
             </div>
             <div className="lab-tile">
-              <span>Alert dari rule</span>
+              <span>Temuan dari aturan pola</span>
               <strong>{num(result.rule_alerts_created)}</strong>
-              <small>seluruh rule pola yang aktif (P01–P10)</small>
+              <small>berdasarkan aturan pola yang sedang aktif</small>
             </div>
           </div>
           <p className="small muted">
-            {num(result.account_proxies_created)} rekening baru dicatat sebagai proxy anonim (tanpa identitas orang) ·
+            {num(result.account_proxies_created)} rekening baru dicatat memakai pengganti identitas anonim ·
             selesai dalam {result.seconds.toLocaleString("id-ID")} detik.
           </p>
+          <p className="notice lab-note">Beberapa transaksi dapat digabung menjadi satu temuan. Hasil ditandai perlu ditinjau manusia; hasil yang tidak ditandai belum tentu bebas masalah.</p>
           {result.mapping_report.notes.map((note) => (
             <p key={note} className="notice lab-note">{note}</p>
           ))}
           <Link to="/alerts" className="btn-link">
-            Buka antrean alert <Icon name="arrow-right" size={14} />
+            Lihat temuan yang perlu ditinjau <Icon name="arrow-right" size={14} />
           </Link>
           <p className="signal-notice small">{result.signal_notice}</p>
         </div>

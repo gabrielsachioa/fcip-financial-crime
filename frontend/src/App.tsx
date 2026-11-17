@@ -10,6 +10,7 @@ import { LabPage } from "./pages/LabPage";
 import { LoginPage } from "./pages/LoginPage";
 import { ModelFlagsPage } from "./pages/ModelFlagsPage";
 import { OverviewPage } from "./pages/OverviewPage";
+import { GuidePage } from "./pages/GuidePage";
 
 export default function App() {
   return (
@@ -24,6 +25,7 @@ export default function App() {
           <Route path="/model-flags" element={<ModelFlagsPage />} />
           <Route path="/lab" element={<LabPage />} />
           <Route path="/audit" element={<AuditPage />} />
+          <Route path="/guide" element={<GuidePage />} />
         </Route>
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />

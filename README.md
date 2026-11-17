@@ -7,6 +7,12 @@ risk scoring, watchlist/PEP screening, graph investigation, AI narrative and
 the complete investigation/evidence workflow remain unfinished. See
 [current context](docs/PROJECT_CONTEXT.md) for scope and open mentor decisions.
 
+**17 November interface redesign:** a task-based Indonesian workspace now
+explains findings with stored observations, clear next actions and optional
+technical detail. A searchable in-app guide supports first-time users.
+[Design system and QA approach](design-system/fcip/MASTER.md). The redesign
+does not change detection or model results.
+
 **17 November ML safeguards:** unknown target values no longer silently become
 normal, invalid predictions fail before flag storage, and a read-only audit
 reports development-data history and shortcut risks. See

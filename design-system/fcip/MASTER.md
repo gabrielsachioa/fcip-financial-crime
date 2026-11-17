@@ -1,92 +1,136 @@
-# FCIP frontend design system
+# FCIP Clear — interface design system
 
-Updated 13 November 2026 using the `ui-ux-pro-max` skill. Jevon asks for a more
-attractive interface that remains restrained. AS-24 refines AS-22's clean
-layout through colour, typography and surface treatment, preserving its
-short copy and progressive disclosure.
+Updated 17 November 2026. Jevon explicitly requests a fresh redesign for people
+without technical knowledge, using `ui-ux-pro-max`. AS-26 supersedes the visual
+and short-copy choices in AS-21–24. The ML/data work remains separate.
 
-## Direction
+## Product direction
 
-Use a light, functional workspace: white navigation, a warm grey-green canvas,
-forest green actions and dark selected navigation. Give white panels thin
-borders, restrained shadows and consistent rounded corners. The skill's
-verified Minimalism & Swiss Style recommendation fits this application; its
-generated marketing gateway and dark/neon financial palette do not fit the
-existing brief. Retain system fonts and the existing SVG family, without new
-packages, external fonts or decorative animation.
+An Indonesian task-based workspace that helps a first-time user understand:
+what is available, what needs attention, why a finding appeared, and what to do
+next. Use plain language before technical names, observed facts before model
+mathematics, and relevant help beside the decision. Do not require an onboarding
+tour, dismissible legal notice or external terminology lookup to use the app.
 
-Use one dark summary card for transaction volume, keeping every value sourced
-from the same API. All other summary cards remain white. Small line icons
-support metric labels without introducing additional icon containers. The
-existing shield mark, favicon and user initials provide compact identity.
-Avoid gradients, glowing effects, decorative charts, invented trends and
-additional explanatory copy.
+Verified skill search `banking compliance dashboard` returned Minimalism & Swiss
+Style: whitespace, clear hierarchy, high contrast and restrained motion suit this
+workspace. Its sales-landing-page composition and premium gold palette were not
+adopted. The earlier generic search matched wellness styling and was rejected.
+Focused searches and the skill's forms guidance support visible labels, recovery
+steps and optional details. The local React 18 stack keeps its existing hooks and
+dependencies; no React 19-only APIs or external font packages are introduced.
 
-Show a page title, its actions and its content. Omit slogans, promotional
-sections, repeated introductions, navigation captions, decorative icon blocks
-and workflow explanations already conveyed by labels. Keep help where it
-changes a decision: file limits, score units, model state, evaluation locks,
-approval consequences, validation errors and contribution interpretation.
-Optional batch metadata uses native `details`/`summary`, retaining values when
-closed. Do not hide required fields, errors or irreversible-action consequences.
+## Information architecture
 
-## Source of truth
+| Label | Route | User's task |
+| --- | --- | --- |
+| Beranda | `/` | View data, add transactions, run a deliberate check |
+| Perlu ditinjau | `/alerts` | Understand and record a human review |
+| Detail peninjauan | `/alerts/:id` | Why flagged, observed evidence, next action |
+| Pemeriksaan lanjutan | `/cases/:id` | Follow the case and linked findings |
+| Hasil otomatis | `/model-flags` | Read stored transaction/weekly model results |
+| Atur deteksi | `/lab` | Prepare/test or approve/use an automatic model |
+| Riwayat aktivitas | `/audit` | Trace recorded actions and export the log |
+| Panduan | `/guide` | Learn the three-step workflow; search definitions |
+| Masuk ke ruang kerja | `/login` | Understand the purpose, then sign in |
 
-`frontend/src/tokens.css` defines semantic colours, type sizes, spacing, radii,
-shadows and motion. `index.css` owns shared components and the workspace shell.
-`review.css`, `analysis.css` and `lab.css` own feature-specific layouts and consume
-the same tokens. Existing `--blue` names alias the teal primary for compatibility.
+Daily work and configuration have separate navigation groups. Existing routes,
+API payloads, permissions and recorded statuses are retained; labels translate
+their meaning. A valid alert-status URL filter is honoured, including shortcuts
+from the home summary. Keep the original state/code available in technical detail.
+
+## Visual foundation
+
+`frontend/src/tokens.css` is the colour/type/spacing source of truth. `index.css`
+defines shared controls, cards, tables, login and navigation. Feature styles
+`review.css`, `analysis.css`, `lab.css`, `operations.css` and `guide.css` consume
+these tokens. Existing `--blue` names alias the primary colour.
 
 | Role | Treatment |
 | --- | --- |
-| Primary action | Forest green `--primary`, white text, darker hover |
-| Secondary action | White surface, neutral border and text |
-| Navigation | White, 240 px; one line per item, dark forest selected item and white text |
-| Body / support | 15 / 14 px, metadata normally 12 px; mobile inputs 16 px |
-| Headings / metrics | 32 px page title, 18 px section title, 38 px metric (28 px on phones) |
-| Spacing | 4, 8, 12, 16, 20, 24, 32, 40, 48 px |
-| Surfaces | 8 px controls, 12 px panels, 18 px login card; thin borders and subtle shadows |
-| Featured summary | Dark `--feature-bg`, white value, pale label/icon; transaction volume only |
-| Status | Label plus semantic colour; green / amber / red / neutral |
-| Chart | Forest green precision and dashed purple recall with visible labels |
-| Focus | 3 px ring, including on light navigation and disclosure summaries |
+| Canvas | Pale blue-grey `#f5f7fc`, white content surfaces |
+| Primary | Cobalt `#3159ce`, white label, darker hover |
+| Navigation | Ink navy `#152a4e`, pale labels, cobalt selected route |
+| Text | Navy `#182b4c`, secondary `#435470`, muted `#63718a` |
+| Guidance | Pale blue panels, a short title and useful next action |
+| Pending | Amber label and explicit status; never colour alone |
+| Success / failure | Green / red plus words and recovery information |
+| Typography | Local Avenir Next, Segoe UI or system sans; no font requests |
+| Surfaces | 12 px controls, 20 px panels, quiet shadows and generous spacing |
+| Interaction | Visible focus, labelled SVG icons, CSS 150 ms feedback |
 
-Sizes, colours and breakpoints are reversible UI design decisions (AS-24),
-not numeric requirements from the FRD/TRD.
+Values, radii, breakpoints and spacing are reversible design choices rather than
+FRD/TRD numerical requirements. The checked main text/background pairs meet 4.5:1
+contrast, following the skill's accessibility guidance. This check does not
+constitute a complete accessibility certification.
 
-## Responsive behaviour
+## Explain findings faithfully
 
-- Above 1200 px: four summary cards; multi-column workspace panels.
-- Up to 1200 px: two summary cards; existing detail and filter layouts adapt.
-- Up to 900 px: existing keyboard-operable navigation drawer; panels stack.
-- Up to 650 px: single-column forms, 16 px inputs, at least 44 px buttons.
-- Reserve two lines for metric labels on phones so values in each row align.
-- Hide the optional user-initial avatar below 768 px, retaining role/logout.
-- Dense tables retain all columns in their own scroll container; the document
-  must fit the viewport. Long IDs and user-provided values wrap where appropriate.
-- Respect reduced motion. Do not use hover as the only route to information.
+`explanations.ts` is a deterministic presentation layer over actual stored values.
+It does not change feature computation, inference, thresholds or reference labels.
 
-## Page application
+- First explain the pattern in Indonesian and show observed amounts/counts/time.
+- For an ML alert, surface stored indicators with the score/cutoff, then allow
+  reading the complete model result before the transaction table.
+- Explain what to check; never invent a normal baseline, authorisation, intent,
+  device owner, country meaning or missing currency. Unknown information stays
+  explicitly unavailable. Retain exact source values in technical disclosures.
+- Score is a model value, not fraud probability. Contribution is an explanation
+  of arithmetic, not evidence of causation. Unit FRAUD/AML describes the model's
+  observation unit, not a classification that a crime occurred.
+- An alert and a stored model flag are different. Model flags can remain stored
+  without new alerts when the relevant alert switch is off.
+- Unflagged/empty data is not proof of safety. Active/approved is not proof of
+  accuracy. A completed upload can still have quarantined records.
+- Keep close scores and cutoffs visibly distinct; tiny cutoffs must not round to
+  apparent zero. Numeric display is localised; original numbers are unchanged.
 
-Login is a centred white card (440 px outside, up to 360 px form) on the shared
-canvas, without a promotional panel. On phones the outer border, shadow and
-padding disappear, leaving the form available at up to 360 px. Overview shows
-existing server counts and operations. Alert, case, Model Flags and Audit share
-panels, tables, filters and badges. Model versions and thresholds have a lightly
-tinted value group. Investigation links use secondary buttons. Lab keeps seven
-steps as a compact progress list with a filled current-step number, validation/final
-boundaries and role-based controls. Its progress list wraps into two columns
-on small screens, with `aria-current="step"` identifying the current step.
+All required bilingual signal and demonstration captions remain visible, including
+with model metrics and review evidence (FR-406/BR-406.1, TRD §10.6, FRD L-01).
+The original rule description and detection reason remain available verbatim.
+Do not hide evaluation locks, errors, required fields or approval consequences.
 
-Retain the complete demonstration and bilingual signal captions as plain text
-(FR-406 / BR-406.1, TRD §10.6, FRD L-01, as previously verified in PROJECT_CONTEXT
-§13). The shared demonstration caption sits in the page footer; signal captions
-stay with the results. No collapsed or dismissible legal captions. Never invent
-trends, counts, model quality, status or data to decorate production screens.
+## Page behaviour
 
-## Review
+Home uses a clear primary review action, explained counts and a three-step path.
+The data area separates stored transactions, upload/check, and records requiring
+repair. Switching views retains the file and metadata; ingesting does not secretly
+run detection. Optional source/date/count metadata uses a native disclosure.
 
-Check at 320/375/768/1024/1440 px, including landscape, populated and empty
-states, keyboard drawer focus/Escape, visible focus, text contrast and reduced
-motion. Browser fixtures must intercept all API requests before navigation;
-never let upload/detection/model actions reach a live backend for visual QA.
+Review uses observed-fact cards, contextual questions, linked transactions and a
+separate decision area. Keep the minimum 20-character reason and existing role
+restrictions. Model explanations precede transactions on ML findings; rule
+findings show rule evidence first. Radio choices align the control and its label.
+
+Lab separates prepare/test from approve/use, retaining mounted form state. Model
+status explains the next permitted step. Desktop shows seven steps; mobile shows
+the current step with an optional full list. Only one version is exposed to
+assistive technology at a time. Required label choices, immutable evaluation
+mapping/share and final-selection boundaries remain enforced by the existing API.
+
+Audit uses readable activity entries with advanced trace IDs available on demand.
+Keep filters, pagination, original reasons and CSV export. Guide has an always
+available search over plain definitions, including precision/recall, baseline,
+alert/flag, source formats and human decisions.
+
+## Responsive and accessible behaviour
+
+Check 320/375/768/1024/1440 px and landscape. Use minimum-zero grid columns and
+shrinkable children so tables scroll inside their own region rather than pushing
+the document wide. Native tables preserve all evidence fields. Mobile controls
+wrap; inputs retain 16 px text. Panel/help text must remain readable when enlarged.
+
+At ≤1000 px, navigation becomes a keyboard-operable drawer: focus stays inside,
+Escape/backdrop restore focus, the main workspace is inert while open, and body
+scroll is restored after closing. A skip link and route-change focus support
+keyboard users. No fake notifications, decorative charts, external assets or
+mandatory guided overlays. Respect `prefers-reduced-motion`.
+
+## Verification
+
+`frontend/tests/README.md` documents the explanation tests, production build and
+fully mocked browser runner. Browser QA uses a dedicated headless Chrome profile,
+a reserved API hostname and interception of all requests before navigation.
+No upload, detection, model or review request reaches a live service. Screenshots
+and their visible counts/metrics are fictitious QA examples, not project results.
+Evidence and limitations are recorded in PROGRESS and PROJECT_CONTEXT §24.

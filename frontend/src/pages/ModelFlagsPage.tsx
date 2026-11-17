@@ -7,15 +7,20 @@ import { fetchModels, fetchScores } from "../api/ml";
 import { Icon } from "../components/Icon";
 import { ModelSignals } from "../components/ModelSignals";
 import { SignalNotice } from "../components/Notices";
+import { scoreNumber } from "../explanations";
 import type { ModelUnit, ModelVersionOut } from "../types";
 import "../analysis.css";
 
 const PAGE_SIZE = 50;
 const MODEL_TABS: { value: ModelUnit | ""; label: string }[] = [
-  { value: "", label: "All signals" },
-  { value: "AML", label: "AML · Mingguan" },
-  { value: "FRAUD", label: "Fraud · Transaction" },
+  { value: "", label: "Semua hasil" },
+  { value: "FRAUD", label: "Per transaksi" },
+  { value: "AML", label: "Per minggu" },
 ];
+const STATE_LABELS: Record<string, string> = {
+  DRAFT: "Rancangan", ACTIVE: "Sedang dipakai", PENDING_APPROVAL: "Menunggu persetujuan",
+  SUSPENDED: "Dihentikan sementara", RETIRED: "Sudah diganti", IN_SIMULATION: "Dalam simulasi",
+};
 
 function validationValue(value: unknown): string {
   return typeof value === "number" && Number.isFinite(value)
@@ -42,72 +47,71 @@ function ModelCard({ model }: { model: ModelVersionOut }) {
     <article className="card analysis-model-card">
       <div className="analysis-model-heading">
         <div>
-          <p className="eyebrow">{isWeekly ? "AML model" : "Fraud model"}</p>
+          <p className="eyebrow">{isWeekly ? "Pemeriksaan mingguan" : "Pemeriksaan transaksi"}</p>
           <h3>
             {isWeekly
               ? unsupervised
-                ? "Weekly account signals"
-                : "Weekly entity signals"
-              : "Transaction signals"}
+                ? "Pola aktivitas rekening"
+                : "Pola aktivitas nasabah"
+              : "Pola tiap transaksi"}
           </h3>
         </div>
         <span
           className={`badge analysis-version-state ${model.state === "ACTIVE" ? "analysis-version-active" : ""}`}
         >
-          {model.state}
+          {STATE_LABELS[model.state] ?? model.state}
         </span>
       </div>
       <p className="analysis-model-description">
         {isWeekly
           ? unsupervised
-            ? "Satu skor per rekening-proxy dan minggu kalender sumber."
-            : "Satu skor per entitas dan minggu kalender."
-          : "Satu skor per transaksi, menggunakan riwayat yang tersedia."}
+            ? "Merangkum aktivitas satu rekening dalam satu minggu. Rekening dipakai sebagai pengganti identitas nasabah pada data ini."
+            : "Merangkum aktivitas satu nasabah dalam satu minggu."
+          : "Memeriksa satu transaksi beserta riwayat yang tersedia saat transaksi terjadi."}
         {unsupervised &&
-          " Isolation Forest tanpa label; skor mengukur keterisolasian, bukan probabilitas fraud."}
+          " Metode ini mencari pola yang berbeda dari contoh lainnya. Skornya bukan persentase kemungkinan fraud."}
       </p>
       {model.state === "DRAFT" && (
         <p className="analysis-model-description">
-          Kandidat untuk ditinjau; belum digunakan untuk menilai upload.
+          Masih berupa rancangan. Belum digunakan untuk memeriksa unggahan baru.
         </p>
       )}
       <div className="analysis-model-values">
         <div>
-          <span>Model version</span>
+          <span>Nama versi pemeriksaan</span>
           <strong className="mono">{model.version}</strong>
         </div>
         <div>
-          <span>Flag threshold</span>
+          <span>Batas untuk ditandai</span>
           <strong className="analysis-threshold">
-            {model.threshold.toFixed(4)}
+            {scoreNumber(model.threshold)}
           </strong>
         </div>
       </div>
       {unsupervised ? (
         <div className="analysis-validation">
           <p>
-            Evaluasi tanpa label{" "}
+            Contoh sumber belum memiliki jawaban acuan{" "}
             <span>· {model.currency ?? "mata uang belum diketahui"}</span>
           </p>
           <p>
-            Precision, recall, dan akurasi fraud belum dapat diukur pada data
-            sumber tanpa label. Stress test sintetis menilai skenario yang
-            dibuat, bukan kinerja fraud produksi.
+            Ketepatan dan cakupan deteksi belum bisa dinilai tanpa hasil review sebagai pembanding.
+            Pengujian skenario buatan hanya menjelaskan hasil pada simulasi tersebut.
           </p>
           {stress && (
             <>
-              <p>Validasi stress sintetis · sebelum tes final</p>
+              <p>Hasil simulasi buatan · sebelum uji akhir</p>
               <dl>
                 <div>
-                  <dt>Precision</dt>
+                  <dt>Ketepatan penandaan</dt>
                   <dd>{validationPercent(stress.precision)}</dd>
                 </div>
                 <div>
-                  <dt>Recall</dt>
+                  <dt>Cakupan kasus positif</dt>
                   <dd>{validationPercent(stress.recall)}</dd>
                 </div>
                 <div>
-                  <dt>Average precision</dt>
+                  <dt>Ringkasan peringkat (AP)</dt>
                   <dd>{validationValue(stress.average_precision)}</dd>
                 </div>
               </dl>
@@ -118,68 +122,76 @@ function ModelCard({ model }: { model: ModelVersionOut }) {
         <div className="analysis-validation">
           <p>
             {model.state === "RETIRED"
-              ? "Historical validation"
+              ? "Hasil pembanding terdahulu"
               : lab
-                ? "Lab validation · at saved threshold"
-                : "Internal validation"}{" "}
-            <span>· synthetic data</span>
+                ? "Hasil pembanding pada batas tersimpan"
+                : "Hasil pembanding internal"}{" "}
+            <span>· data simulasi</span>
           </p>
           <dl>
             <div>
-              <dt>Average precision</dt>
+              <dt>Peringkat keseluruhan (AP)</dt>
               <dd>{validationValue(model.validation.average_precision)}</dd>
             </div>
             <div>
-              <dt>Precision</dt>
-              <dd>{validationValue(model.validation.precision)}</dd>
+              <dt>Ketepatan penandaan</dt>
+              <dd>{validationPercent(model.validation.precision)}</dd>
             </div>
             <div>
-              <dt>Recall</dt>
-              <dd>{validationValue(model.validation.recall)}</dd>
+              <dt>Cakupan kasus positif</dt>
+              <dd>{validationPercent(model.validation.recall)}</dd>
             </div>
           </dl>
         </div>
       )}
       <details className="analysis-model-reference">
-        <summary>Training reference</summary>
+        <summary>Asal data dan detail teknis</summary>
+        <p>Ketepatan (precision) adalah bagian hasil yang ditandai dan berlabel positif. Cakupan (recall) adalah bagian contoh positif yang berhasil ditemukan. AP merangkum urutan skor pada berbagai batas. Angka ini bukan kepastian bahwa suatu transaksi adalah kejahatan.</p>
         <dl>
+          <div>
+            <dt>Satuan teknis</dt>
+            <dd>{model.unit} · {isWeekly ? "rangkuman mingguan" : "satu transaksi"}. Nama satuan ini bukan keputusan tentang jenis kejahatan.</dd>
+          </div>
+          <div>
+            <dt>Jenis model tersimpan</dt>
+            <dd className="mono">{model.artefact_type}</dd>
+          </div>
           {unsupervised && (
             <>
               <div>
-                <dt>Learning</dt>
-                <dd>Unsupervised; label tidak digunakan untuk fit</dd>
+                <dt>Cara belajar</dt>
+                <dd>Tanpa jawaban acuan saat pelatihan (unsupervised)</dd>
               </div>
               <div>
                 <dt>Mata uang</dt>
                 <dd>
-                  {model.currency ?? "Belum diketahui"} · tanpa konversi FX
+                  {model.currency ?? "Belum diketahui"} · nilai mata uang tidak dikonversi
                 </dd>
               </div>
               <div>
                 <dt>Penjelasan</dt>
                 <dd>
-                  Selisih skor dengan penggantian median training; bukan
-                  TreeSHAP
+                  Perubahan skor saat satu nilai diganti nilai tengah data latih
                 </dd>
               </div>
             </>
           )}
           <div>
-            <dt>Dataset</dt>
+            <dt>Contoh pelatihan</dt>
             <dd>
               {model.trained_on.profile ?? "—"} · seed{" "}
               {model.trained_on.seed ?? "—"}
             </dd>
           </div>
           <div>
-            <dt>Generator / features</dt>
+            <dt>Pembuat data / versi indikator</dt>
             <dd>
               {model.trained_on.generator_version ?? "—"} /{" "}
               {model.feature_set_version}
             </dd>
           </div>
           <div>
-            <dt>Definition hash</dt>
+            <dt>Sidik integritas (hash)</dt>
             <dd className="mono analysis-hash">{model.definition_hash}</dd>
           </div>
         </dl>
@@ -235,53 +247,63 @@ export function ModelFlagsPage() {
   const shownOffset = scores.data?.offset ?? offset;
   const unitLabel =
     unit === "AML"
-      ? "observasi mingguan"
+      ? "rangkuman mingguan"
       : unit === "FRAUD"
-        ? "transactions"
-        : "model units";
+        ? "transaksi"
+        : "hasil pemeriksaan";
 
   return (
     <div className="analysis-page">
       <div className="page-header">
         <div>
-          <h1>Model flags</h1>
+          <span className="page-kicker">HASIL OTOMATIS</span>
+          <h1>Kenali hasil yang ditandai</h1>
+          <p>Lihat apa yang ditemukan pemeriksaan otomatis, lalu buka antrean tinjauan untuk mencatat keputusan.</p>
         </div>
         <Link to="/alerts" className="btn-link secondary analysis-header-action">
-          <Icon name="alert" size={17} /> Open alert queue
+          <Icon name="alert" size={17} /> Buka antrean tinjauan
         </Link>
       </div>
 
+      <div className="analysis-explain-band">
+        <span className="analysis-explain-icon"><Icon name="scan" size={25} /></span>
+        <div><h2>Ditandai berarti perlu dilihat, bukan sudah terbukti fraud.</h2><p>Hasil muncul ketika skornya mencapai batas pemeriksaan. Buka alasan tiap hasil untuk memahami indikator yang berpengaruh. Skor bukan persentase kemungkinan kejahatan.</p></div>
+        <Link to="/guide#istilah" className="btn-link button-secondary">Pahami istilah <Icon name="arrow-right" size={15} /></Link>
+      </div>
+
+      {models.error && <div className="card error analysis-query-error" role="alert">
+        <h2>Informasi versi belum dapat dimuat</h2>
+        <p>{errorMessage(models.error)}</p>
+        <p>Hasil pemeriksaan yang berhasil dimuat tetap dapat dibaca di bawah. Muat ulang informasi versi untuk melihat status persetujuannya.</p>
+        <button type="button" className="button-secondary" onClick={() => void models.refetch()}>Coba muat versi lagi</button>
+      </div>}
+      <details className="analysis-model-section analysis-model-disclosure">
+        <summary><span><strong>Pemeriksaan yang tersimpan</strong><small>Lihat versi, status persetujuan, dan hasil pengujiannya.</small></span><span className="analysis-small-count">{models.error ? "Versi belum dapat dimuat" : models.data ? `${models.data.length} versi` : "Memuat…"}</span></summary>
       <section
         className="analysis-model-section"
         aria-labelledby="model-versions-heading"
       >
         <div className="section-head">
           <div>
-            <h2 id="model-versions-heading">Model versions</h2>
+            <h2 id="model-versions-heading">Versi pemeriksaan otomatis</h2>
           </div>
           {models.data && (
             <span className="analysis-small-count">
-              {models.data.length} registered
+              {models.data.length} versi tersimpan
             </span>
           )}
         </div>
         {models.isPending && (
           <div className="card analysis-loading" role="status">
-            Loading model versions…
-          </div>
-        )}
-        {models.error && (
-          <div className="card error" role="alert">
-            {errorMessage(models.error)}
+            Memuat versi pemeriksaan…
           </div>
         )}
         {models.data && models.data.length === 0 && (
           <div className="card empty-state">
             <Icon name="layers" size={28} />
-            <h3>No model versions available</h3>
+            <h3>Belum ada versi pemeriksaan</h3>
             <p>
-              Scores will be available when an active model version is
-              registered.
+              Analis menyiapkan model, lalu penanggung jawab menyetujuinya sebelum dipakai pada data baru.
             </p>
           </div>
         )}
@@ -293,6 +315,7 @@ export function ModelFlagsPage() {
           </div>
         )}
       </section>
+      </details>
 
       <section
         className="card analysis-signal-card"
@@ -301,15 +324,15 @@ export function ModelFlagsPage() {
       >
         <div className="section-head analysis-signal-heading">
           <div>
-            <h2 id="model-signals-heading">Units above threshold</h2>
+            <h2 id="model-signals-heading">Hasil yang mencapai batas pemeriksaan</h2>
             <p className="muted">
-              Entity-week dan transaksi adalah unit berbeda.
+              Pilih hasil per transaksi atau rangkuman mingguan. Keduanya memiliki satuan berbeda dan tidak boleh dijumlahkan sebagai jumlah transaksi.
             </p>
           </div>
           {scores.data && (
             <span className="analysis-small-count" aria-live="polite">
               {scores.isPlaceholderData
-                ? "Updating…"
+                ? "Memperbarui…"
                 : `${total.toLocaleString("id-ID")} ${unitLabel}`}
             </span>
           )}
@@ -319,7 +342,7 @@ export function ModelFlagsPage() {
           <div
             className="analysis-tabs"
             role="tablist"
-            aria-label="Scoring model"
+            aria-label="Jenis hasil pemeriksaan"
           >
             {MODEL_TABS.map((tab, index) => (
               <button
@@ -351,11 +374,11 @@ export function ModelFlagsPage() {
             ))}
           </div>
           <label className="analysis-search-field">
-            <span className="analysis-sr-only">Search flagged units</span>
+            <span className="analysis-sr-only">Cari hasil berdasarkan nama atau referensi nasabah</span>
             <Icon name="search" size={17} />
             <input
               type="search"
-              placeholder="Search entity reference or name"
+              placeholder="Cari nama atau referensi nasabah"
               maxLength={100}
               value={searchInput}
               onChange={(event) => setSearchInput(event.target.value)}
@@ -371,7 +394,7 @@ export function ModelFlagsPage() {
           {(!scores.data || scores.isPlaceholderData) && <SignalNotice />}
           {(scores.isPending || scores.isPlaceholderData) && (
             <div className="analysis-loading" role="status">
-              Loading model signals…
+              Memuat hasil pemeriksaan…
             </div>
           )}
           {scores.error && (
@@ -382,7 +405,7 @@ export function ModelFlagsPage() {
                 className="button-secondary"
                 onClick={() => void scores.refetch()}
               >
-                Try again
+                Coba lagi
               </button>
             </div>
           )}
@@ -395,13 +418,13 @@ export function ModelFlagsPage() {
                   <Icon name="activity" size={30} />
                   <h3>
                     {search
-                      ? "No matching signals"
-                      : "No units above threshold"}
+                      ? "Hasil belum ditemukan"
+                      : "Belum ada hasil pada batas pemeriksaan"}
                   </h3>
                   <p>
                     {search
-                      ? "Try another entity reference or name, or select a different model."
-                      : "Stored model flags will appear here after detection runs."}
+                      ? "Coba nama atau referensi lain, atau ubah jenis hasil yang dipilih."
+                      : "Hasil akan tampil setelah pemeriksaan dijalankan. Daftar kosong tidak membuktikan semua transaksi aman."}
                   </p>
                 </div>
               </>
@@ -419,7 +442,7 @@ export function ModelFlagsPage() {
             <span className="muted">
               {(shownOffset + 1).toLocaleString("id-ID")}–
               {Math.min(shownOffset + PAGE_SIZE, total).toLocaleString("id-ID")}{" "}
-              of {total.toLocaleString("id-ID")} {unitLabel}
+              dari {total.toLocaleString("id-ID")} {unitLabel}
             </span>
             <div>
               <button
@@ -428,7 +451,7 @@ export function ModelFlagsPage() {
                 disabled={offset === 0 || scores.isFetching}
                 onClick={() => setOffset(Math.max(0, offset - PAGE_SIZE))}
               >
-                <Icon name="arrow-left" size={16} /> Previous
+                <Icon name="arrow-left" size={16} /> Sebelumnya
               </button>
               <button
                 type="button"
@@ -436,7 +459,7 @@ export function ModelFlagsPage() {
                 disabled={offset + PAGE_SIZE >= total || scores.isFetching}
                 onClick={() => setOffset(offset + PAGE_SIZE)}
               >
-                Next <Icon name="arrow-right" size={16} />
+                Berikutnya <Icon name="arrow-right" size={16} />
               </button>
             </div>
           </div>
@@ -444,8 +467,7 @@ export function ModelFlagsPage() {
         <div className="analysis-readonly-note">
           <Icon name="shield" size={17} />
           <span>
-            Sinyal hanya dapat ditinjau. Keputusan triage dilakukan pada alert
-            di antrean.
+            Halaman ini menjelaskan hasil otomatis. Untuk meninjau, menutup, atau meneruskan temuan, gunakan antrean tinjauan.
           </span>
         </div>
       </section>
