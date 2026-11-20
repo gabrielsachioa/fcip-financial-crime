@@ -4,10 +4,10 @@
 Intelligence Platform capstone: what the project is, what the spec demands, what
 is actually built, what is deliberately not built, and what is still undecided.
 
-Last updated: **17 November 2026** · latest scope estimate in
+Last updated: **20 November 2026** · latest scope estimate in
 [PROGRESS.md](PROGRESS.md) is roughly 20% (3 November; not recounted by this audit).
 
-**Current handoff:** §18–24, [the Lab guide](LAB_THIN_SLICE.md) and
+**Current handoff:** §18–25, [the Lab guide](LAB_THIN_SLICE.md) and
 [PROGRESS.md](PROGRESS.md) describe the current application after the team's
 27 October/3 November work: nine roles, model approval and monitoring, and
 P01–P10 app rules. CF-05(b) is recorded as answered; an MLRO controls model
@@ -39,6 +39,14 @@ Jevon explicitly requests a fresh novice-friendly UI/UX using `ui-ux-pro-max`.
 §24 and [the design system](../design-system/fcip/MASTER.md) describe the new
 Indonesian task-based interface, grounded explanations and searchable guide.
 This is a presentation stage; the outstanding ML decisions above remain open.
+
+**20 November ML input response:** Jevon selects answer `1` (interpreted as a
+review-worthy target), supplies a pattern/feature proposal, keeps the existing
+AI-generated dummy client data and delegates research/recommendations for
+prediction-time context, review provenance and evaluation (items 4–6 in
+[ML_READINESS.md](ML_READINESS.md)). AS-27 and §25 record the working choices.
+Missing observations/reviews and an independent final remain evidence gaps;
+no new feature implementation, training, source/label change or activation.
 
 The [4 November Lab repair](ml/lab_repair_20261104.md) passes 913 distinct backend
 checks and the frontend build. It fixes evaluation/mapping leakage, adds a
@@ -947,6 +955,20 @@ spacing, font sizes, breakpoints and QA viewports are reversible design choices,
 not FRD/TRD numeric targets. Verification uses pure helper tests and isolated
 browser fixtures; all screenshot metrics/data are fictional QA examples. No
 backend, generator/shared data, model/threshold/label, live DB or activation change.
+
+**AS-27 — delegated ML development recommendations (20 Nov):** Jevon's numbered
+response authorises researching items 4–6 and retaining existing dummy data.
+Interpret `1` as the first offered target, suspicious and worth human review,
+without relabelling old targets or claiming mentor ratification. Treat his
+taxonomy as design input, not reviewed reference decisions. Recommend strict
+prediction-time context/unknown handling, evidence-backed review provenance and
+same-population precision/recall/false-positive comparisons. Keep 70/15/15 roles,
+disclose exposed finals/episode overlap, and avoid invented bank pass marks,
+review capacity or calibrated probabilities. New fields/review-category names
+and comparison criteria are development recommendations only; existing scoring,
+sealed experiments, shared data/generator and stage order remain unchanged.
+The research and source-specific feasibility findings are in ML_READINESS.md;
+foreign guidance supplies examples rather than Indonesian legal thresholds.
 
 ### TRD §1.5 — conflicts still open
 
@@ -2421,3 +2443,45 @@ mobile progress disclosure and retained form state; isolated browser regression
 checks. **Capstone:** Seluruh tampilan utama dirancang ulang agar pengguna baru
 lebih mudah memahami alur, alasan penandaan dan tindak lanjut. Tampilan skor
 dan indikator diperjelas tanpa mengubah hasil atau menyimpulkan adanya kejahatan.
+
+---
+
+## 25. ML input response and delegated research — 20 November 2026
+
+Jevon answers the six readiness requests: `1` for item 1, a taxonomy/feature
+proposal for item 2, existing AI-generated dummy client data for item 3, and
+delegates researching/recommending items 4–6 because the domain is unfamiliar.
+[ML_READINESS.md](ML_READINESS.md) retains the original questions and records
+the working decisions, source links and remaining evidence gaps. AS-27 records
+this authority and its limits, rather than claiming a mentor approved a target.
+
+The first answer is interpreted as review-worthy, not confirmed crime. The
+taxonomy is not a reviewed case collection. Recommend available-at-scoring
+context, explicit missing-history/field limits, evidence-backed review records
+and comparable precision/recall/false-positive evaluation. Preserve temporal
+70/15/15 roles; the existing exposed final cannot become a new blind final.
+No universal production percentage/capacity is guessed from foreign guidance.
+New review-category names and feature preconditions are proposals, not changes
+to existing binary mappings, models or scoring. Rules/model alerts remain
+advisory; the proposal's auto-block/challenge action does not apply to FCIP.
+
+Read-only inspection confirms `counterparty_ref` and `merchant_category` in the
+615-row CSV, absent from its current Lab feature inputs; the CSV has no before/
+after balances. The saved TRAIN-only audit records 0/430 baseline-ready rows.
+This does not audit every existing project source or justify invented history.
+PPATK, FFIEC, FINTRAC, BIS and scikit-learn primary references support the
+methodology; project choices and source-specific limitations are distinguished
+from legal requirements and from source authors' research results.
+
+**Verification:** documentation consistency, changed local links and whitespace
+checks; no application-test rerun is needed for prose-only changes. No training,
+new metrics, data/label/generator change, DB access, model activation or scope/
+backlog reorder. Missing reviewed/contextual evidence, independent final data
+and future operational tolerances remain explicit limitations.
+
+**Decisions I took myself:** AS-27 working target interpretation, point-in-time
+feature feasibility, provenance rubric and comparative development recommendations.
+**Capstone:** Arah pengembangan ML kini memakai target transaksi yang perlu
+ditinjau, data dummy yang sudah ada dan rekomendasi dari sumber resmi. Riset
+tidak menggantikan bukti yang hilang; belum ada klaim peningkatan model atau
+kesiapan perbankan.

@@ -1,9 +1,33 @@
 # FCIP — Progress Status
 
-**As of 17 November 2026 · roughly 20% of MVP scope (3 November estimate; not recounted by the safeguards or UI/ML exercises)**
+**As of 20 November 2026 · roughly 20% of MVP scope (3 November estimate; not recounted by the safeguards or UI/ML exercises)**
 
-Supersedes any earlier progress figure. Scope definitions, architecture and open
-questions are unchanged — see `PROJECT_CONTEXT.md`.
+Supersedes any earlier progress figure. Scope definitions and architecture are
+unchanged; see `PROJECT_CONTEXT.md` for current responses and open questions.
+
+## 20 November — ML input response and delegated research
+
+Jevon selects target option 1 (working interpretation: worth human review),
+supplies a behavioural feature proposal, keeps the existing AI-generated dummy
+client data and delegates research for items 4–6. [Working decisions and sources](ML_READINESS.md)
+cover prediction-time context, evidence-backed review provenance and development
+evaluation. PPATK/FFIEC/FINTRAC/BIS and official scikit-learn references inform the
+recommendations; none supplies a universal bank acceptance percentage.
+
+Read-only verification of the latest 615-row CSV header, saved mapping, feature
+registry and existing audit confirms that recipient IDs exist in the source but
+are not consumed by current Lab features, before/after balances are absent and
+0/430 TRAIN rows meet the current baseline gate. No new quality result, data/
+label/generator change, feature implementation, training, live DB access or
+activation. Documentation consistency/local links and `git diff --check` are
+the relevant checks; application tests are not rerun for prose changes.
+
+**Decisions I took myself:** AS-27's review-worthy interpretation, unknown-aware
+feature feasibility, review provenance proposal and comparative development
+criteria; no guessed operational targets. **Ringkasan capstone:** Dasar keputusan
+ML dijelaskan dari sumber resmi. Data dummy tetap dipakai untuk pengembangan;
+flag berarti perlu ditinjau, dan pola/riwayat yang belum didukung data serta
+ketiadaan pengujian final independen tetap dinyatakan sebagai keterbatasan.
 
 ## 17 November — fresh interface for first-time users
 

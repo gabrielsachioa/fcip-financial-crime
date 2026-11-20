@@ -4,7 +4,8 @@ Jevon authorises improvements to the deficiencies identified in the readiness
 review, prioritising ML transaction flags. This first implementation hardens
 label handling and inference and adds a descriptive development-data audit.
 It does not establish new fraud/AML labels, acceptance targets or model quality.
-The operational target in PROJECT_CONTEXT §22 still needs Jevon/mentor input.
+The original operational-target question is in PROJECT_CONTEXT §22; the
+20 November response and working interpretation below update its status.
 
 ## What a flag means
 
@@ -22,6 +23,15 @@ became available. Those facts must be present in the data and supported by the
 feature implementation before they can influence predictions.
 
 ## Input needed from Jevon and the mentor
+
+**20 November response:** Jevon selects answer `1`, supplies a behavioural
+taxonomy/features proposal, directs use of the existing AI-generated dummy data
+prepared for the client, and delegates researching/recommending items 4–6.
+We interpret `1` as **suspicious and worth human review**, the first option in
+item 1 below. This is the working development interpretation, not independently
+confirmed crime labels or a mentor's sign-off. The original requests remain
+below for traceability; the decisions following them describe what is now
+settled and what evidence remains unavailable.
 
 1. **Target decision:** suspicious and worth investigating, or confirmed fraud/
    money laundering. Define positive/negative/undecided and the evidence needed
@@ -60,6 +70,136 @@ For this capstone use synthetic, nonidentifying cases. FRD NG-04 prohibits real
 personal/bank extracts. A bank pilot with authorised data is a separate scope
 decision and environment; this work does not ask for real customer data.
 Generator 1.4.0 and shared Tiny/Small data remain subject to AGENTS.md approval.
+
+## Working decisions after Jevon's response — 20 November 2026
+
+These are research-backed development recommendations authorised by Jevon's
+delegation, not new implemented features, a changed threshold or bank acceptance.
+They preserve FRD §2.5's advisory boundary and the existing stage order.
+
+### 1–3. Target, pattern proposal and existing data
+
+- Target: prioritise observations that merit human investigation. A reviewed
+  positive means review-worthy in a specified synthetic scenario; a reviewed
+  negative means a supported legitimate interpretation in that scenario.
+  Unresolved/insufficient-evidence cases stay separate with a blank target.
+  An unflagged transaction is not certified legitimate. Existing `is_fraud`
+  values and historical target descriptions are not rewritten.
+- The supplied structuring/smurfing, probe, noise/warming and fan-out/fan-in
+  taxonomy is a feature/design input, not a new reviewed answer key. Patterns
+  may overlap. Splitting to satisfy a payment-channel limit does not by itself
+  establish evasive intent; routine payments, small residual balances and rapid
+  onward transfers also have legitimate explanations. Use observed facts plus
+  context rather than asserting purpose from amounts alone.
+- Keep existing synthetic client/project sources. Do not regenerate, relabel,
+  add invented history or silently substitute a public/real dataset. Preserve
+  source hashes and provenance per experiment. Synthetic performance describes
+  agreement with those simulated reference decisions, not bank effectiveness.
+- Start from the existing tabular candidates (Logistic Regression, LightGBM,
+  Isolation Forest); select using development evidence, not a promise that one
+  architecture wins. The proposed sequence/GNN and account-network work does
+  not change the backlog order or become implemented by this record.
+- The proposal's auto-block/challenge action does not apply to FCIP. Rules and
+  approved model alerts remain evidence for humans, under existing permissions.
+
+### 4. Prediction-time context and feature feasibility
+
+Record the transaction/account identifiers, exact source time and its precision/
+zone, amount/currency/direction, channel/type, available counterparty, device and
+business context. Keep when each fact became available; late investigation
+findings may inform labels but cannot be retroactively used as scoring inputs.
+An absent field/history is unknown, not zero, normality or account inactivity.
+
+The latest 615-row source has `counterparty_ref`, `merchant_category` and device
+references, but its saved Lab mapping/feature groups do not consume counterparty
+identity or merchant category. That CSV has no before/after balance columns.
+Its TRAIN-only readiness audit finds 0/430 rows meet the existing historical
+baseline gate (30 earlier observations over 30 observed days). These are
+specific source/implementation limitations, not claims about every project
+dataset. The feature policy should distinguish:
+
+| Proposed feature family | Preconditions and interpretation |
+|---|---|
+| Counts/value windows, observed amount shape | Exact times for intraday windows; explicit currency/direction. Existing 1h/24h counts/value features are a starting point, not every proposed window. |
+| Account-relative amounts, new recipients, probe sequences | Adequate earlier observations, meaningful stable recipient IDs and order. Same-time rows need a documented order; no ordering by arbitrary IDs. The example IDR50,000 cutoff is not adopted as a fraud definition. |
+| Pass-through, dwell time, fan-out/fan-in and cycles | Linked incoming/outgoing counterparties, available edges and time order; reconcile mirrored transfers to avoid double counting. Window totals/nearest outgoing payments do not prove which incoming funds financed an outgoing transfer. |
+| Before/after balance or residual balance ratio | Verified balance semantics and snapshots; do not reconstruct from an unspecified balance or fabricate missing values. |
+| Noise/warming and legitimate business context | Supported transaction purpose/merchant context and history. Small routine payments are observations, not evidence of concealment. |
+
+All temporal/graph queries must stop at scoring time. A later consolidation can
+support a later alert, never a feature backdated to the initial transfer. Do not
+mix currency amounts, assume bank identity from an account ID, or infer payment
+rails/ownership from merchant names. Proposed 5m/4h/etc. windows are candidate
+design parameters; any implemented choice needs explicit recorded validation.
+
+### 5. Review provenance and reference-label rubric
+
+For future review records, retain a case/episode ID, linked transaction IDs,
+observed pattern(s), reviewer reference/time, decision, evidence, legitimate
+alternative explanations and unresolved questions. Use human-facing decisions
+`PERLU_DITINJAU`, `WAJAR_DENGAN_BUKTI` and `BUKTI_BELUM_CUKUP`; these are proposed
+review categories, not new literal values in the existing binary mapping.
+Only resolved decisions can be explicitly mapped to training targets.
+
+Where team reviewers are available, review without seeing model scores or the
+generator key, then preserve disagreements and their resolution. If independent
+review is unavailable, disclose that instead of inventing reviewer provenance.
+Do not make model/rule outputs their own reference truth. Reviewer text, scenario
+names, target labels and future findings stay out of model inputs. The supplied
+615-row key retains its original, user-reported team-review provenance; this
+record does not retroactively make it independently validated.
+
+### 6. Development evaluation and acceptance recommendation
+
+- Retain the mentor-proposed/previously approved chronological 70/15/15 roles:
+  TRAIN learns; validation selects features/model/threshold; final evaluates a
+  frozen choice. Preserve whole time groups and check episode overlap; the
+  existing 615-row exercise has disclosed episode overlap and an already
+  exposed final. Repeated runs on it are development comparisons, not a fresh
+  blind test. No new final is created by shuffling/re-splitting exposed rows.
+- Report AP (Average Precision, with its exact definition, rather than silently
+  equating it with trapezoidal PR-AUC), precision, recall, TP/FP/FN/TN, pattern/
+  segment support, normal-lookalike errors and alert workload. Explain precision
+  as how many flagged cases match the reference; recall as how many reference
+  positives are found. Report sample counts/uncertainty; absent pattern support
+  is unassessed. Delay/loss-weighted metrics need actual timing/loss reference
+  data; leave them unavailable when absent.
+- Recommended development comparison: use the same population, labels and
+  observation timing as the reference. Prefer a candidate that reduces false
+  positives without losing measured recall/covered patterns, or improves recall
+  without increasing false positives; expose the tradeoff when neither holds.
+  A small point-estimate improvement is not established generalisation. This
+  recommendation does not replace the sealed experiments' existing guards.
+- No invented 90%/95% bank pass mark, daily analyst capacity or loss cost. There
+  is no supplied operational evidence for those values. Show validation tradeoff
+  curves and workload relative to the reference instead of silently choosing a
+  tolerance. A future numerical acceptance policy requires client/mentor inputs
+  and an independent suitable evaluation source.
+- Scores remain risk-ranking signals, not percentages of crime probability.
+  Any probability calibration needs separate time-respecting held-out evidence
+  and checks; no calibration is performed here. No activation follows merely
+  from successful technical tests or a synthetic metric.
+
+### Research basis and limits
+
+Sources checked on 20 November 2026. PPATK supplies Indonesian suspicious-
+transaction context; foreign guidance supplies methodological examples, not
+Indonesian channel limits, reporting thresholds or binding product rules.
+The data fields, review categories, model-starting strategy and comparative
+development criteria above are our project recommendations, not quoted standards.
+
+- [PPATK: reporting and the TKM definition](https://www.ppatk.go.id/pelaporan/read/50/): deviations from the customer's profile/pattern and suspected reporting avoidance are relevant context.
+- [FFIEC: AML red flags](https://bsaaml.ffiec.gov/manual/Appendices/07): a red flag alone is not evidence of crime; legitimate business purpose matters.
+- [FINTRAC: financial-entity indicators](https://fintrac-canafe.canada.ca/guidance-directives/transaction-operation/indicators-indicateurs/fin_mltf-eng.php): assess indicators with facts and context.
+- [FINTRAC: explaining suspicion](https://fintrac-canafe.canada.ca/guidance-directives/transaction-operation/str-dod/str-dod-eng): clear factual/contextual rationale supports a review record; FCIP does not transmit such reports.
+- [BIS: Project Aurora](https://www.bis.org/project/aurora): network analysis and simulated collaboration inform AML research; real-world proofs of concept remain essential. This does not transfer BIS results to FCIP.
+- [scikit-learn: chronological evaluation](https://scikit-learn.org/stable/modules/cross_validation.html), [threshold selection](https://scikit-learn.org/stable/modules/classification_threshold.html), [AP](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.average_precision_score.html) and [calibration](https://scikit-learn.org/stable/modules/calibration.html): methodological references, not bank acceptance numbers.
+
+**Remaining evidence gaps:** the taxonomy is not independent reviewed cases;
+missing context/history cannot be supplied by research alone. Existing data can
+support further explicitly limited development, but cannot establish unobserved
+patterns or independent final/bank performance. Mentor ratification and real
+operational tolerance remain distinct from Jevon's development delegation.
 
 ## Label contract implemented
 
@@ -151,8 +291,10 @@ claim of improved precision/recall follows.
 ## Work still pending
 
 The first safeguards stage does not complete the broader bank-readiness request.
-New training and revised features/data need the target, reviewed cases and
-acceptance decisions above. Do not activate a candidate merely because its
+The 20 November response supplies a working review-worthy target and delegates
+development recommendations; it does not supply the missing reviewed/contextual
+evidence or independent final data. Future training must state those limitations
+and pin its source and evaluation protocol. Do not activate a candidate merely because its
 technical tests pass. The existing product backlog in PROGRESS remains in order:
 decision completeness and evidence storage, rule maker-checker, investigation
 views, screening/entity resolution, draft reporting, metrics and governance,
