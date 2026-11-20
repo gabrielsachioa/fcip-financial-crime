@@ -7,7 +7,7 @@ is actually built, what is deliberately not built, and what is still undecided.
 Last updated: **20 November 2026** · latest scope estimate in
 [PROGRESS.md](PROGRESS.md) is roughly 20% (3 November; not recounted by this audit).
 
-**Current handoff:** §18–25, [the Lab guide](LAB_THIN_SLICE.md) and
+**Current handoff:** §18–26, [the Lab guide](LAB_THIN_SLICE.md) and
 [PROGRESS.md](PROGRESS.md) describe the current application after the team's
 27 October/3 November work: nine roles, model approval and monitoring, and
 P01–P10 app rules. CF-05(b) is recorded as answered; an MLRO controls model
@@ -47,6 +47,15 @@ prediction-time context, review provenance and evaluation (items 4–6 in
 [ML_READINESS.md](ML_READINESS.md)). AS-27 and §25 record the working choices.
 Missing observations/reviews and an independent final remain evidence gaps;
 no new feature implementation, training, source/label change or activation.
+
+**20 November implementation after "oke gas":** §26 and
+[ML_READINESS.md](ML_READINESS.md) describe 11 optional transaction-context
+observations and a new validation-only comparison on the unchanged 615-row
+source. Native validation catches remain 11/12 positives with FP0, equal to the
+reference; no strict detection improvement or activation. All 12 offline
+candidate artifacts reproduce validation scores/explanations. The probe amount-
+jump feature has no TRAIN support and is excluded. AS-28 records implementation
+choices; no new final, generator/shared-data change or stage reorder.
 
 The [4 November Lab repair](ml/lab_repair_20261104.md) passes 913 distinct backend
 checks and the frontend build. It fixes evaluation/mapping leakage, adds a
@@ -969,6 +978,23 @@ and comparison criteria are development recommendations only; existing scoring,
 sealed experiments, shared data/generator and stage order remain unchanged.
 The research and source-specific feasibility findings are in ML_READINESS.md;
 foreign guidance supplies examples rather than Indonesian legal thresholds.
+
+**AS-28 — authorised transaction-context implementation (20 Nov):** Jevon's
+"oke gas" authorises implementing the preceding existing-data development plan.
+Keep the eight original groups/defaults and add three opt-in groups with 11
+observations. Use his proposed 5m/1h/4h/24h source-clock windows as research
+parameters, not FRD thresholds or adopted IDR50,000 probe rules. Preserve
+counterparty IDs, native nulls, account/currency boundaries, unknown day-only
+windows and no ordering among equal-time peers. Refuse flow features based on
+an unmapped default direction. Describe amount/flow relations as observations,
+not criminal intent or exact fund tracing. Preserve base behavioral_v1 values;
+seal transaction_context_v1 as a separate hashed vocabulary marker and hash the
+new module in Lab protocols. Existing mappings/score arithmetic are not rebased.
+The new DB-free comparison fixes four feature variants and three native
+candidates before fitting, reuses 70/15/15 roles on the existing source and
+reports validation only. Channel-frequency removal is an ablation, not proof
+of removing all source shortcuts. No label/generator change or TEST scoring;
+keep every result OFFLINE_DRAFT and retain warnings/source/code/artifact hashes.
 
 ### TRD §1.5 — conflicts still open
 
@@ -2485,3 +2511,61 @@ feature feasibility, provenance rubric and comparative development recommendatio
 ditinjau, data dummy yang sudah ada dan rekomendasi dari sumber resmi. Riset
 tidak menggantikan bukti yang hilang; belum ada klaim peningkatan model atau
 kesiapan perbankan.
+
+---
+
+## 26. Optional transaction context and offline comparison — 20 November 2026
+
+After §25's research response Jevon says "oke gas". AS-28 records this authority
+for the existing-data development step. The Lab adds **Transaksi beruntun**,
+**Hubungan lawan transaksi** and **Dana masuk dan keluar** as initially unchecked
+groups. Eleven observations cover short-window counts/value, known-counterparty/
+channel diversity and coverage, prior same-counterparty count/amount jump,
+four-hour incoming/outgoing totals and ratio, and time since prior incoming.
+Counterparty mapping now carries stable source references to monitoring; native
+missing mapped cells do not become literal identifiers. No balance/ownership,
+criminal purpose or multi-hop trail is invented. Base history gates stay intact.
+
+The optional extension has a separate hashed vocabulary marker; legacy saved
+models still compute their original values. Training, stored-artifact validation
+and serving share reconstruction. Equal-time peers never become prior history,
+and available day-only history makes possibly overlapping windows unknown.
+Flow features require a mapped direction. Existing final-evaluation code locks,
+permissions, model approvals and synthetic/advisory boundaries stay in force.
+
+The checksum-pinned 615-row source is unchanged. Four predeclared variants ×
+three native candidates fit offline on 430 TRAIN and compare on 92 validation
+rows; 93 final rows are not scored. LightGBM wins validation AP in every variant.
+Reference/context AP is 0.966667/0.966667; without channel-frequency features
+0.946078/0.956667. Every selected default and matched operating point has
+TP11/FP0/FN1/TN80: precision100% on only11 flags and recall91.67% of12 positives.
+ATO4/5 and VELOCITY7/7 are the only positively supported validation families.
+There is **no strict catch/FP improvement** and no independent final/bank claim.
+The proposed probe amount-jump feature is all-missing in TRAIN and excluded;
+context otherwise adds10 usable features (19→29). Historical sparse-baseline,
+source-shortcut and review-provenance limitations remain.
+
+[ML_READINESS.md](ML_READINESS.md) gives the reproducible command and limits;
+[results](ml/transaction_context_20261120_results.json) preserve protocol/hashes.
+[Replay verification](ml/transaction_context_20261120_verification.json) checks
+all12 saved candidates' content, finite scores/contributions and original
+validation confusion matrices without another fit, TEST scoring or DB access.
+All1,071 backend tests, including5 slow checks, pass on verified private
+PostgreSQL16.15;428 warnings are retained. Initial new-test expectations for
+canonical nulls are corrected, with final full-suite evidence in
+[the checks](ml/transaction_context_20261120_checks.json). The private socket-only
+cluster stops cleanly. A simple causal oracle agrees on1,980 feature values;
+15 frontend explanation tests and production build pass. No new browser QA,
+large-context-feature capacity test or bank UAT is claimed.
+
+All new research artifacts remain OFFLINE_DRAFT, with no live registry change,
+activation, source relabelling, generator/shared Tiny/Small edit, live DB data change
+or backlog reorder. Optional observations are implemented; sequence/graph,
+funds matching, calibration, independent reviewed cases/final and operational
+acceptance remain pending. Prior experiments are not rewritten.
+
+**Decisions I took myself:** AS-28 opt-in versioned observations, causal/unknown
+handling, explicit counterparty mapping, validation-only variants/ablation and
+finite saved-artifact replay. **Capstone:** Sistem kini dapat mempelajari lebih
+banyak hubungan transaksi yang datanya tersedia. Eksperimen belum meningkatkan
+jumlah kasus tertangkap atau salah flag; seluruh kandidat tetap draft offline.

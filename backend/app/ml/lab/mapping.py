@@ -51,6 +51,9 @@ FIELDS: tuple[dict, ...] = (
      "aliases": ("deviceid", "device", "sourcedeviceid", "deviceref")},
     {"key": "merchant_ref", "label": "ID merchant", "required": False, "help": "",
      "aliases": ("merchantid", "merchant", "sourcemerchantid", "merchantref")},
+    {"key": "counterparty_ref", "label": "ID lawan transaksi", "required": False,
+     "help": "Identitas stabil rekening/tujuan pada transaksi masuk atau keluar. Bukan nama atau kategori merchant.",
+     "aliases": ("counterpartyref", "counterpartyid", "recipientid", "destinationaccount", "destaccountid", "namedest")},
     {"key": "ip_address", "label": "Alamat IP", "required": False, "help": "", "aliases": ("ipaddress", "ip")},
     {"key": "location", "label": "Lokasi", "required": False, "help": "", "aliases": ("location", "city", "lokasi")},
     {"key": "counterparty_country", "label": "Negara lawan transaksi", "required": False,
@@ -278,7 +281,7 @@ def _normalize(raw: pd.DataFrame, fields: dict[str, str], date_format: str,
     notes: list[str] = []
     work = pd.DataFrame(index=raw.index)
     for key, column in fields.items():
-        work[key] = raw[column].astype(str)
+        work[key] = raw[column].astype("string").fillna("")
     if "transaction_ref" not in work:
         work["transaction_ref"] = [f"ROW-{i + 1:07d}" for i in range(len(raw))]
         notes.append("ID transaksi tidak dipetakan: nomor baris dipakai sebagai ID.")
@@ -359,6 +362,7 @@ def apply_mapping(raw: pd.DataFrame, mapping: dict) -> MappedData:
         notes.append(f"{missing_label} baris tanpa nilai label dikeluarkan dari pelatihan dan evaluasi.")
 
     frame = accepted.loc[keep].reset_index(drop=True)
+    frame.attrs["direction_observed"] = "direction" in fields
     y = labels[keep]
     categories = None
     if category_column:

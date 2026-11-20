@@ -1,0 +1,28 @@
+{
+  "category_column": "pattern_code",
+  "date_format": "iso",
+  "default_currency": "XXX",
+  "fields": {
+    "account_number": "account_number",
+    "amount": "amount",
+    "channel": "channel",
+    "counterparty_country": "counterparty_country",
+    "counterparty_ref": "counterparty_ref",
+    "currency": "currency",
+    "device_ref": "device_ref",
+    "direction": "direction",
+    "ip_address": "ip_address",
+    "location": "location",
+    "merchant_ref": "merchant_ref",
+    "transaction_date": "transaction_date",
+    "transaction_ref": "transaction_ref",
+    "transaction_type": "transaction_type"
+  },
+  "label_column": "is_fraud",
+  "negative_values": [
+    "0"
+  ],
+  "positive_values": [
+    "1"
+  ]
+}

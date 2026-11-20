@@ -25,7 +25,8 @@ ALL_MODELS = ["logistic_regression", "lightgbm", "isolation_forest"]
 
 def test_every_fraud_feature_belongs_to_exactly_one_group() -> None:
     grouped = [f for g in FEATURE_GROUPS for f in g["features"]]
-    assert sorted(grouped) == sorted(feature_names("FRAUD"))
+    from app.ml.behavioral.transaction_context import VERSION, VOCABULARY_KEY
+    assert sorted(grouped) == sorted(feature_names("FRAUD", {VOCABULARY_KEY: VERSION}))
     assert len(grouped) == len(set(grouped))
 
 

@@ -18,6 +18,13 @@ const { alertExplanation, featureDisplayName, featureExplanation, featureValue, 
 const contribution = (feature, value) => ({ feature, value, definition: 'Original stored definition', contribution: 0.3 });
 const alert = (pattern, details = {}, transactions = []) => ({ pattern_code: pattern, detection_details: details, transactions });
 
+test('context factors explain observed relationships and flow ratios without asserting a crime', () => {
+  assert.equal(featureDisplayName('COUNT_R5M'), 'Transaksi dalam 5 menit');
+  assert.match(featureExplanation('OUT_IN_VALUE_RATIO_R4H'), /belum membuktikan/);
+  assert.match(featureExplanation('KNOWN_COUNTERPARTIES_R24H'), /ID yang hilang/);
+  assert.match(featureExplanation('SECONDS_SINCE_PRIOR_CREDIT'), /belum mencocokkan/);
+});
+
 test('P02 explains only the recorded band/count/currency and keeps the upper limit exclusive', () => {
   const result = alertExplanation(alert('P02_STRUCTURING', {
     TXN_COUNT_IN_BAND: 3, AGGREGATE_AMOUNT: '1125000000', CURRENCY: 'IDR',

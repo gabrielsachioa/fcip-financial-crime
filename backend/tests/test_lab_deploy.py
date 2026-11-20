@@ -114,7 +114,7 @@ def test_every_lab_model_explains_each_score() -> None:
     mapped = apply_mapping(raw, mapping_for(raw))
     outcome = train_run(mapped.frame, mapped.labels, None, feature_groups=ALL_GROUPS,
                         model_keys=["logistic_regression", "lightgbm", "isolation_forest"], train_share=0.6)
-    X, _ = build_matrix(mapped.frame, np.ones(len(mapped.frame), dtype=bool))
+    X, _ = build_matrix(mapped.frame, np.ones(len(mapped.frame), dtype=bool), ALL_GROUPS)
     sample = X.iloc[:6]
     for model in outcome.models:
         predictor = load_predictor(model.artefact_type, model.model_text, model.features)

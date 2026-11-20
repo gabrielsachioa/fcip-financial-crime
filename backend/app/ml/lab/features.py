@@ -13,6 +13,7 @@ import numpy as np
 import pandas as pd
 
 from app.ml.behavioral.features import FEATURE_DEFINITIONS, FEATURE_SET_VERSION, build_features, feature_names, fit_vocabulary
+from app.ml.behavioral.transaction_context import DEFINITIONS as CONTEXT_DEFINITIONS, VERSION as CONTEXT_VERSION, VOCABULARY_KEY
 
 UNIT = "FRAUD"
 
@@ -44,15 +45,26 @@ FEATURE_GROUPS: tuple[dict, ...] = (
     {"key": "sesi", "label": "Data sesi dari sumber", "default": True,
      "description": "Percobaan login, durasi, saldo tercatat (hanya jika dataset menyediakannya).",
      "features": ("LOGIN_ATTEMPTS", "TRANSACTION_DURATION", "ACCOUNT_BALANCE")},
+    {"key": "urutan", "label": "Transaksi beruntun", "default": False,
+     "description": "Jumlah transaksi dalam 5 menit, total nominal 1 jam dan keragaman kanal yang tercatat. Perlu waktu transaksi yang jelas; aktivitas ramai belum tentu mencurigakan.",
+     "features": ("COUNT_R5M", "VALUE_R1H", "KNOWN_CHANNELS_R24H")},
+    {"key": "tujuan", "label": "Hubungan lawan transaksi", "default": False,
+     "description": "Jumlah lawan transaksi yang tercatat serta lonjakan nominal ke lawan transaksi yang sama. ID yang hilang tetap ditandai sebagai keterbatasan; tidak menyimpulkan pemilik rekening.",
+     "features": ("KNOWN_COUNTERPARTIES_R24H", "COUNTERPARTY_COVERAGE_R24H", "OBSERVED_SAME_COUNTERPARTY_COUNT_R1H",
+                  "AMOUNT_OVER_PRIOR_COUNTERPARTY_MIN_R1H")},
+    {"key": "arus", "label": "Dana masuk dan keluar", "default": False,
+     "description": "Perbandingan dana masuk/keluar selama 4 jam dan jeda sejak dana masuk sebelumnya. Perlu arah dana yang dipetakan; belum membuktikan dana yang sama diteruskan.",
+     "features": ("CREDIT_VALUE_R4H", "DEBIT_VALUE_R4H", "OUT_IN_VALUE_RATIO_R4H", "SECONDS_SINCE_PRIOR_CREDIT")},
 )
 GROUP_KEYS = tuple(g["key"] for g in FEATURE_GROUPS)
+CONTEXT_GROUPS = {"urutan", "tujuan", "arus"}
 
 # Every feature of the unit belongs to exactly one group (checked by a test).
-assert sorted(f for g in FEATURE_GROUPS for f in g["features"]) == sorted(feature_names(UNIT))
+assert sorted(f for g in FEATURE_GROUPS for f in g["features"]) == sorted(feature_names(UNIT) + list(CONTEXT_DEFINITIONS))
 
 
 def definition(code: str) -> str:
-    return FEATURE_DEFINITIONS.get((UNIT, code), "")
+    return CONTEXT_DEFINITIONS.get(code, FEATURE_DEFINITIONS.get((UNIT, code), ""))
 
 
 def selected_features(groups: list[str]) -> list[str]:
@@ -63,14 +75,18 @@ def selected_features(groups: list[str]) -> list[str]:
     return [f for g in FEATURE_GROUPS if g["key"] in chosen for f in g["features"]]
 
 
-def build_matrix(frame: pd.DataFrame, train_mask: np.ndarray) -> tuple[pd.DataFrame, dict]:
+def build_matrix(frame: pd.DataFrame, train_mask: np.ndarray, feature_groups: list[str] | None = None) -> tuple[pd.DataFrame, dict]:
     """All FRAUD features for every row of `frame`, in `frame`'s order, with the
     vocabulary fitted on the training rows only."""
     vocabulary = fit_vocabulary(frame.loc[train_mask])
+    if CONTEXT_GROUPS.intersection(feature_groups or []):
+        if "arus" in feature_groups and frame.attrs.get("direction_observed") is False:
+            raise ValueError("Fitur dana masuk/keluar memerlukan kolom arah transaksi yang dipetakan, bukan arah default.")
+        vocabulary[VOCABULARY_KEY] = CONTEXT_VERSION
     features = build_features(frame, UNIT, vocabulary)
     order = pd.Series(np.arange(len(frame)), index=frame.transaction_ref.to_numpy())
     features = features.set_index(order.loc[features.transaction_ref].to_numpy()).sort_index()
-    return features[feature_names(UNIT)], vocabulary
+    return features[feature_names(UNIT, vocabulary)], vocabulary
 
 
 __all__ = ["FEATURE_GROUPS", "FEATURE_SET_VERSION", "GROUP_KEYS", "UNIT", "build_matrix", "definition",

@@ -1,0 +1,102 @@
+{
+  "base_head": "c2279d030fd39f6a117a96aca36470c05e454d54",
+  "scope": "Optional transaction context and validation-only existing-data comparison; no live DB, data/generator change, TEST scoring or activation.",
+  "backend_full_final": {
+    "started_at_utc": "2026-11-20T14:56:00.804869+00:00",
+    "finished_at_utc": "2026-11-20T15:00:35.455192+00:00",
+    "seconds": 274.65,
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "pytest",
+      "-p",
+      "no:cacheprovider",
+      "-o",
+      "addopts=",
+      "-q"
+    ],
+    "exit_code": 0,
+    "private_server_verified": true,
+    "data_directory": "/var/folders/ky/ymzyd42n7cz6zq7mfjtz35rw0000gn/T/fcip_context_v1g08ycp/pg",
+    "log": "/var/folders/ky/ymzyd42n7cz6zq7mfjtz35rw0000gn/T/fcip_context_v1g08ycp/full_final.log",
+    "passed": 1071,
+    "warnings": 428,
+    "log_sha256": "3aa75810fa9e4167796c409864ab2cc1b0ad652295d55d4a9e196dd575f908a6",
+    "includes_slow_tests": true,
+    "cluster_stopped": true
+  },
+  "previous_full_attempt": {
+    "started_at_utc": "2026-11-20T14:50:48.680857+00:00",
+    "finished_at_utc": "2026-11-20T14:55:16.769729+00:00",
+    "seconds": 268.09,
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "pytest",
+      "-p",
+      "no:cacheprovider",
+      "-o",
+      "addopts=",
+      "-q"
+    ],
+    "exit_code": 1,
+    "private_server_verified": true,
+    "data_directory": "/var/folders/ky/ymzyd42n7cz6zq7mfjtz35rw0000gn/T/fcip_context_v1g08ycp/pg",
+    "log": "/var/folders/ky/ymzyd42n7cz6zq7mfjtz35rw0000gn/T/fcip_context_v1g08ycp/full.log",
+    "passed": 1068,
+    "failed": 3,
+    "log_sha256": "d2948bd811debf97b2362236a3ce09e4bbd68832c2b74ba994c312da3093c0fa",
+    "failure_reason": "New test expected empty strings; canonical optional text correctly returns native null. Test expectation corrected; production code unchanged after experiment."
+  },
+  "initial_test_harness_issue": "Unix-socket query encoding triggered Alembic ConfigParser interpolation; corrected runner to use PGHOST/PGPORT, without application changes.",
+  "distinct_backend_checks": 1071,
+  "frontend": {
+    "explanation_tests": {
+      "command": [
+        "npm",
+        "run",
+        "test:explanations"
+      ],
+      "passed": 15,
+      "exit_code": 0
+    },
+    "build": {
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "exit_code": 0,
+      "javascript_kb": 473.8,
+      "css_kb": 88.21
+    },
+    "browser_qa_performed": false
+  },
+  "development_experiment": {
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "app.scripts.compare_transaction_context",
+      "--data",
+      "ml_data/team_review_s20261110/training_labeled.csv",
+      "--mapping",
+      "../docs/ml/transaction_context_20261120_mapping.json",
+      "--expected-sha256",
+      "d2b8087e9fc07a2462d84bb1d3fb3be405035b8027430a670b1753e6f220aea6",
+      "--train-share",
+      "0.7",
+      "--out",
+      "ml_models/transaction_context_s20261120"
+    ],
+    "exit_code": 0,
+    "models_fitted": 12,
+    "results_sha256": "3f69f717aeb099d62b49f224191a8345cd540cc70dec02fe9b61e296b67dfd05",
+    "verification_sha256": "4b6d707ada7029ad46454dfa561627ec6d7a10aa503bfdfedccf4cbd545eea7a",
+    "test_predictions_computed": false,
+    "state": "OFFLINE_DRAFT"
+  },
+  "oracle_comparisons": 1980,
+  "original_source_unchanged": true,
+  "live_database_accessed": false,
+  "warnings_preserved": true
+}

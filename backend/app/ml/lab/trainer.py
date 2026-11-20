@@ -296,7 +296,10 @@ def train_run(frame: pd.DataFrame, y: np.ndarray, categories: pd.Series | None, 
             raise LabTrainingError("Pola positif validasi belum ada di TRAIN: " + ", ".join(absent)
                                    + ". Tambahkan contoh pada periode latih tanpa mencampur urutan waktu.")
     feature_started = time.perf_counter()
-    matrix, vocabulary = build_matrix(frame, masks["train"])
+    try:
+        matrix, vocabulary = build_matrix(frame, masks["train"], feature_groups)
+    except ValueError as exc:
+        raise LabTrainingError(str(exc)) from exc
     feature_seconds = time.perf_counter() - feature_started
     train_matrix = matrix.loc[masks["train"], requested]
     unusable = [c for c in requested if train_matrix[c].isna().all()

@@ -1,5 +1,10 @@
 # ML readiness and data needed — 17 November 2026
 
+**Latest implementation, 20 November:** after the research response Jevon says
+"oke gas". The optional transaction-context features and limited offline
+comparison below are now implemented. They supersede the earlier no-new-features/
+training status for this stage only; no model activation or bank-quality claim.
+
 Jevon authorises improvements to the deficiencies identified in the readiness
 review, prioritising ML transaction flags. This first implementation hardens
 label handling and inference and adds a descriptive development-data audit.
@@ -200,6 +205,90 @@ missing context/history cannot be supplied by research alone. Existing data can
 support further explicitly limited development, but cannot establish unobserved
 patterns or independent final/bank performance. Mentor ratification and real
 operational tolerance remain distinct from Jevon's development delegation.
+
+## Optional transaction context implemented — 20 November 2026
+
+The Lab offers three additional, initially unchecked groups: **Transaksi
+beruntun**, **Hubungan lawan transaksi**, and **Dana masuk dan keluar**. They add
+11 observations: 5-minute count, 1-hour total amount, known 24-hour channel/
+counterparty diversity and counterparty coverage, prior same-counterparty count/
+amount jump, four-hour incoming/outgoing totals and their ratio, and elapsed
+seconds since an earlier incoming transaction. These are source-clock research
+windows from Jevon's proposal, not regulatory or fraud thresholds.
+
+Counterparty mapping preserves stable source identifiers through training and
+monitoring. Native missing mapped cells remain empty rather than becoming literal
+`None`/`nan`/`<NA>` identifiers. The flow group refuses a Lab mapping that supplied
+only default DEBIT direction. Equal-time peers have no invented order. Day-only
+observations produce no intraday context; already available date-only history
+makes potentially overlapping windows unknown. Account/currency boundaries and
+the base historical-baseline policy are preserved. Plain Indonesian factor
+explanations distinguish observations from proof of laundering or a probe.
+
+Base `behavioral_v1` names/values stay unchanged without the extension. New
+candidates seal `transaction_context_version: transaction_context_v1` in their
+hashed vocabulary. Artifact validation permits new features only with that
+recognised marker; serving reconstructs the same extension. Lab snapshots hash
+the new module. Saved old models keep their arithmetic; in-progress old sealed
+runs cannot continue final evaluation under changed code. No hash is rebased.
+
+### Measured development comparison
+
+The checksum-pinned 615-row source is unchanged. The DB-free command
+`app.scripts.compare_transaction_context` predeclares four variants with three
+native candidates each. All use chronological 430 TRAIN / 92 validation / 93
+excluded final rows, TRAIN-only vocabulary, highest validation AP for model
+choice and native validation max-F1 thresholds. An extra validation diagnostic
+finds the least-FP threshold retaining the reference's total/per-pattern catches;
+it does not change native Lab policy. The known/exposed final is **not scored
+again**, and is not an independent test.
+
+| Variant (LightGBM selected in each) | Validation AP | TP / FP / FN / TN | Precision / recall |
+|---|---:|---|---|
+| Existing groups | 0.966667 | 11 / 0 / 1 / 80 | 100% / 91.67% |
+| Existing + context | 0.966667 | 11 / 0 / 1 / 80 | 100% / 91.67% |
+| Existing without channel-frequency features | 0.946078 | 11 / 0 / 1 / 80 | 100% / 91.67% |
+| Context without channel-frequency features | 0.956667 | 11 / 0 / 1 / 80 | 100% / 91.67% |
+
+Both context comparisons retain catches/FP but **do not strictly improve them**.
+The small AP increase without channel-frequency features is a ranking finding,
+not improved operational detection or evidence of generalisation. Every variant
+catches ATO 4/5 and VELOCITY 7/7 on validation; other patterns are unassessed there.
+Precision 100% rests on only 11 flags. The counterparty amount-jump feature is
+entirely missing in TRAIN and excluded by the existing unusable-feature filter;
+this source cannot train that proposed probe indicator. Context otherwise adds
+10 usable observations (19→29 features). Sparse baseline history, timing/recipe
+shortcuts, review provenance and missing balances/ownership remain limitations.
+These validation results are not compared to the earlier 93-row TEST as though
+they were the same population.
+
+All artifacts remain **OFFLINE_DRAFT**, without registration or activation.
+Original data/labels, generator, shared Tiny/Small and live DB are untouched.
+Multi-hop graph/sequence models, matched-funds tracing, new reviewed examples,
+calibration and operational/bank acceptance remain pending in the existing order.
+
+[Results](ml/transaction_context_20261120_results.json),
+[mapping](ml/transaction_context_20261120_mapping.json) and
+[replay verification](ml/transaction_context_20261120_verification.json) retain
+provenance. All 12 artifacts pass content validation and reproduce native
+validation confusion matrices with finite scores/contributions, without refits,
+TEST predictions or DB access. A separate simple causal oracle agrees on1,980
+feature values across180 in-memory fixture rows. All1,071 backend tests (including
+5 slow),15 explanation tests and frontend build pass. The private PostgreSQL
+test cluster stops cleanly. [Technical checks](ml/transaction_context_20261120_checks.json)
+retain final full-suite evidence and428 warnings; finite saved parameters/
+outputs are checked explicitly. No new browser QA or large-context capacity
+claim follows from these tests.
+
+Reproduce from `backend/` with matching source/code and a **new output directory**:
+
+```bash
+.venv/bin/python -m app.scripts.compare_transaction_context \
+  --data ml_data/team_review_s20261110/training_labeled.csv \
+  --mapping ../docs/ml/transaction_context_20261120_mapping.json \
+  --expected-sha256 d2b8087e9fc07a2462d84bb1d3fb3be405035b8027430a670b1753e6f220aea6 \
+  --train-share 0.7 --out ml_models/NEW_context_comparison
+```
 
 ## Label contract implemented
 

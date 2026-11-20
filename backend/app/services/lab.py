@@ -143,7 +143,7 @@ def _protocol(db: Session, checksum: str, *, lock: bool = False) -> LabEvaluatio
 def _code_hashes() -> dict:
     app = Path(__file__).resolve().parents[1]
     names = ("ml/lab/trainer.py", "ml/lab/features.py", "ml/lab/mapping.py",
-             "ml/behavioral/features.py", "ml/behavioral/model.py", "ml/behavioral/standardize.py",
+             "ml/behavioral/features.py", "ml/behavioral/transaction_context.py", "ml/behavioral/model.py", "ml/behavioral/standardize.py",
              "services/tabular.py", "services/lab.py")
     return {name: _sha256((app / name).read_bytes()) for name in names}
 

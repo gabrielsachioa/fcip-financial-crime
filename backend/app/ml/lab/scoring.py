@@ -170,7 +170,7 @@ def verify(version) -> list[str]:
         raise ValueError(f"{version.version}: stored content does not match its definition_hash")
     if (version.feature_set_version != LAB_FEATURE_SET_VERSION or context.get("version") != LAB_FEATURE_SET_VERSION
             or vocabulary.get("feature_set_version") != FEATURE_SET_VERSION
-            or not features or not set(features) <= set(feature_names(UNIT))):
+            or not features or not set(features) <= set(feature_names(UNIT, vocabulary))):
         raise ValueError(f"{version.version}: incompatible lab feature set")
     if (card.get("version") != version.version or card.get("artefact_type") != version.artefact_type
             or version.unit != UNIT or card["model"].get("threshold") != version.threshold):

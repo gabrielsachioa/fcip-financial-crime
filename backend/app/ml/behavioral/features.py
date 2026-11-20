@@ -94,11 +94,19 @@ class FeatureInputError(ValueError):
     pass
 
 
-def feature_names(unit: Literal["AML", "FRAUD"] | str) -> list[str]:
+def feature_names(unit: Literal["AML", "FRAUD"] | str, vocabulary: dict | None = None) -> list[str]:
     unit = unit.upper()
     if unit not in {"AML", "FRAUD"}:
         raise FeatureInputError("unit must be AML or FRAUD")
-    return [code for owner, code in FEATURE_DEFINITIONS if owner == unit]
+    names = [code for owner, code in FEATURE_DEFINITIONS if owner == unit]
+    if vocabulary is not None:
+        from app.ml.behavioral.transaction_context import FEATURES, enabled
+        try:
+            if enabled(vocabulary, unit):
+                names.extend(FEATURES)
+        except ValueError as exc:
+            raise FeatureInputError(str(exc)) from exc
+    return names
 
 
 def _prepared(frame: pd.DataFrame) -> pd.DataFrame:
@@ -310,7 +318,7 @@ def _aml(f: pd.DataFrame, vocabulary: dict) -> pd.DataFrame:
 
 def build_features(frame: pd.DataFrame, unit: Literal["AML", "FRAUD"] | str, vocabulary: dict) -> pd.DataFrame:
     unit = unit.upper()
-    names = feature_names(unit)
+    names = feature_names(unit, vocabulary)
     if vocabulary.get("feature_set_version") != FEATURE_SET_VERSION:
         raise FeatureInputError("Vocabulary belongs to another feature set")
     f = _prepared(frame)
@@ -320,5 +328,11 @@ def build_features(frame: pd.DataFrame, unit: Literal["AML", "FRAUD"] | str, voc
     if f.currency.iloc[0] != vocabulary.get("currency"):
         raise FeatureInputError("Observation currency differs from the trained vocabulary; no FX conversion is available")
     out = _aml(f, vocabulary) if unit == "AML" else _fraud(f, vocabulary)
+    if vocabulary.get("transaction_context_version") is not None:
+        from app.ml.behavioral.transaction_context import build
+        context = build(f)
+        context.index = f.transaction_ref
+        for name in context:
+            out[name] = out.transaction_ref.map(context[name])
     out[names] = out[names].astype("float64").replace([np.inf, -np.inf], np.nan)
     return out[columns].sort_values(["account_number", "as_of", "transaction_ref"], kind="stable").reset_index(drop=True)

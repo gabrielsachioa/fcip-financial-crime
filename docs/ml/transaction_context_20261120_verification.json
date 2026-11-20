@@ -1,0 +1,117 @@
+{
+  "input_and_artifact_hashes_match": true,
+  "code_hashes_match": true,
+  "validation_only": true,
+  "test_predictions_computed": false,
+  "database_access": false,
+  "training_repeated": false,
+  "artifact_checks": [
+    {
+      "variant": "baseline",
+      "model": "logistic_regression",
+      "validation_rows": 92,
+      "finite_scores_and_explanations": true,
+      "artifact_verified": true,
+      "native_confusion_matrix_reproduced": true
+    },
+    {
+      "variant": "baseline",
+      "model": "lightgbm",
+      "validation_rows": 92,
+      "finite_scores_and_explanations": true,
+      "artifact_verified": true,
+      "native_confusion_matrix_reproduced": true
+    },
+    {
+      "variant": "baseline",
+      "model": "isolation_forest",
+      "validation_rows": 92,
+      "finite_scores_and_explanations": true,
+      "artifact_verified": true,
+      "native_confusion_matrix_reproduced": true
+    },
+    {
+      "variant": "baseline_without_channel_frequency",
+      "model": "logistic_regression",
+      "validation_rows": 92,
+      "finite_scores_and_explanations": true,
+      "artifact_verified": true,
+      "native_confusion_matrix_reproduced": true
+    },
+    {
+      "variant": "baseline_without_channel_frequency",
+      "model": "lightgbm",
+      "validation_rows": 92,
+      "finite_scores_and_explanations": true,
+      "artifact_verified": true,
+      "native_confusion_matrix_reproduced": true
+    },
+    {
+      "variant": "baseline_without_channel_frequency",
+      "model": "isolation_forest",
+      "validation_rows": 92,
+      "finite_scores_and_explanations": true,
+      "artifact_verified": true,
+      "native_confusion_matrix_reproduced": true
+    },
+    {
+      "variant": "context",
+      "model": "logistic_regression",
+      "validation_rows": 92,
+      "finite_scores_and_explanations": true,
+      "artifact_verified": true,
+      "native_confusion_matrix_reproduced": true
+    },
+    {
+      "variant": "context",
+      "model": "lightgbm",
+      "validation_rows": 92,
+      "finite_scores_and_explanations": true,
+      "artifact_verified": true,
+      "native_confusion_matrix_reproduced": true
+    },
+    {
+      "variant": "context",
+      "model": "isolation_forest",
+      "validation_rows": 92,
+      "finite_scores_and_explanations": true,
+      "artifact_verified": true,
+      "native_confusion_matrix_reproduced": true
+    },
+    {
+      "variant": "context_without_channel_frequency",
+      "model": "logistic_regression",
+      "validation_rows": 92,
+      "finite_scores_and_explanations": true,
+      "artifact_verified": true,
+      "native_confusion_matrix_reproduced": true
+    },
+    {
+      "variant": "context_without_channel_frequency",
+      "model": "lightgbm",
+      "validation_rows": 92,
+      "finite_scores_and_explanations": true,
+      "artifact_verified": true,
+      "native_confusion_matrix_reproduced": true
+    },
+    {
+      "variant": "context_without_channel_frequency",
+      "model": "isolation_forest",
+      "validation_rows": 92,
+      "finite_scores_and_explanations": true,
+      "artifact_verified": true,
+      "native_confusion_matrix_reproduced": true
+    }
+  ],
+  "results_sha256": "3f69f717aeb099d62b49f224191a8345cd540cc70dec02fe9b61e296b67dfd05",
+  "causal_oracle": {
+    "in_memory_fixture_rows": 180,
+    "accounts": 4,
+    "seed": 41,
+    "comparisons": 1980,
+    "features": 11,
+    "day_only_and_equal_time_cases": true,
+    "source_data_used_or_changed": false,
+    "passed": true
+  }
+}

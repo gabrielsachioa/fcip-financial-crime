@@ -5,6 +5,43 @@
 Supersedes any earlier progress figure. Scope definitions and architecture are
 unchanged; see `PROJECT_CONTEXT.md` for current responses and open questions.
 
+## 20 November — optional transaction context and offline comparison
+
+After the research response Jevon says "oke gas". Eleven new observations in
+three opt-in Lab groups add short-window activity, known-counterparty context
+and incoming/outgoing flow summaries. Counterparty mapping survives monitoring;
+missing cells do not become literal IDs. Equal-time/day-only uncertainty,
+account/currency isolation, direction provenance and legacy arithmetic are
+protected. The extension is separately versioned in the hashed vocabulary and
+new code is included in protocol snapshots. UI explanations stay factual.
+
+Four predeclared variants × three models use the unchanged 615-row source:
+430 TRAIN / 92 validation / 93 unscored final. Reference/context LightGBM both
+have validation TP11/FP0/FN1/TN80, precision100% on11 flags, recall91.67% of12
+positives, AP0.966667. Removing channel-frequency features gives AP0.946078 vs
+0.956667, but unchanged flags. ATO4/5 and VELOCITY7/7 only; no strict improvement,
+new blind final or bank-effectiveness claim. One proposed probe feature has no
+TRAIN support and is excluded. All candidates remain OFFLINE_DRAFT.
+
+**Verification:** all1,071 backend tests pass, including5 slow checks, on a
+verified private PostgreSQL16.15 server;428 warnings are retained. Initial new
+test expectations for canonical nulls were corrected; the final full suite is
+green. The private socket-only cluster stops cleanly. Twelve candidate artifacts
+independently replay validation with finite scores/contributions;1,980 window
+calculations match a simple causal oracle. Fifteen frontend explanation tests
+and production build pass. No new browser QA/capacity/bank UAT claim.
+[Technical checks](ml/transaction_context_20261120_checks.json),
+[results](ml/transaction_context_20261120_results.json),
+[replay](ml/transaction_context_20261120_verification.json),
+[mapping and reproducible method](ML_READINESS.md). No live DB/registry access,
+activation, original data/label/generator/shared-source edit or stage reorder.
+
+**Decisions I took myself:** AS-28 opt-in versioned features, unknown/time
+handling, source mapping and validation-only comparison with channel-frequency
+ablation. **Ringkasan capstone:** Fitur ML dan keterlacakan bertambah, tetapi
+eksperimen pada data dummy yang sama belum memperbaiki deteksi; model tidak
+diaktifkan dan keterbatasan data tetap dinyatakan.
+
 ## 20 November — ML input response and delegated research
 
 Jevon selects target option 1 (working interpretation: worth human review),

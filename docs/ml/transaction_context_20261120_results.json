@@ -1,0 +1,449 @@
+{
+  "artifact_sha256": {
+    "baseline_isolation_forest.txt": "b221f2ab0632db41abc38455f1eb66b3bb7ed70868279cecf88d738150e992ce",
+    "baseline_lightgbm.txt": "ddf9e653fa6b2cd0f262493d060cb97450785bbf14b901d85f898378ad5ad69d",
+    "baseline_logistic_regression.txt": "44a34dc54f4150da3032e96d42b549aba278bd935da242a7c53b616a8fb4163f",
+    "baseline_training.json": "59302ff3d57a8571b2c0b22563d57c6fa5eafd4e7a28953f0080f39c33d1df36",
+    "baseline_without_channel_frequency_isolation_forest.txt": "d8e8251c370e98384ab42405aafdb44ed3deeab5d776a21dab7de0754248e98d",
+    "baseline_without_channel_frequency_lightgbm.txt": "767da87281431270e4926477cf005918e8d19b78b4fd553f15be26db132671bc",
+    "baseline_without_channel_frequency_logistic_regression.txt": "b0de3aa3a62dd2c76d336ccc2637a04883fe379bf2ba965a3346cc5d111bf39e",
+    "baseline_without_channel_frequency_training.json": "55fdcc069152ea22e4cb0d871fc010a1492f4e5ad64823bd0261723b715205b6",
+    "context_isolation_forest.txt": "22f38bd96e1e7fdddced41cbbd2da5cf7ca5318509c7c2bcae19cae75f5d67e1",
+    "context_lightgbm.txt": "b5bba4423a6a776af0ac9459b5b138332ebdf9965055e96532bafdc81585939e",
+    "context_logistic_regression.txt": "df629871a4ec02b76ff610fbd3e352ce7d4cb99507e8c1ac83a9f485fc5d0348",
+    "context_training.json": "402c417b04bf576804240f1dffaf1a74b0a40e63d333b1e013cfb4396d8e8ef4",
+    "context_without_channel_frequency_isolation_forest.txt": "b31572a4f3efa55892fa47d1249e0ce9bad5ca977ce24413c56e4c2ec377a5b1",
+    "context_without_channel_frequency_lightgbm.txt": "35ac7a05559f079dbd5ccf915a68268abe130384d2cf6a1a2b5d6f5ee78123a5",
+    "context_without_channel_frequency_logistic_regression.txt": "bf9d64af2f9bdf8a220c84ab28ab1dd003c401c3ebbe89eb88d4e37338c4fc6e",
+    "context_without_channel_frequency_training.json": "0ecdc47a91855638eaeae6bf95b842455cfe9c87ae7af709c8ee62089ddd3e80",
+    "mapping.json": "7734a14d20a6f75cea9b0c992e56c1dab46b170351d291ded82414223df6321d",
+    "protocol.json": "e1923cabdc03415b0f1f34a8467270a3e540a4f47481a243004211574d8ea2f1"
+  },
+  "completed_at_utc": "2026-11-20T14:51:33.763566+00:00",
+  "limitations": [
+    "Existing synthetic client data and supplied review key; not adjudicated financial crime or bank validation.",
+    "Small correlated scenario/account samples; no independent-episode confidence claim.",
+    "This is development validation, not a fresh independent final; existing final exposure is not undone.",
+    "Only validation-supported patterns are assessed; absent patterns remain unassessed.",
+    "Channel-frequency ablation does not remove every potential recipe shortcut, including timing or channel-diversity shortcuts.",
+    "Optional local context is not multi-hop graph reconstruction, ownership evidence, balance reconstruction or calibrated probability.",
+    "Native max-F1 and matched-recall points are validation diagnostics, not operational acceptance tolerances."
+  ],
+  "matched_validation_comparisons": {
+    "context": {
+      "f1": 0.9565217391304348,
+      "flagged": 11,
+      "flagged_per_10k": 1195.6521739130435,
+      "fn": 1,
+      "fp": 0,
+      "no_more_false_positives": true,
+      "patterns": {
+        "ATO": {
+          "caught": 4,
+          "positives": 5
+        },
+        "VELOCITY": {
+          "caught": 7,
+          "positives": 7
+        }
+      },
+      "precision": 1.0,
+      "recall": 0.9166666666666666,
+      "strict_improvement": false,
+      "threshold": 0.48984697026741536,
+      "tn": 80,
+      "tp": 11
+    },
+    "context_without_channel_frequency": {
+      "f1": 0.9565217391304348,
+      "flagged": 11,
+      "flagged_per_10k": 1195.6521739130435,
+      "fn": 1,
+      "fp": 0,
+      "no_more_false_positives": true,
+      "patterns": {
+        "ATO": {
+          "caught": 4,
+          "positives": 5
+        },
+        "VELOCITY": {
+          "caught": 7,
+          "positives": 7
+        }
+      },
+      "precision": 1.0,
+      "recall": 0.9166666666666666,
+      "strict_improvement": false,
+      "threshold": 0.28641228433054566,
+      "tn": 80,
+      "tp": 11
+    }
+  },
+  "protocol": {
+    "code_sha256": {
+      "app/ml/behavioral/features.py": "82ed30476b58731dd9d9e9feb1b61f86f06ab460e322cac258d6f83a07f63ce7",
+      "app/ml/behavioral/model.py": "2853c51580e6ebc563bd5ad14f03ab88c57ff48a523e5ea1cbcf31c5e9429a41",
+      "app/ml/behavioral/standardize.py": "4ab32d58ef5167fe3685edec2b0e2254c7d7d538e34005a2aaf4f9d761436e55",
+      "app/ml/behavioral/transaction_context.py": "ff511e4d2753df0df921dc172fd930b6b0fe6796c32f65295b237ed24128a9d7",
+      "app/ml/lab/features.py": "041fedd42899582df12db0e1740a310841e8708cdabb231a6cfdc59cfd6138c8",
+      "app/ml/lab/mapping.py": "0f7f8293cf258684db587687cbef917dc71878d130260d5b6c5a3df8f7efe0e3",
+      "app/ml/lab/trainer.py": "dbf9169b6d7e486945f56f746c4bf5d9640b36bdcd5e8f7af9e9e278b5a602f2",
+      "app/scripts/compare_transaction_context.py": "e7814d238c6a6de7a690db9f4bcfe2aefb589274c708700610a506999539080d",
+      "app/services/tabular.py": "4f3c09428d56de41fe2fdd77f976f43c08fb57ad5c1ec485300d3a83a0a9113b"
+    },
+    "comparison": "Also report minimum-FP validation threshold retaining reference total/per-pattern catches; ties prefer TP then threshold.",
+    "dependencies": {
+      "lightgbm": "4.5.0",
+      "numpy": "2.1.3",
+      "pandas": "2.2.3",
+      "scikit-learn": "1.5.2"
+    },
+    "independent_final_claimed": false,
+    "input_sha256": "d2b8087e9fc07a2462d84bb1d3fb3be405035b8027430a670b1753e6f220aea6",
+    "mapping_sha256": "7734a14d20a6f75cea9b0c992e56c1dab46b170351d291ded82414223df6321d",
+    "model_keys": [
+      "logistic_regression",
+      "lightgbm",
+      "isolation_forest"
+    ],
+    "registered_or_activated": false,
+    "seed": 20261026,
+    "selection": "Native highest validation AP per variant; native max-F1 validation threshold.",
+    "split_rows": {
+      "test": 93,
+      "train": 430,
+      "validation": 92
+    },
+    "started_at_utc": "2026-11-20T14:51:32.733469+00:00",
+    "test_outcomes_disclosed": false,
+    "test_scores_computed": false,
+    "train_share": 0.7,
+    "variants": {
+      "baseline": [
+        "nominal",
+        "riwayat",
+        "penyimpangan",
+        "kecepatan",
+        "waktu",
+        "kanal",
+        "kebaruan",
+        "sesi"
+      ],
+      "baseline_without_channel_frequency": [
+        "nominal",
+        "riwayat",
+        "penyimpangan",
+        "kecepatan",
+        "waktu",
+        "kebaruan",
+        "sesi"
+      ],
+      "context": [
+        "nominal",
+        "riwayat",
+        "penyimpangan",
+        "kecepatan",
+        "waktu",
+        "kanal",
+        "kebaruan",
+        "sesi",
+        "urutan",
+        "tujuan",
+        "arus"
+      ],
+      "context_without_channel_frequency": [
+        "nominal",
+        "riwayat",
+        "penyimpangan",
+        "kecepatan",
+        "waktu",
+        "kebaruan",
+        "sesi",
+        "urutan",
+        "tujuan",
+        "arus"
+      ]
+    },
+    "version": "transaction_context_comparison_v1"
+  },
+  "results": {
+    "baseline": {
+      "average_precision": 0.9666666666666667,
+      "f1": 0.9565217391304348,
+      "features": [
+        "AMOUNT",
+        "LOG_AMOUNT",
+        "AMOUNT_OVER_TRAIN_MEDIAN",
+        "IS_DEBIT",
+        "HISTORY_DAYS",
+        "PRIOR_HISTORY_COUNT",
+        "PRIOR_COUNT_R7D",
+        "PRIOR_VALUE_R7D",
+        "PRIOR_COUNT_R30D",
+        "PRIOR_VALUE_R30D",
+        "PRIOR_DEBIT_VALUE_R7D",
+        "PRIOR_SMALL_COUNT_R7D",
+        "DAYS_SINCE_PREV_OBSERVATION",
+        "COUNT_R1H",
+        "COUNT_R24H",
+        "DEBIT_VALUE_R24H",
+        "UTC_HOUR_SIN",
+        "UTC_HOUR_COS",
+        "CHANNEL_TRAIN_FREQUENCY"
+      ],
+      "flagged": 11,
+      "flagged_per_10k": 1195.6521739130435,
+      "fn": 1,
+      "fp": 0,
+      "model_key": "lightgbm",
+      "patterns": {
+        "ATO": {
+          "caught": 4,
+          "positives": 5
+        },
+        "VELOCITY": {
+          "caught": 7,
+          "positives": 7
+        }
+      },
+      "precision": 1.0,
+      "recall": 0.9166666666666666,
+      "roc_auc": 0.9916666666666667,
+      "threshold": 0.5038643408002007,
+      "tn": 80,
+      "tp": 11,
+      "unusable_features": [
+        "NO_BASELINE",
+        "AMOUNT_OVER_PRIOR_MEAN",
+        "AMOUNT_Z_PRIOR",
+        "BALANCE_OVER_PRIOR_MEAN",
+        "DAY_ONLY_TIMESTAMP",
+        "CHANNEL_UNSEEN",
+        "DEVICE_PRESENT",
+        "IP_PRESENT",
+        "LOCATION_PRESENT",
+        "DEVICE_FIRST_USE",
+        "IP_FIRST_USE",
+        "LOCATION_FIRST_USE",
+        "MERCHANT_FIRST_USE",
+        "LOGIN_ATTEMPTS",
+        "TRANSACTION_DURATION",
+        "ACCOUNT_BALANCE"
+      ]
+    },
+    "baseline_without_channel_frequency": {
+      "average_precision": 0.946078431372549,
+      "f1": 0.9565217391304348,
+      "features": [
+        "AMOUNT",
+        "LOG_AMOUNT",
+        "AMOUNT_OVER_TRAIN_MEDIAN",
+        "IS_DEBIT",
+        "HISTORY_DAYS",
+        "PRIOR_HISTORY_COUNT",
+        "PRIOR_COUNT_R7D",
+        "PRIOR_VALUE_R7D",
+        "PRIOR_COUNT_R30D",
+        "PRIOR_VALUE_R30D",
+        "PRIOR_DEBIT_VALUE_R7D",
+        "PRIOR_SMALL_COUNT_R7D",
+        "DAYS_SINCE_PREV_OBSERVATION",
+        "COUNT_R1H",
+        "COUNT_R24H",
+        "DEBIT_VALUE_R24H",
+        "UTC_HOUR_SIN",
+        "UTC_HOUR_COS"
+      ],
+      "flagged": 11,
+      "flagged_per_10k": 1195.6521739130435,
+      "fn": 1,
+      "fp": 0,
+      "model_key": "lightgbm",
+      "patterns": {
+        "ATO": {
+          "caught": 4,
+          "positives": 5
+        },
+        "VELOCITY": {
+          "caught": 7,
+          "positives": 7
+        }
+      },
+      "precision": 1.0,
+      "recall": 0.9166666666666666,
+      "roc_auc": 0.9770833333333333,
+      "threshold": 0.5426106900274309,
+      "tn": 80,
+      "tp": 11,
+      "unusable_features": [
+        "NO_BASELINE",
+        "AMOUNT_OVER_PRIOR_MEAN",
+        "AMOUNT_Z_PRIOR",
+        "BALANCE_OVER_PRIOR_MEAN",
+        "DAY_ONLY_TIMESTAMP",
+        "DEVICE_PRESENT",
+        "IP_PRESENT",
+        "LOCATION_PRESENT",
+        "DEVICE_FIRST_USE",
+        "IP_FIRST_USE",
+        "LOCATION_FIRST_USE",
+        "MERCHANT_FIRST_USE",
+        "LOGIN_ATTEMPTS",
+        "TRANSACTION_DURATION",
+        "ACCOUNT_BALANCE"
+      ]
+    },
+    "context": {
+      "average_precision": 0.9666666666666667,
+      "f1": 0.9565217391304348,
+      "features": [
+        "AMOUNT",
+        "LOG_AMOUNT",
+        "AMOUNT_OVER_TRAIN_MEDIAN",
+        "IS_DEBIT",
+        "HISTORY_DAYS",
+        "PRIOR_HISTORY_COUNT",
+        "PRIOR_COUNT_R7D",
+        "PRIOR_VALUE_R7D",
+        "PRIOR_COUNT_R30D",
+        "PRIOR_VALUE_R30D",
+        "PRIOR_DEBIT_VALUE_R7D",
+        "PRIOR_SMALL_COUNT_R7D",
+        "DAYS_SINCE_PREV_OBSERVATION",
+        "COUNT_R1H",
+        "COUNT_R24H",
+        "DEBIT_VALUE_R24H",
+        "UTC_HOUR_SIN",
+        "UTC_HOUR_COS",
+        "CHANNEL_TRAIN_FREQUENCY",
+        "COUNT_R5M",
+        "VALUE_R1H",
+        "KNOWN_CHANNELS_R24H",
+        "KNOWN_COUNTERPARTIES_R24H",
+        "COUNTERPARTY_COVERAGE_R24H",
+        "OBSERVED_SAME_COUNTERPARTY_COUNT_R1H",
+        "CREDIT_VALUE_R4H",
+        "DEBIT_VALUE_R4H",
+        "OUT_IN_VALUE_RATIO_R4H",
+        "SECONDS_SINCE_PRIOR_CREDIT"
+      ],
+      "flagged": 11,
+      "flagged_per_10k": 1195.6521739130435,
+      "fn": 1,
+      "fp": 0,
+      "model_key": "lightgbm",
+      "patterns": {
+        "ATO": {
+          "caught": 4,
+          "positives": 5
+        },
+        "VELOCITY": {
+          "caught": 7,
+          "positives": 7
+        }
+      },
+      "precision": 1.0,
+      "recall": 0.9166666666666666,
+      "roc_auc": 0.9916666666666667,
+      "threshold": 0.48984697026741536,
+      "tn": 80,
+      "tp": 11,
+      "unusable_features": [
+        "NO_BASELINE",
+        "AMOUNT_OVER_PRIOR_MEAN",
+        "AMOUNT_Z_PRIOR",
+        "BALANCE_OVER_PRIOR_MEAN",
+        "DAY_ONLY_TIMESTAMP",
+        "CHANNEL_UNSEEN",
+        "DEVICE_PRESENT",
+        "IP_PRESENT",
+        "LOCATION_PRESENT",
+        "DEVICE_FIRST_USE",
+        "IP_FIRST_USE",
+        "LOCATION_FIRST_USE",
+        "MERCHANT_FIRST_USE",
+        "LOGIN_ATTEMPTS",
+        "TRANSACTION_DURATION",
+        "ACCOUNT_BALANCE",
+        "AMOUNT_OVER_PRIOR_COUNTERPARTY_MIN_R1H"
+      ]
+    },
+    "context_without_channel_frequency": {
+      "average_precision": 0.9566666666666666,
+      "f1": 0.9565217391304348,
+      "features": [
+        "AMOUNT",
+        "LOG_AMOUNT",
+        "AMOUNT_OVER_TRAIN_MEDIAN",
+        "IS_DEBIT",
+        "HISTORY_DAYS",
+        "PRIOR_HISTORY_COUNT",
+        "PRIOR_COUNT_R7D",
+        "PRIOR_VALUE_R7D",
+        "PRIOR_COUNT_R30D",
+        "PRIOR_VALUE_R30D",
+        "PRIOR_DEBIT_VALUE_R7D",
+        "PRIOR_SMALL_COUNT_R7D",
+        "DAYS_SINCE_PREV_OBSERVATION",
+        "COUNT_R1H",
+        "COUNT_R24H",
+        "DEBIT_VALUE_R24H",
+        "UTC_HOUR_SIN",
+        "UTC_HOUR_COS",
+        "COUNT_R5M",
+        "VALUE_R1H",
+        "KNOWN_CHANNELS_R24H",
+        "KNOWN_COUNTERPARTIES_R24H",
+        "COUNTERPARTY_COVERAGE_R24H",
+        "OBSERVED_SAME_COUNTERPARTY_COUNT_R1H",
+        "CREDIT_VALUE_R4H",
+        "DEBIT_VALUE_R4H",
+        "OUT_IN_VALUE_RATIO_R4H",
+        "SECONDS_SINCE_PRIOR_CREDIT"
+      ],
+      "flagged": 11,
+      "flagged_per_10k": 1195.6521739130435,
+      "fn": 1,
+      "fp": 0,
+      "model_key": "lightgbm",
+      "patterns": {
+        "ATO": {
+          "caught": 4,
+          "positives": 5
+        },
+        "VELOCITY": {
+          "caught": 7,
+          "positives": 7
+        }
+      },
+      "precision": 1.0,
+      "recall": 0.9166666666666666,
+      "roc_auc": 0.9864583333333333,
+      "threshold": 0.28641228433054566,
+      "tn": 80,
+      "tp": 11,
+      "unusable_features": [
+        "NO_BASELINE",
+        "AMOUNT_OVER_PRIOR_MEAN",
+        "AMOUNT_Z_PRIOR",
+        "BALANCE_OVER_PRIOR_MEAN",
+        "DAY_ONLY_TIMESTAMP",
+        "DEVICE_PRESENT",
+        "IP_PRESENT",
+        "LOCATION_PRESENT",
+        "DEVICE_FIRST_USE",
+        "IP_FIRST_USE",
+        "LOCATION_FIRST_USE",
+        "MERCHANT_FIRST_USE",
+        "LOGIN_ATTEMPTS",
+        "TRANSACTION_DURATION",
+        "ACCOUNT_BALANCE",
+        "AMOUNT_OVER_PRIOR_COUNTERPARTY_MIN_R1H"
+      ]
+    }
+  },
+  "source_unchanged": true,
+  "state": "OFFLINE_DRAFT",
+  "validation_positives": 12,
+  "validation_rows": 92
+}
