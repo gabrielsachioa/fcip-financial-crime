@@ -23,6 +23,17 @@ REFRESH_COOKIE = "fcip_refresh_token"
 # Scoped to /auth so the browser never attaches the refresh token to ordinary API calls.
 REFRESH_COOKIE_PATH = "/auth"
 
+def _cookie_samesite() -> str:
+    val = getattr(settings, "cookie_samesite", "none")
+    return str(val).lower()
+
+
+def _cookie_secure() -> bool:
+    samesite = _cookie_samesite()
+    # Browser wajib mensyaratkan Secure=True jika SameSite=None
+    if samesite == "none":
+        return True
+    return bool(getattr(settings, "cookie_secure", False))
 
 def _set_refresh_cookie(response: Response, token: str, expires_at: datetime) -> None:
     max_age = max(int((expires_at - datetime.now(timezone.utc)).total_seconds()), 0)
@@ -33,7 +44,7 @@ def _set_refresh_cookie(response: Response, token: str, expires_at: datetime) ->
         path=REFRESH_COOKIE_PATH,
         httponly=True,
         secure=settings.cookie_secure,
-        samesite="strict",
+        samesite="none",
     )
 
 
@@ -43,7 +54,7 @@ def _clear_refresh_cookie(response: Response) -> None:
         path=REFRESH_COOKIE_PATH,
         httponly=True,
         secure=settings.cookie_secure,
-        samesite="strict",
+        samesite="none",
     )
 
 
